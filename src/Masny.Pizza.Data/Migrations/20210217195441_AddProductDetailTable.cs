@@ -36,7 +36,7 @@ namespace Masny.Pizza.Data.Migrations
                 table: "Products");
 
             migrationBuilder.CreateTable(
-                name: "ProductDetail",
+                name: "ProductDetails",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -54,9 +54,9 @@ namespace Masny.Pizza.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductDetail", x => x.Id);
+                    table.PrimaryKey("PK_ProductDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductDetail_Products_ProductId",
+                        name: "FK_ProductDetails_Products_ProductId",
                         column: x => x.ProductId,
                         principalTable: "Products",
                         principalColumn: "Id",
@@ -64,15 +64,15 @@ namespace Masny.Pizza.Data.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductDetail_ProductId",
-                table: "ProductDetail",
+                name: "IX_ProductDetails_ProductId",
+                table: "ProductDetails",
                 column: "ProductId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ProductDetail");
+                name: "ProductDetails");
 
             migrationBuilder.AddColumn<double>(
                 name: "Carbohydrate",

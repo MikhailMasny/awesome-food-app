@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+
+<header>
+    <div class="wrapper">
+        <div class="header header__indent-bottom">
+            <a class="logo logo__link" asp-controller="Home" asp-action="Index">ToDo App</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="auth">
+                    <span class="auth__name">@User.Identity.Name</span>
+                    <form method="post" asp-controller="Account" asp-action="Logout">
+                        <button class="button" type="submit">Logout</button>
+                    </form>
+                </div>
+            }
+            else
+            {
+                <div class="auth">
+                    <a class="link" asp-controller="Account" asp-action="Login">Login</a>
+                    <a class="button button__link" asp-controller="Account" asp-action="Register">Register</a>
+                </div>
+            }
+        </div>
+    </div>
+</header>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>

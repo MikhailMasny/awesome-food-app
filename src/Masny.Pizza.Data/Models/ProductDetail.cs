@@ -32,5 +32,7 @@ namespace Masny.Pizza.Data.Models
         public string Comment { get; set; }
 
         public DiameterType Diameter { get; set; }
+
+        public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

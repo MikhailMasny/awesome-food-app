@@ -10,12 +10,14 @@ namespace Masny.Pizza.Data.Models
 
         public string Name { get; set; }
 
+        public string Description { get; set; }
+
         public ICollection<ProductDetail> ProductDetails { get; set; }
 
         //public DiameterType Diameter { get; set; } // TODO: to another table
 
         public ICollection<ProductIngredient> ProductIngredients { get; set; }
 
-        public ICollection<OrderProduct> OrderProducts { get; set; }
+        
     }
 }

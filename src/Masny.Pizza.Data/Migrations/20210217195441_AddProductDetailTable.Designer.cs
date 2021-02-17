@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masny.Pizza.Data.Migrations
 {
     [DbContext(typeof(PizzaAppContext))]
-    [Migration("20210217182643_AddProductDetailTable")]
+    [Migration("20210217195441_AddProductDetailTable")]
     partial class AddProductDetailTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -146,7 +146,7 @@ namespace Masny.Pizza.Data.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductDetail");
+                    b.ToTable("ProductDetails");
                 });
 
             modelBuilder.Entity("Masny.Pizza.Data.Models.ProductIngredient", b =>

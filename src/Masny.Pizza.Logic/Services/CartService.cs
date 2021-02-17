@@ -1,5 +1,6 @@
 ﻿using Masny.Pizza.Data.Contexts;
 using Masny.Pizza.Data.Models;
+using Masny.Pizza.Logic.Interfaces;
 using Masny.Pizza.Logic.Models;
 using Microsoft.Extensions.Caching.Memory;
 using System;
@@ -7,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Masny.Pizza.Logic.Services
 {
-    public class CartService
+    public class CartService : ICartService
     {
         private readonly PizzaAppContext _pizzaAppContext;
         private readonly IMemoryCache _memoryCache;
@@ -28,7 +29,7 @@ namespace Masny.Pizza.Logic.Services
                 cartDto = new CartDto
                 {
                     UserId = userId,
-                    Products = new List<Product>(),
+                    Products = new List<ProductDetail>(),
                 };
 
                 _memoryCache.Set(
@@ -42,14 +43,14 @@ namespace Masny.Pizza.Logic.Services
         }
 
         //
-        public void AddOrUpdate(int operationType, string userId, Product product)
+        public void AddOrUpdate(int operationType, string userId, ProductDetail product)
         {
             if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
             {
                 cartDto = new CartDto
                 {
                     UserId = userId,
-                    Products = new List<Product>(),
+                    Products = new List<ProductDetail>(),
                 };
             }
 
@@ -57,12 +58,6 @@ namespace Masny.Pizza.Logic.Services
             if (operationType == 1)
             {
                 cartDto.Products.Add(product);
-
-                _memoryCache.Set(
-                    userId,
-                    cartDto,
-                    new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)));
             }
             else if(operationType == 2)
             {

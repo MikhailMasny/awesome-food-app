@@ -1,5 +1,7 @@
 using Masny.Pizza.Data.Contexts;
 using Masny.Pizza.Data.Models;
+using Masny.Pizza.Logic.Interfaces;
+using Masny.Pizza.Logic.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +31,8 @@ namespace Masny.Pizza.App
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<ICartService, CartService>();
+
             // Database context
             services.AddDbContext<PizzaAppContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PizzaAppConnection")));
@@ -39,8 +43,8 @@ namespace Masny.Pizza.App
 
             // Microsoft services
             services.AddMemoryCache();
-            services.AddControllersWithViews();
-                //.AddRazorRuntimeCompilation();
+            services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
 
             services.ConfigureApplicationCookie(config =>
             {
