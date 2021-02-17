@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Masny.Pizza.Data.Migrations
 {
-    [DbContext(typeof(PizzaContext))]
+    [DbContext(typeof(PizzaAppContext))]
     [Migration("20210217173928_Init")]
     partial class Init
     {

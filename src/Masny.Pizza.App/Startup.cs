@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,31 +30,43 @@ namespace Masny.Pizza.App
         public void ConfigureServices(IServiceCollection services)
         {
             // Database context
-            services.AddDbContext<PizzaContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("PizzaConnection")));
+            services.AddDbContext<PizzaAppContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("PizzaAppConnection")));
 
             // ASP.NET Core Identity
             services.AddIdentity<User, IdentityRole>()
-                .AddEntityFrameworkStores<PizzaContext>();
+                .AddEntityFrameworkStores<PizzaAppContext>();
 
+            // Microsoft services
+            services.AddMemoryCache();
+            services.AddControllersWithViews();
+                //.AddRazorRuntimeCompilation();
+
+            services.ConfigureApplicationCookie(config =>
+            {
+                config.Cookie.Name = "PizzaApp.Cookie";
+                //config.LoginPath = "/Account/SignIn";
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
+            app.UseSerilogRequestLogging();
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapControllerRoute(
+                    name: "default",
+                    pattern: "{controller=Home}/{action=Index}/{id?}");
             });
         }
     }

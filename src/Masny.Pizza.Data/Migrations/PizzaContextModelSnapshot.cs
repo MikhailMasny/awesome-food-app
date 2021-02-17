@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Masny.Pizza.Data.Migrations
 {
-    [DbContext(typeof(PizzaContext))]
+    [DbContext(typeof(PizzaAppContext))]
     partial class PizzaContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

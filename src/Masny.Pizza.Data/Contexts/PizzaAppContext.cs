@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Masny.Pizza.Data.Contexts
 {
-    public class PizzaContext : IdentityDbContext<User>
+    public class PizzaAppContext : IdentityDbContext<User>
     {
-        public PizzaContext(DbContextOptions<PizzaContext> options)
+        public PizzaAppContext(DbContextOptions<PizzaAppContext> options)
             : base(options)
         {
         }
