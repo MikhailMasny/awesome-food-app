@@ -21,6 +21,8 @@ namespace Masny.Pizza.Data.Models
 
         public decimal TotalPrice { get; set; }
 
+        // TODO: comment status time
+
         public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

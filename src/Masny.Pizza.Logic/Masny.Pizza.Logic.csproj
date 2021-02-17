@@ -8,4 +8,9 @@
     <ProjectReference Include="..\Masny.Pizza.Data\Masny.Pizza.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
+    <Folder Include="Mangers\" />
+  </ItemGroup>
+
 </Project>

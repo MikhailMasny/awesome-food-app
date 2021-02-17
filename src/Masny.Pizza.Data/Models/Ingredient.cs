@@ -8,6 +8,8 @@ namespace Masny.Pizza.Data.Models
 
         public string Name { get; set; }
 
+        public decimal Price { get; set; }
+
         public ICollection<ProductIngredient> ProductIngredients { get; set; }
     }
 }

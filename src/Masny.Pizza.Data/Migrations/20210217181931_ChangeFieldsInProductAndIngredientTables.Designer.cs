@@ -4,14 +4,16 @@ using Masny.Pizza.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Masny.Pizza.Data.Migrations
 {
     [DbContext(typeof(PizzaAppContext))]
-    partial class PizzaContextModelSnapshot : ModelSnapshot
+    [Migration("20210217181931_ChangeFieldsInProductAndIngredientTables")]
+    partial class ChangeFieldsInProductAndIngredientTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,29 +97,8 @@ namespace Masny.Pizza.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<double>("Carbohydrate")
                         .HasColumnType("float");
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("Diameter")
-                        .HasColumnType("int");
 
                     b.Property<double>("Energy")
                         .HasColumnType("float");
@@ -125,14 +106,14 @@ namespace Masny.Pizza.Data.Migrations
                     b.Property<double>("Fat")
                         .HasColumnType("float");
 
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
 
                     b.Property<double>("Protein")
                         .HasColumnType("float");
@@ -142,9 +123,7 @@ namespace Masny.Pizza.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("ProductDetail");
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Masny.Pizza.Data.Models.ProductIngredient", b =>
@@ -396,17 +375,6 @@ namespace Masny.Pizza.Data.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductDetail", b =>
-                {
-                    b.HasOne("Masny.Pizza.Data.Models.Product", "Product")
-                        .WithMany("ProductDetails")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("Masny.Pizza.Data.Models.ProductIngredient", b =>
                 {
                     b.HasOne("Masny.Pizza.Data.Models.Ingredient", "Ingredient")
@@ -490,8 +458,6 @@ namespace Masny.Pizza.Data.Migrations
             modelBuilder.Entity("Masny.Pizza.Data.Models.Product", b =>
                 {
                     b.Navigation("OrderProducts");
-
-                    b.Navigation("ProductDetails");
 
                     b.Navigation("ProductIngredients");
                 });
