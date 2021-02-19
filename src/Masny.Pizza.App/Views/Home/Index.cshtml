@@ -13,7 +13,11 @@ Cart: @Model.Count
 @foreach (var item in Model.Products)
 {
     <p>@item.Name</p>
-    <a asp-controller="Home" asp-action="AddToCart" asp-route-id="@item.Id">
-        AddToCard
+    <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id">
+        Details
     </a>
+
+
 }
+
+

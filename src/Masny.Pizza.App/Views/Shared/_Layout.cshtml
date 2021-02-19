@@ -28,10 +28,18 @@
             }
         </div>
     </div>
+
+    @*<button id="cartMainButton">Cart</button>*@
+
+    <form method="post" asp-controller="Cart" asp-action="Index">
+        <button class="button" type="submit">Cart</button>
+    </form>
 </header>
 <body>
     <div>
         @RenderBody()
     </div>
+    @RenderSection("scripts", false)
+    @*<script src="~/js/cart/post.js"></script>*@
 </body>
 </html>

@@ -44,6 +44,9 @@ namespace Masny.Pizza.App
             // Microsoft services
             services.AddMemoryCache();
             services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+)
                 .AddRazorRuntimeCompilation();
 
             services.ConfigureApplicationCookie(config =>

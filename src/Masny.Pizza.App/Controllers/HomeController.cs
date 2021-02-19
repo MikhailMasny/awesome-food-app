@@ -28,12 +28,12 @@ namespace Masny.Pizza.App.Controllers
         {
             Console.WriteLine(HttpContext.User.Identity.Name);
 
-            var cartServiceModel = _cartService.Get(HttpContext.User.Identity.Name.ToString());
+            //var cartServiceModel = _cartService.Get(HttpContext.User.Identity.Name.ToString());
 
             return View(new CommonViewModel
             {
                 Products = await _pizzaAppContext.Products.AsNoTracking().ToListAsync(),
-                Count = cartServiceModel.Products.Count
+                Count = 0 // cartServiceModel.Products.Count
             });
         }
 

@@ -1,0 +1,13 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model IEnumerable<Masny.Pizza.Data.Models.ProductDetail>
+
+@foreach (var item in Model)
+{
+    <div>@item.Id @item.Product.Name</div>
+}
+
