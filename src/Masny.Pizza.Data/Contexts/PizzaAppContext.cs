@@ -13,9 +13,9 @@ namespace Masny.Pizza.Data.Contexts
 
         public DbSet<Ingredient> Ingredients { get; set; }
 
-        public DbSet<Product> Products { get; set; }
-
         public DbSet<ProductDetail> ProductDetails { get; set; }
+
+        public DbSet<Product> Products { get; set; }
 
         public DbSet<ProductIngredient> ProductIngredients { get; set; }
 

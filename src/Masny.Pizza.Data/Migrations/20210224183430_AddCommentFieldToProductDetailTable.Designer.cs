@@ -4,14 +4,16 @@ using Masny.Pizza.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Masny.Pizza.Data.Migrations
 {
     [DbContext(typeof(PizzaAppContext))]
-    partial class PizzaContextModelSnapshot : ModelSnapshot
+    [Migration("20210224183430_AddCommentFieldToProductDetailTable")]
+    partial class AddCommentFieldToProductDetailTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,14 +78,14 @@ namespace Masny.Pizza.Data.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductDetailId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductDetailId");
 
                     b.ToTable("OrderProducts");
                 });
@@ -110,23 +112,20 @@ namespace Masny.Pizza.Data.Migrations
                     b.Property<double>("Fat")
                         .HasColumnType("float");
 
-                    b.Property<int>("Kind")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductDetailId")
+                    b.Property<int?>("ProductDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<double>("Protein")
                         .HasColumnType("float");
-
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
 
                     b.Property<double>("Weight")
                         .HasColumnType("float");
@@ -166,7 +165,10 @@ namespace Masny.Pizza.Data.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductDetailId")
+                    b.Property<int?>("ProductDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -394,24 +396,22 @@ namespace Masny.Pizza.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masny.Pizza.Data.Models.Product", "Product")
+                    b.HasOne("Masny.Pizza.Data.Models.Product", "ProductDetail")
                         .WithMany("OrderProducts")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductDetail");
                 });
 
             modelBuilder.Entity("Masny.Pizza.Data.Models.Product", b =>
                 {
                     b.HasOne("Masny.Pizza.Data.Models.ProductDetail", "ProductDetail")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("ProductDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductDetailId");
 
                     b.Navigation("ProductDetail");
                 });
@@ -426,9 +426,7 @@ namespace Masny.Pizza.Data.Migrations
 
                     b.HasOne("Masny.Pizza.Data.Models.ProductDetail", "ProductDetail")
                         .WithMany("ProductIngredients")
-                        .HasForeignKey("ProductDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductDetailId");
 
                     b.Navigation("Ingredient");
 

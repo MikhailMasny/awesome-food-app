@@ -12,7 +12,7 @@ namespace Masny.Pizza.Logic.Models
         public string UserId { get; set; }
 
         // TODO: change it to Dto object
-        public IList<ProductDetail> Products { get; set; }
+        public IList<Product> Products { get; set; }
 
         //public IList<int> ProductIds { get; set; }
     }

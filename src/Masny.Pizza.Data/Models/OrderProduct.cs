@@ -8,8 +8,8 @@
 
         public Order Order { get; set; }
 
-        public int ProductDetailId { get; set; }
+        public int ProductId { get; set; }
 
-        public ProductDetail ProductDetail { get; set; }
+        public Product Product { get; set; }
     }
 }

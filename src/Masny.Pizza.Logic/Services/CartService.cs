@@ -50,14 +50,14 @@ namespace Masny.Pizza.Logic.Services
         }
 
         //
-        public void AddOrUpdate(int operationType, string userId, ProductDetail product)
+        public void AddOrUpdate(int operationType, string userId, Product product)
         {
             if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
             {
                 cartDto = new CartDto
                 {
                     UserId = userId,
-                    Products = new List<ProductDetail>(),
+                    Products = new List<Product>(),
                 };
             }
 

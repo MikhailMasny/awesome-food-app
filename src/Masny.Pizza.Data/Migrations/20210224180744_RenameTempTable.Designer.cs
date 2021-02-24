@@ -4,14 +4,16 @@ using Masny.Pizza.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Masny.Pizza.Data.Migrations
 {
     [DbContext(typeof(PizzaAppContext))]
-    partial class PizzaContextModelSnapshot : ModelSnapshot
+    [Migration("20210224180744_RenameTempTable")]
+    partial class RenameTempTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -76,19 +78,19 @@ namespace Masny.Pizza.Data.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductId")
+                    b.Property<int>("ProductDetailId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("ProductId");
+                    b.HasIndex("ProductDetailId");
 
                     b.ToTable("OrderProducts");
                 });
 
-            modelBuilder.Entity("Masny.Pizza.Data.Models.Product", b =>
+            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductDetail", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -110,48 +112,27 @@ namespace Masny.Pizza.Data.Migrations
                     b.Property<double>("Fat")
                         .HasColumnType("float");
 
-                    b.Property<int>("Kind")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("ProductDetailId")
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductTempId")
                         .HasColumnType("int");
 
                     b.Property<double>("Protein")
                         .HasColumnType("float");
-
-                    b.Property<int>("Size")
-                        .HasColumnType("int");
 
                     b.Property<double>("Weight")
                         .HasColumnType("float");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductDetailId");
-
-                    b.ToTable("Products");
-                });
-
-            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Comment")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
+                    b.HasIndex("ProductTempId");
 
                     b.ToTable("ProductDetails");
                 });
@@ -166,16 +147,37 @@ namespace Masny.Pizza.Data.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductDetailId")
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("ProductTempId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IngredientId");
 
-                    b.HasIndex("ProductDetailId");
+                    b.HasIndex("ProductTempId");
 
                     b.ToTable("ProductIngredients");
+                });
+
+            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductTemp", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
                 });
 
             modelBuilder.Entity("Masny.Pizza.Data.Models.User", b =>
@@ -394,26 +396,24 @@ namespace Masny.Pizza.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masny.Pizza.Data.Models.Product", "Product")
+                    b.HasOne("Masny.Pizza.Data.Models.ProductDetail", "ProductDetail")
                         .WithMany("OrderProducts")
-                        .HasForeignKey("ProductId")
+                        .HasForeignKey("ProductDetailId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
 
-                    b.Navigation("Product");
+                    b.Navigation("ProductDetail");
                 });
 
-            modelBuilder.Entity("Masny.Pizza.Data.Models.Product", b =>
+            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductDetail", b =>
                 {
-                    b.HasOne("Masny.Pizza.Data.Models.ProductDetail", "ProductDetail")
+                    b.HasOne("Masny.Pizza.Data.Models.ProductTemp", "ProductTemp")
                         .WithMany("ProductDetails")
-                        .HasForeignKey("ProductDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductTempId");
 
-                    b.Navigation("ProductDetail");
+                    b.Navigation("ProductTemp");
                 });
 
             modelBuilder.Entity("Masny.Pizza.Data.Models.ProductIngredient", b =>
@@ -424,15 +424,13 @@ namespace Masny.Pizza.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Masny.Pizza.Data.Models.ProductDetail", "ProductDetail")
+                    b.HasOne("Masny.Pizza.Data.Models.ProductTemp", "ProductTemp")
                         .WithMany("ProductIngredients")
-                        .HasForeignKey("ProductDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductTempId");
 
                     b.Navigation("Ingredient");
 
-                    b.Navigation("ProductDetail");
+                    b.Navigation("ProductTemp");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -496,12 +494,12 @@ namespace Masny.Pizza.Data.Migrations
                     b.Navigation("OrderProducts");
                 });
 
-            modelBuilder.Entity("Masny.Pizza.Data.Models.Product", b =>
+            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductDetail", b =>
                 {
                     b.Navigation("OrderProducts");
                 });
 
-            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductDetail", b =>
+            modelBuilder.Entity("Masny.Pizza.Data.Models.ProductTemp", b =>
                 {
                     b.Navigation("ProductDetails");
 

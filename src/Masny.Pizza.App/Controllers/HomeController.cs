@@ -35,7 +35,7 @@ namespace Masny.Pizza.App.Controllers
 
             return View(new CommonViewModel
             {
-                Products = await _pizzaAppContext.Products.AsNoTracking().ToListAsync(),
+                Products = await _pizzaAppContext.ProductDetails.AsNoTracking().ToListAsync(),
                 Count = 0 // cartServiceModel.Products.Count
             });
         }

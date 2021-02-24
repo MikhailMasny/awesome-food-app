@@ -7,7 +7,7 @@ namespace Masny.Pizza.App.ViewModels
 {
     public class CommonViewModel
     {
-        public IEnumerable<Masny.Pizza.Data.Models.Product> Products { get; set; }
+        public IEnumerable<Masny.Pizza.Data.Models.ProductDetail> Products { get; set; }
 
         public int Count { get; set; }
     }

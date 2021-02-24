@@ -49,7 +49,7 @@ namespace Masny.Pizza.App.Controllers
         [HttpPost]
         public IActionResult Add([FromBody] Model model)
         {
-            var pdm = _pizzaAppContext.ProductDetails.AsNoTracking().FirstOrDefault(pd => pd.Id == model.Id);
+            var pdm = _pizzaAppContext.Products.AsNoTracking().FirstOrDefault(pd => pd.Id == model.Id);
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // TODO: To extension
             cartService.AddOrUpdate(1, userId, pdm);
 

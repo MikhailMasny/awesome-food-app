@@ -4,14 +4,14 @@
 @{
 }
 
-@model IEnumerable<Masny.Pizza.Data.Models.ProductDetail>
+@model IEnumerable<Masny.Pizza.Data.Models.Product>
 
 @foreach (var item in Model)
 {
 
 
 <div>
-    @item.Product.Name @item.Price
+    @item.ProductDetail.Name @item.Price
 
     @if (User.Identity.IsAuthenticated)
     {

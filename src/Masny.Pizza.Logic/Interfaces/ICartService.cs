@@ -14,6 +14,6 @@ namespace Masny.Pizza.Logic.Interfaces
         Task Clear(string userId);
         CartDto Get(string userId);
 
-        void AddOrUpdate(int operationType, string userId, ProductDetail product);
+        void AddOrUpdate(int operationType, string userId, Product product);
     }
 }

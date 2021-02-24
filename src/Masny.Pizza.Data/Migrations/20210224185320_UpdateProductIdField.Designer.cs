@@ -4,14 +4,16 @@ using Masny.Pizza.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Masny.Pizza.Data.Migrations
 {
     [DbContext(typeof(PizzaAppContext))]
-    partial class PizzaContextModelSnapshot : ModelSnapshot
+    [Migration("20210224185320_UpdateProductIdField")]
+    partial class UpdateProductIdField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,7 +168,10 @@ namespace Masny.Pizza.Data.Migrations
                     b.Property<int>("IngredientId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ProductDetailId")
+                    b.Property<int?>("ProductDetailId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -426,9 +431,7 @@ namespace Masny.Pizza.Data.Migrations
 
                     b.HasOne("Masny.Pizza.Data.Models.ProductDetail", "ProductDetail")
                         .WithMany("ProductIngredients")
-                        .HasForeignKey("ProductDetailId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ProductDetailId");
 
                     b.Navigation("Ingredient");
 

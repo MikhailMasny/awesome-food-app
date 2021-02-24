@@ -65,7 +65,7 @@ namespace Masny.Pizza.App.Controllers
                 pizzaAppContext.OrderProducts.Add(new OrderProduct
                 {
                     OrderId = order.Id,
-                    ProductDetailId = item.ProductId
+                    ProductId = item.Id
                 });
             }
 

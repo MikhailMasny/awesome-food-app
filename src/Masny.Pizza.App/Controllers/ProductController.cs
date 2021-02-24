@@ -23,7 +23,7 @@ namespace Masny.Pizza.App.Controllers
             
 
 
-            var pdm = await _pizzaAppContext.ProductDetails.Include(pd => pd.Product).AsNoTracking().Where(pd => pd.ProductId == id).ToListAsync();
+            var pdm = await _pizzaAppContext.Products.Include(pd => pd.ProductDetail).AsNoTracking().Where(pd => pd.ProductDetailId == id).ToListAsync();
             //_cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
 
             return View(pdm);

@@ -4,10 +4,10 @@
 @{
 }
 
-@model IEnumerable<Masny.Pizza.Data.Models.ProductDetail>
+@model IEnumerable<Masny.Pizza.Data.Models.Product>
 
 @foreach (var item in Model)
 {
-    <div>@item.Id @item.Product.Name</div>
+    <div>@item.Id @item.ProductDetail.Name</div>
 }
 

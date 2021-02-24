@@ -1,38 +1,23 @@
 ﻿using Masny.Pizza.Data.Enums;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Masny.Pizza.Data.Models
 {
     public class ProductDetail
     {
+        // TODO: Type (pizza or any type)
         public int Id { get; set; }
 
-        public int ProductId { get; set; }
-
-        public Product Product { get; set; }
-
-        public byte[] Photo { get; set; }
-
-        public decimal Price { get; set; }
-
-        public double Energy { get; set; }
-
-        public double Protein { get; set; }
-
-        public double Fat { get; set; }
-
-        public double Carbohydrate { get; set; }
-
-        public double Weight { get; set; }
+        public string Name { get; set; }
 
         public string Comment { get; set; }
 
-        public DiameterType Diameter { get; set; }
+        public ICollection<Product> ProductDetails { get; set; }
 
-        public ICollection<OrderProduct> OrderProducts { get; set; }
+        //public DiameterType Diameter { get; set; } // TODO: to another table
+
+        public ICollection<ProductIngredient> ProductIngredients { get; set; }
+
+        
     }
 }
