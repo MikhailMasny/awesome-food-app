@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Masny.Pizza.App.Controllers
@@ -28,6 +29,8 @@ namespace Masny.Pizza.App.Controllers
         {
             Console.WriteLine(HttpContext.User.Identity.Name);
 
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
             //var cartServiceModel = _cartService.Get(HttpContext.User.Identity.Name.ToString());
 
             return View(new CommonViewModel
@@ -37,23 +40,16 @@ namespace Masny.Pizza.App.Controllers
             });
         }
 
-        [Authorize]
-        public async Task<IActionResult> AddToCart(int id)
-        {
-            var pdm = _pizzaAppContext.ProductDetails.AsNoTracking().FirstOrDefault(pd => pd.ProductId == id);
-            _cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
+        //[Authorize]
+        //public async Task<IActionResult> AddToCart(int id)
+        //{
+        //    var pdm = _pizzaAppContext.ProductDetails.AsNoTracking().FirstOrDefault(pd => pd.ProductId == id);
+        //    _cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
 
-            //var userId = await _accountManager.GetUserIdByNameAsync(User.Identity.Name);
-            //await _todoManager.DeleteAsync(id, userId);
+        //    //var userId = await _accountManager.GetUserIdByNameAsync(User.Identity.Name);
+        //    //await _todoManager.DeleteAsync(id, userId);
 
-            return RedirectToAction("Index", "Home");
-        }
-
-        [Authorize]
-        [HttpGet]
-        public IActionResult Secret()
-        {
-            return View();
-        }
+        //    return RedirectToAction("Index", "Home");
+        //}
     }
 }

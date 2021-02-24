@@ -9,14 +9,16 @@
 <header>
     <div class="wrapper">
         <div class="header header__indent-bottom">
-            <a class="logo logo__link" asp-controller="Home" asp-action="Index">ToDo App</a>
+            <a class="logo logo__link" asp-controller="Home" asp-action="Index">Pizza</a>
             @if (User.Identity.IsAuthenticated)
             {
                 <div class="auth">
                     <span class="auth__name">@User.Identity.Name</span>
-                    <form method="post" asp-controller="Account" asp-action="Logout">
+                    <a class="button button__link" asp-controller="Cart" asp-action="Index">Cart</a>
+                    <a class="button button__link" asp-controller="Account" asp-action="Logout">Logout</a>
+                    @*<form method="post" asp-controller="Account" asp-action="Logout">
                         <button class="button" type="submit">Logout</button>
-                    </form>
+                    </form>*@
                 </div>
             }
             else
@@ -31,9 +33,9 @@
 
     @*<button id="cartMainButton">Cart</button>*@
 
-    <form method="post" asp-controller="Cart" asp-action="Index">
+    @*<form method="post" asp-controller="Cart" asp-action="Index">
         <button class="button" type="submit">Cart</button>
-    </form>
+    </form>*@
 </header>
 <body>
     <div>

@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Masny.Pizza.App.Controllers
@@ -19,6 +20,9 @@ namespace Masny.Pizza.App.Controllers
 
         public async Task<IActionResult> DetailAsync(int id)
         {
+            
+
+
             var pdm = await _pizzaAppContext.ProductDetails.Include(pd => pd.Product).AsNoTracking().Where(pd => pd.ProductId == id).ToListAsync();
             //_cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
 

@@ -13,5 +13,7 @@ namespace Masny.Pizza.Logic.Models
 
         // TODO: change it to Dto object
         public IList<ProductDetail> Products { get; set; }
+
+        //public IList<int> ProductIds { get; set; }
     }
 }

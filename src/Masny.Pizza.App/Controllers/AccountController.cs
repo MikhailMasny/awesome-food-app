@@ -97,8 +97,39 @@ namespace Masny.Pizza.App.Controllers
             return View(model);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[HttpGet]
+        //public IActionResult Profile()
+        //{
+        //    return View();
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Profile(LoginViewModel model)
+        //{
+        //    model = model ?? throw new ArgumentNullException(nameof(model));
+
+        //    if (ModelState.IsValid)
+        //    {
+        //        var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+        //        if (result.Succeeded)
+        //        {
+        //            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+        //            {
+        //                return Redirect(model.ReturnUrl);
+        //            }
+
+        //            return RedirectToAction("Account", "Profile");
+        //        }
+
+        //        //ModelState.AddModelError(string.Empty, AccountResource.IncorrectData);
+        //        ModelState.AddModelError(string.Empty, "Неверные данные");
+        //    }
+        //    return View(model);
+        //}
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
         [Authorize]
         public async Task<IActionResult> Logout()
         {

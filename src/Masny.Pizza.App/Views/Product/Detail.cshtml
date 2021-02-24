@@ -8,11 +8,21 @@
 
 @foreach (var item in Model)
 {
-    <div>@item.Product.Name <button data-cart-id="@item.Id">to cart</button></div>
+
+
+<div>
+    @item.Product.Name @item.Price
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <button data-cart-id="@item.Id">to cart</button>
+    }
+
+</div>
 }
 
 @section scripts
 {
-    <script src="~/js/cart/add.js"></script>
+    <script src="~/js/cart/post.js"></script>
 }
 

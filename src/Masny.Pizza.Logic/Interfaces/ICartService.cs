@@ -10,6 +10,8 @@ namespace Masny.Pizza.Logic.Interfaces
 {
     public interface ICartService
     {
+
+        Task Clear(string userId);
         CartDto Get(string userId);
 
         void AddOrUpdate(int operationType, string userId, ProductDetail product);

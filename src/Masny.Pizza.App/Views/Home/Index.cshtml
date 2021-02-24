@@ -6,16 +6,26 @@
 
 @model CommonViewModel
 
-Cart: @Model.Count
+@*Cart: @Model.Count*@
 
-<h1>Index</h1>
+<h1>Pizza here</h1>
 
 @foreach (var item in Model.Products)
 {
-    <p>@item.Name</p>
+<div style="width: 200px; display: flex; justify-content: space-between">
+    <div>@item.Name</div>
+    <div>@item.Description</div>
+    <div>
+        <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id">
+            Details
+        </a>
+    </div>
+</div>
+
+    @*<p>@item.Name</p>
     <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id">
         Details
-    </a>
+    </a>*@
 
 
 }

@@ -5,6 +5,7 @@ using Masny.Pizza.Logic.Models;
 using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Masny.Pizza.Logic.Services
 {
@@ -23,23 +24,29 @@ namespace Masny.Pizza.Logic.Services
 
         public CartDto Get(string userId)
         {
-            CartDto cartDto;
-            if (!_memoryCache.TryGetValue(userId, out cartDto))
+            if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
             {
-                cartDto = new CartDto
-                {
-                    UserId = userId,
-                    Products = new List<ProductDetail>(),
-                };
+                //cartDto = new CartDto
+                //{
+                //    UserId = userId,
+                //    Products = new List<ProductDetail>(),
+                //};
 
-                _memoryCache.Set(
-                    userId,
-                    cartDto,
-                    new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)));
+                //_memoryCache.Set(
+                //    userId,
+                //    cartDto,
+                //    new MemoryCacheEntryOptions()
+                //        .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)));
             }
 
             return cartDto;
+        }
+
+        public Task Clear(string userId)
+        {
+            _memoryCache.Remove(userId);
+
+            return Task.CompletedTask;
         }
 
         //
