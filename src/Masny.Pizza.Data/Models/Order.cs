@@ -1,10 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Masny.Pizza.Data.Models
 {
     public class Order
     {
         public int Id { get; set; }
+
+        public int Number { get; set; }
+
+        public DateTime Creation { get; set; }
 
         public string UserId { get; set; }
 
@@ -20,6 +25,8 @@ namespace Masny.Pizza.Data.Models
         //public string PromoCode { get; set; }
 
         public decimal TotalPrice { get; set; }
+
+        public string Comment { get; set; }
 
         // TODO: comment status time
 

@@ -2,6 +2,7 @@
 using Masny.Pizza.Data.Models;
 using Masny.Pizza.Logic.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,14 +43,39 @@ namespace Masny.Pizza.App.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(SimpleTestClass simpleTestClass)
+        public async Task<IActionResult> IndexAsync(SimpleTestClass simpleTestClass)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
             var cartProducts = cartService.Get(userId);
 
+            var orderNumber = 1;
+            var dateTimeNow = DateTime.Now;
+            //try
+            //{
+            //    var lastOrder1 = await pizzaAppContext.Orders.AsNoTracking().LastOrDefaultAsync();
+            //}
+            //catch (Exception ex)
+            //{
+
+            //    throw;
+            //}
+
+            var lastOrder = await pizzaAppContext.Orders
+                .AsNoTracking()
+                .OrderBy(o => o.Id)
+                .LastOrDefaultAsync();
+
+            if (lastOrder is not null && lastOrder.Creation.Date == dateTimeNow.Date)
+            {
+                orderNumber = ++lastOrder.Number;
+            }
+
             var order = new Order
             {
+                Number = orderNumber,
+                Creation = dateTimeNow,
+                Comment = simpleTestClass.Comment,
                 UserId = userId,
                 Name = "test",
                 Phone = "take from db",
@@ -80,7 +106,7 @@ namespace Masny.Pizza.App.Controllers
 
             //pizzaAppContext.Orders.Add()
 
-            cartService.Clear(userId);
+            await cartService.Clear(userId);
 
             return Redirect("/Home/Index");
         }

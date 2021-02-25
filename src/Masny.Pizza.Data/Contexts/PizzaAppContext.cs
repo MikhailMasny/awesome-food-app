@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Masny.Pizza.Data.Contexts
 {
+    // TODO: Add configurations
+
     public class PizzaAppContext : IdentityDbContext<User>
     {
         public PizzaAppContext(DbContextOptions<PizzaAppContext> options)
