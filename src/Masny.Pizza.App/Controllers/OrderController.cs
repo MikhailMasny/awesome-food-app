@@ -110,6 +110,23 @@ namespace Masny.Pizza.App.Controllers
 
             return Redirect("/Home/Index");
         }
+
+        public async Task<IActionResult> DetailAsync(int id)
+        {
+
+
+
+            var pdm = 
+                await pizzaAppContext.OrderProducts
+                    .Include(op => op.Product)
+                        .ThenInclude(p => p.ProductDetail)
+                    .AsNoTracking()
+                    .Where(pd => pd.OrderId == id)
+                    .ToListAsync();
+            //_cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
+
+            return View(pdm);
+        }
     }
 
     public class SimpleTestClass

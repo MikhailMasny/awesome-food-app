@@ -2,6 +2,7 @@ using Masny.Pizza.Data.Contexts;
 using Masny.Pizza.Data.Models;
 using Masny.Pizza.Logic.Interfaces;
 using Masny.Pizza.Logic.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -48,6 +49,14 @@ namespace Masny.Pizza.App
     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
 )
                 .AddRazorRuntimeCompilation();
+
+            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            //    .AddCookie(options => //CookieAuthenticationOptions
+            //    {
+            //        options.Cookie.Name = "PizzaApp.Cookie";
+            //        options.Cookie.Expiration
+            //        //options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+            //    });
 
             services.ConfigureApplicationCookie(config =>
             {

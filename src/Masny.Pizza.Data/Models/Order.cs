@@ -28,6 +28,8 @@ namespace Masny.Pizza.Data.Models
 
         public string Comment { get; set; }
 
+        public int Status { get; set; }
+
         // TODO: comment status time
 
         public ICollection<OrderProduct> OrderProducts { get; set; }

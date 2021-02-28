@@ -15,6 +15,7 @@
                 <div class="auth">
                     <span class="auth__name">@User.Identity.Name</span>
                     <a class="button button__link" asp-controller="Cart" asp-action="Index">Cart</a>
+                    <a class="button button__link" asp-controller="Account" asp-action="OrderHistory">Orders</a>
                     <a class="button button__link" asp-controller="Account" asp-action="Logout">Logout</a>
                     @*<form method="post" asp-controller="Account" asp-action="Logout">
                         <button class="button" type="submit">Logout</button>

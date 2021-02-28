@@ -1,11 +1,14 @@
 ﻿using Masny.Pizza.App.ViewModels;
+using Masny.Pizza.Data.Contexts;
 using Masny.Pizza.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Masny.Pizza.App.Controllers
@@ -14,13 +17,16 @@ namespace Masny.Pizza.App.Controllers
     {
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
+        private readonly PizzaAppContext pizzaAppContext;
 
         public AccountController(
             SignInManager<User> signInManager,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            PizzaAppContext pizzaAppContext)
         {
             _signInManager = signInManager ?? throw new ArgumentNullException(nameof(signInManager));
             _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager));
+            this.pizzaAppContext = pizzaAppContext;
         }
 
         [HttpGet]
@@ -95,6 +101,14 @@ namespace Masny.Pizza.App.Controllers
                 ModelState.AddModelError(string.Empty, "Неверные данные");
             }
             return View(model);
+        }
+
+        public IActionResult OrderHistory()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var orderHistory = pizzaAppContext.Orders.AsNoTracking().Where(o => o.UserId == userId).ToList();
+
+            return View(orderHistory);
         }
 
         //[HttpGet]
