@@ -7,7 +7,7 @@ namespace Masny.Pizza.Data.Models
     {
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
 
         public User User { get; set; }
 

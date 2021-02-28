@@ -111,36 +111,50 @@ namespace Masny.Pizza.App.Controllers
             return View(orderHistory);
         }
 
-        //[HttpGet]
-        //public IActionResult Profile()
-        //{
-        //    return View();
-        //}
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> ProfileAsync()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var profile = await pizzaAppContext.Profiles.AsNoTracking().FirstAsync(p => p.UserId == userId);
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Profile(LoginViewModel model)
-        //{
-        //    model = model ?? throw new ArgumentNullException(nameof(model));
+            return View(profile);
+        }
 
-        //    if (ModelState.IsValid)
-        //    {
-        //        var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
-        //        if (result.Succeeded)
-        //        {
-        //            if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
-        //            {
-        //                return Redirect(model.ReturnUrl);
-        //            }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Profile(ProfileViewModel model)
+        {
+            model = model ?? throw new ArgumentNullException(nameof(model));
 
-        //            return RedirectToAction("Account", "Profile");
-        //        }
+            if (ModelState.IsValid)
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var profile = await pizzaAppContext.Profiles.FirstAsync(p => p.UserId == userId);
 
-        //        //ModelState.AddModelError(string.Empty, AccountResource.IncorrectData);
-        //        ModelState.AddModelError(string.Empty, "Неверные данные");
-        //    }
-        //    return View(model);
-        //}
+                profile.FullName = model.FullName;
+                profile.BirthDate = model.BirthDate;
+
+                pizzaAppContext.SaveChanges();
+
+                return RedirectToAction("Index", "Home");
+
+                //var result = await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, false);
+                //if (result.Succeeded)
+                //{
+                //    if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
+                //    {
+                //        return Redirect(model.ReturnUrl);
+                //    }
+
+                //    return RedirectToAction("Account", "Profile");
+                //}
+
+                //ModelState.AddModelError(string.Empty, AccountResource.IncorrectData);
+                ModelState.AddModelError(string.Empty, "Неверные данные");
+            }
+            return View(model);
+        }
 
         //[HttpPost]
         //[ValidateAntiForgeryToken]
