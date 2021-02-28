@@ -1,13 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Masny.Pizza.Data.Enums;
+using System;
 
 namespace Masny.Pizza.Data.Models
 {
-    // TODO: one-to-one
     public class Profile
     {
+        public int Id { get; set; }
+
+        public int UserId { get; set; }
+
+        public User User { get; set; }
+
+        public string FullName { get; set; }
+
+        public GenderType Gender { get; set; }
+
+        public DateTime BirthDate { get; set; }
+
+        public byte[] Avatar { get; set; }
     }
 }

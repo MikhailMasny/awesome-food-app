@@ -24,5 +24,9 @@ namespace Masny.Pizza.Data.Contexts
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<OrderProduct> OrderProducts { get; set; }
+
+        public DbSet<Profile> Profiles { get; set; }
+
+        public DbSet<DeliveryAddress> DeliveryAddresses { get; set; }
     }
 }

@@ -8,5 +8,9 @@ namespace Masny.Pizza.Data.Models
         public string Address { get; set; }
 
         public ICollection<Order> Orders { get; set; }
+
+        public ICollection<DeliveryAddress> DeliveryAddresses { get; set; }
+
+        //public Profile Profile { get; set; }
     }
 }
