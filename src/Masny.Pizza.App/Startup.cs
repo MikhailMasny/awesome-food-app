@@ -38,6 +38,9 @@ namespace Masny.Pizza.App
             services.AddDbContext<PizzaAppContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("PizzaAppConnection")));
 
+            services.AddDbContext<FoodAppContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("PizzaAppConnection")));
+
             // ASP.NET Core Identity
             services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<PizzaAppContext>();
