@@ -4,4 +4,8 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Masny.Food.Logic\Masny.Food.Logic.csproj" />
+  </ItemGroup>
+
 </Project>

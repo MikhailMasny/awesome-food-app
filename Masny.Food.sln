@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masny.Food.Data", "src\Masn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masny.Food.App", "src\Masny.Food.App\Masny.Food.App.csproj", "{DC575F5E-6A48-45C3-A834-F6A1897E1798}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masny.Food.Logic", "src\Masny.Food.Logic\Masny.Food.Logic.csproj", "{5EB06922-E5E6-4EBA-B0C7-1F66E2CF87E6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{DC575F5E-6A48-45C3-A834-F6A1897E1798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DC575F5E-6A48-45C3-A834-F6A1897E1798}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DC575F5E-6A48-45C3-A834-F6A1897E1798}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EB06922-E5E6-4EBA-B0C7-1F66E2CF87E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EB06922-E5E6-4EBA-B0C7-1F66E2CF87E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EB06922-E5E6-4EBA-B0C7-1F66E2CF87E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EB06922-E5E6-4EBA-B0C7-1F66E2CF87E6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
