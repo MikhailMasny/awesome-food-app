@@ -1,0 +1,35 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Masny.Food.Data.Models.Profile
+
+<h1>User profile</h1>
+
+
+<form method="post" asp-controller="Account" asp-action="Profile">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div class="indent__margin-bottom">
+        <input class="input" asp-for="Name" placeholder="Username" type="text" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    @*<div class="indent__margin-bottom">
+            <input class="input" asp-for="Gender" placeholder="********" type="text" />
+            <span asp-validation-for="Gender"></span>
+        </div>*@
+    <div class="indent__margin-bottom">
+        <input class="input" asp-for="BirthDate" placeholder="********" type="date" />
+        <span asp-validation-for="BirthDate"></span>
+    </div>
+    @*<div class="indent__margin-bottom">
+            <input class="input" asp-for="Gender" placeholder="********" type="password" />
+            <span asp-validation-for="Gender"></span>
+        </div>*@
+    <div class="indent__margin-bottom">
+        <button class="button" type="submit">Enter</button>
+    </div>
+</form>
+
+

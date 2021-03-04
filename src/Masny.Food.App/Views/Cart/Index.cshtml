@@ -1,0 +1,34 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+@model Masny.Food.Logic.Models.CartDto
+
+
+
+<h1>Cart index</h1>
+
+@if (Model is not null)
+{
+    @foreach (var item in Model.Products)
+    {
+        <p>@item.Id  @item.Price</p>
+    }
+}
+else
+{
+    <p>Корзина пуста</p>
+}
+
+<a asp-controller="Order" asp-action="Index">Get order</a>
+
+@*<form method="post" asp-controller="Order" asp-action="Index">
+        <button class="button" type="submit">Get order</button>
+    </form>*@
+
+@section scripts
+{
+    @*<script src="~/js/cart/post.js"></script>*@
+}
