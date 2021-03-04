@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masny.Pizza.Data", "src\Mas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masny.Pizza.App", "src\Masny.Pizza.App\Masny.Pizza.App.csproj", "{14A74596-4F00-4DD4-860F-CBF1079525A5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masny.Food.Data", "src\Masny.Food.Data\Masny.Food.Data.csproj", "{613AB960-F5D4-452C-B45E-D337B97B0D21}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masny.Food.Data", "src\Masny.Food.Data\Masny.Food.Data.csproj", "{613AB960-F5D4-452C-B45E-D337B97B0D21}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Masny.Food.App", "src\Masny.Food.App\Masny.Food.App.csproj", "{DC575F5E-6A48-45C3-A834-F6A1897E1798}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{613AB960-F5D4-452C-B45E-D337B97B0D21}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{613AB960-F5D4-452C-B45E-D337B97B0D21}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{613AB960-F5D4-452C-B45E-D337B97B0D21}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DC575F5E-6A48-45C3-A834-F6A1897E1798}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC575F5E-6A48-45C3-A834-F6A1897E1798}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC575F5E-6A48-45C3-A834-F6A1897E1798}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC575F5E-6A48-45C3-A834-F6A1897E1798}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
