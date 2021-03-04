@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Masny.Food.Data.Models
+﻿namespace Masny.Food.Data.Models
 {
     /// <summary>
     /// Link table Product - Ingredient.

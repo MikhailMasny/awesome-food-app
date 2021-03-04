@@ -28,21 +28,21 @@
         /// <summary>
         /// Apartment.
         /// </summary>
-        public int Apartment { get; set; }
+        public int? Apartment { get; set; }
 
         /// <summary>
         /// Floor.
         /// </summary>
-        public int Floor { get; set; }
+        public int? Floor { get; set; }
 
         /// <summary>
         /// Intercom.
         /// </summary>
-        public int Intercom { get; set; }
+        public int? Intercom { get; set; }
 
         /// <summary>
         /// Entrance.
         /// </summary>
-        public int Entrance { get; set; }
+        public int? Entrance { get; set; }
     }
 }

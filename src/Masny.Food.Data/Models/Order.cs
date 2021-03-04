@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Masny.Food.Data.Enums;
+using System;
 using System.Collections.Generic;
 
 namespace Masny.Food.Data.Models
@@ -44,6 +45,11 @@ namespace Masny.Food.Data.Models
         public string Phone { get; set; }
 
         /// <summary>
+        /// In place.
+        /// </summary>
+        public bool InPlace { get; set; }
+
+        /// <summary>
         /// Address.
         /// </summary>
         public string Address { get; set; }
@@ -66,7 +72,7 @@ namespace Masny.Food.Data.Models
         /// <summary>
         /// Status.
         /// </summary>
-        public int Status { get; set; }
+        public StatusType Status { get; set; }
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
     }

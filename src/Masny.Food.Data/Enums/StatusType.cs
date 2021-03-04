@@ -1,9 +1,9 @@
 ﻿namespace Masny.Food.Data.Enums
 {
     /// <summary>
-    /// Diameter type.
+    /// Status type.
     /// </summary>
-    public enum DiameterType
+    public enum StatusType
     {
         /// <summary>
         /// Unknown.
@@ -11,18 +11,18 @@
         Unknown = -1,
 
         /// <summary>
-        /// Small size.
+        /// Todo.
         /// </summary>
-        Small = 25,
+        Todo = 0,
 
         /// <summary>
-        /// Medium size.
+        /// In progress.
         /// </summary>
-        Medium = 30,
+        InProgress = 1,
 
         /// <summary>
-        /// Big size.
+        /// Done.
         /// </summary>
-        Big = 35,
+        Done = 2,
     }
 }
