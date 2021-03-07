@@ -1,25 +1,36 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Masny.Food.App.ViewModels
 {
+    /// <summary>
+    /// Login view model.
+    /// </summary>
     public class LoginViewModel
     {
+        /// <summary>
+        /// User name.
+        /// </summary>
         [Required]
         [Display(Name = nameof(Username))]
         public string Username { get; set; }
 
+        /// <summary>
+        /// Password.
+        /// </summary>
         [Required]
         [DataType(DataType.Password)]
         [Display(Name = nameof(Password))]
         public string Password { get; set; }
 
-        [Display(Name = "RememberMe")]
+        /// <summary>
+        /// Remember me.
+        /// </summary>
+        [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
 
+        /// <summary>
+        /// Return url.
+        /// </summary>
         public string ReturnUrl { get; set; }
     }
 }

@@ -1,34 +1,37 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
-
-@model Masny.Food.Data.Models.Profile
+﻿@model ProfileViewModel
 
 <h1>User profile</h1>
 
-
-<form method="post" asp-controller="Account" asp-action="Profile">
+<form method="post" asp-controller="Account" asp-action="Profile" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly"></div>
-    <div class="indent__margin-bottom">
-        <input class="input" asp-for="Name" placeholder="Username" type="text" />
+    
+    <div>
+        <input asp-for="Name" placeholder="Enter your name" type="text" />
         <span asp-validation-for="Name"></span>
     </div>
-    @*<div class="indent__margin-bottom">
-            <input class="input" asp-for="Gender" placeholder="********" type="text" />
-            <span asp-validation-for="Gender"></span>
-        </div>*@
-    <div class="indent__margin-bottom">
-        <input class="input" asp-for="BirthDate" placeholder="********" type="date" />
+
+    <div>
+        <input asp-for="BirthDate" placeholder="Enter birthdate" type="date" />
         <span asp-validation-for="BirthDate"></span>
     </div>
-    @*<div class="indent__margin-bottom">
-            <input class="input" asp-for="Gender" placeholder="********" type="password" />
-            <span asp-validation-for="Gender"></span>
-        </div>*@
-    <div class="indent__margin-bottom">
-        <button class="button" type="submit">Enter</button>
+
+    <div>
+        <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderType>()"></select>
+        <span asp-validation-for="Gender" />
+    </div>
+
+    <div>
+        @{
+            if (Model.Avatar is not null)
+            {
+                <img style="width:25%" src="data:image/jpeg;base64,@(Convert.ToBase64String(Model.Avatar))" />
+            }
+        }
+        <input asp-for="AvatarFile" type="file" />
+    </div>
+
+    <div>
+        <button type="submit">Save</button>
     </div>
 </form>
 

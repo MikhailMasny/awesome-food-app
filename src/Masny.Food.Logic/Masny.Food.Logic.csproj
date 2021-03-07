@@ -8,8 +8,4 @@
     <ProjectReference Include="..\Masny.Food.Data\Masny.Food.Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Managers\" />
-  </ItemGroup>
-
 </Project>

@@ -1,4 +1,5 @@
-﻿using Masny.Food.App.ViewModels;
+﻿using Masny.Food.App.Extensions;
+using Masny.Food.App.ViewModels;
 using Masny.Food.Data.Contexts;
 using Masny.Food.Data.Enums;
 using Masny.Food.Data.Models;
@@ -23,6 +24,17 @@ namespace Masny.Food.App.Controllers
         {
             this.cartService = cartService;
             this.foodAppContext = foodAppContext;
+        }
+
+
+        public IActionResult OrderHistory()
+        {
+            var userId = User.GetUserIdByClaimsPrincipal();
+
+
+            var orderHistory = foodAppContext.Orders.AsNoTracking().Where(o => o.UserId == userId).ToList();
+
+            return View(orderHistory);
         }
 
         [HttpGet]

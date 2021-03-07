@@ -1,6 +1,7 @@
 using Masny.Food.Data.Contexts;
 using Masny.Food.Data.Models;
 using Masny.Food.Logic.Interfaces;
+using Masny.Food.Logic.Managers;
 using Masny.Food.Logic.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -25,7 +26,10 @@ namespace Masny.Food.App
 
         public void ConfigureServices(IServiceCollection services)
         {
+            // Managers & services
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<IProfileManager, ProfileManager>();
+            services.AddScoped(typeof(IRepositoryManager<>), typeof(RepositoryManager<>));
 
             // Database context
             services.AddDbContext<FoodAppContext>(options =>

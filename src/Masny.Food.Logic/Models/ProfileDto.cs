@@ -1,14 +1,18 @@
 ﻿using Masny.Food.Data.Enums;
-using Microsoft.AspNetCore.Http;
 using System;
 
-namespace Masny.Food.App.ViewModels
+namespace Masny.Food.Logic.Models
 {
     /// <summary>
-    /// Profile view model.
+    /// Profile data transfer object.
     /// </summary>
-    public class ProfileViewModel
+    public class ProfileDto
     {
+        /// <summary>
+        /// User identifier.
+        /// </summary>
+        public string UserId { get; set; }
+
         /// <summary>
         /// Name.
         /// </summary>
@@ -30,10 +34,5 @@ namespace Masny.Food.App.ViewModels
         /// Avatar.
         /// </summary>
         public byte[] Avatar { get; set; }
-
-        /// <summary>
-        /// Avatar from file.
-        /// </summary>
-        public IFormFile AvatarFile { get; set; }
     }
 }
