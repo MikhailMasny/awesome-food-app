@@ -43,6 +43,36 @@ namespace Masny.Food.Logic.Managers
             return productDetailDtos;
         }
 
+        public async Task<IEnumerable<ProductDto>> GetAllProductsByIds(IEnumerable<int> ids)
+        {
+            var products = await _productManager
+                .GetAll()
+                .Where(p => ids.Contains(p.Id))
+                .ToListAsync();
+
+            var productDtos = new List<ProductDto>();
+            foreach (var product in products)
+            {
+                // TODO: change to yield return
+                productDtos.Add(new ProductDto
+                {
+                    Id = product.Id,
+                    Photo = product.Photo,
+                    Price = product.Price,
+                    Energy = product.Energy,
+                    Protein = product.Protein,
+                    Fat = product.Fat,
+                    Carbohydrate = product.Carbohydrate,
+                    Weight = product.Weight,
+                    Comment = product.Comment,
+                    Diameter = product.Diameter,
+                    Kind = product.Kind,
+                });
+            }
+
+            return productDtos;
+        }
+
         public async Task<(IEnumerable<ProductDto> productDtos, string productName)> GetAllProductsByProductDetailId(int productDetailId)
         {
             var products = await _productManager

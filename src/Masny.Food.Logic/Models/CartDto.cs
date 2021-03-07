@@ -13,8 +13,8 @@ namespace Masny.Food.Logic.Models
         public string UserId { get; set; }
 
         /// <summary>
-        /// List of products (data transfer objects).
+        /// List of product identifiers.
         /// </summary>
-        public IList<ProductDto> Products { get; set; }
+        public IList<int> ProductIds { get; set; }
     }
 }

@@ -1,34 +1,27 @@
 ﻿using Masny.Food.App.Extensions;
 using Masny.Food.App.ViewModels;
-using Masny.Food.Data.Contexts;
 using Masny.Food.Logic.Enums;
 using Masny.Food.Logic.Interfaces;
-using Masny.Food.Logic.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Masny.Food.App.Controllers
 {
     public class CartController : Controller
     {
-        private readonly FoodAppContext _foodAppContext;
-        private readonly IMemoryCache memoryCache;
         private readonly ICartService _cartService;
+        private readonly IProductManager _productManager;
 
-        public CartController(FoodAppContext foodAppContext,
-            IMemoryCache memoryCache,
-            ICartService cartService)
+        public CartController(
+            ICartService cartService,
+            IProductManager productManager)
         {
-            _foodAppContext = foodAppContext;
-            this.memoryCache = memoryCache;
-            _cartService = cartService;
+            _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
+            _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
         }
 
         [Authorize]
@@ -37,10 +30,11 @@ namespace Masny.Food.App.Controllers
             var cartDto = await _cartService.GetAsync(User.GetUserIdByClaimsPrincipal());
 
             var productViewModels = new List<ProductViewModel>();
-
-            if (cartDto.Products.Any())
+            if (cartDto.ProductIds.Any())
             {
-                foreach (var product in cartDto.Products)
+                var productDtos = await _productManager.GetAllProductsByIds(cartDto.ProductIds);
+
+                foreach (var product in productDtos)
                 {
                     productViewModels.Add(new ProductViewModel
                     {
@@ -50,71 +44,19 @@ namespace Masny.Food.App.Controllers
                 }
             }
 
-            //var cartViewModel = new CartViewModel
-            //{
-            //    Products = productViewModels,
-            //};
-
             return View(productViewModels);
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> AddAsync([FromBody] Model model)
+        public async Task<IActionResult> Add([FromBody] CartAddViewModel model)
         {
-            var pdm = _foodAppContext.Products.AsNoTracking().FirstOrDefault(pd => pd.Id == model.Id);
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier); // TODO: To extension
-
-            var pdmDto = new ProductDto
-            {
-                Id = pdm.Id,
-                //ProductDetailId = pdm.ProductDetailId,
-                Photo = pdm.Photo,
-                Price = pdm.Price,
-                Energy = pdm.Energy,
-                Protein = pdm.Protein,
-                Fat = pdm.Fat,
-                Carbohydrate = pdm.Carbohydrate,
-                Weight = pdm.Weight,
-                Comment = pdm.Comment,
-                Diameter = pdm.Diameter,
-                Kind = pdm.Kind
-
-            };
-
-            await _cartService.AddOrUpdateAsync(CartOperationType.Add, userId, pdmDto);
-
-            //var userId = await _accountManager.GetUserIdByNameAsync(User.Identity.Name);
-            //await _todoManager.DeleteAsync(id, userId);
-
-            return Ok();
-
-            //return RedirectToAction("Index", "Home");
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> OrderAsync([FromBody] Model model)
-        {
-            //var list = new List<int>();
-            //foreach (var item in model.Array)
-            //{
-            //    list.Add(Convert.ToInt32(item));
-            //}
-
-            //var pdm = await _pizzaAppContext.ProductDetails.Include(p => p.Product).AsNoTracking().Where(p => list.Contains(p.Id)).ToListAsync();
-
-            //return Ok(pdm);
-            //return View();
+            await _cartService.AddOrUpdateAsync(
+                CartOperationType.Add,
+                User.GetUserIdByClaimsPrincipal(),
+                model.ProductId);
 
             return Ok();
         }
-    }
-
-    public class Model
-    {
-        public int Id { get; set; }
-
-        
     }
 }

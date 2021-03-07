@@ -21,5 +21,7 @@ namespace Masny.Food.Logic.Interfaces
         /// <param name="productDetailId">Product detail identifier.</param>
         /// <returns>List of product data transfer objects.</returns>
         Task<(IEnumerable<ProductDto> productDtos, string productName)> GetAllProductsByProductDetailId(int productDetailId);
+
+        Task<IEnumerable<ProductDto>> GetAllProductsByIds(IEnumerable<int> ids);
     }
 }

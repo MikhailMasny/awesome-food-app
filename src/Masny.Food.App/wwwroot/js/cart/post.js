@@ -1,6 +1,6 @@
 ﻿function addItem(uri, data) {
     const item = {
-        id: data,
+        productId: data,
     };
 
     fetch(uri, {

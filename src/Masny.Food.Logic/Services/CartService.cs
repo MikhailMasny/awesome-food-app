@@ -25,28 +25,21 @@ namespace Masny.Food.Logic.Services
                 cartDto = new CartDto
                 {
                     UserId = userId,
-                    Products = new List<ProductDto>(),
+                    ProductIds = new List<int>(),
                 };
             }
 
             return Task.FromResult(cartDto);
         }
 
-        public Task ClearAsync(string userId)
-        {
-            _memoryCache.Remove(userId);
-
-            return Task.CompletedTask;
-        }
-
-        public Task AddOrUpdateAsync(CartOperationType cartOperationType, string userId, ProductDto productDto)
+        public Task AddOrUpdateAsync(CartOperationType cartOperationType, string userId, int productId)
         {
             if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
             {
                 cartDto = new CartDto
                 {
                     UserId = userId,
-                    Products = new List<ProductDto>(),
+                    ProductIds = new List<int>(),
                 };
             }
 
@@ -56,12 +49,12 @@ namespace Masny.Food.Logic.Services
                     break;
                 case CartOperationType.Add:
                     {
-                        cartDto.Products.Add(productDto);
+                        cartDto.ProductIds.Add(productId);
                     }
                     break;
                 case CartOperationType.Remove:
                     {
-                        cartDto.Products.Remove(productDto);
+                        cartDto.ProductIds.Remove(productId);
                     }
                     break;
                 default:
@@ -73,6 +66,13 @@ namespace Masny.Food.Logic.Services
                     cartDto,
                     new MemoryCacheEntryOptions()
                         .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)));
+
+            return Task.CompletedTask;
+        }
+
+        public Task ClearAsync(string userId)
+        {
+            _memoryCache.Remove(userId);
 
             return Task.CompletedTask;
         }

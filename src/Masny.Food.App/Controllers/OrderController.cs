@@ -13,6 +13,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
+// TODO: ordercontroller, deliveryaddresses, js to delete from cart
+
 namespace Masny.Food.App.Controllers
 {
     public class OrderController : Controller
@@ -95,20 +97,20 @@ namespace Masny.Food.App.Controllers
                 Name = "test",
                 Phone = "take from db",
                 Address = "take from db",
-                TotalPrice = cartProducts.Products.Sum(p => p.Price)
+                //TotalPrice = cartProducts.Products.Sum(p => p.Price)
             };
 
             foodAppContext.Orders.Add(order);
             foodAppContext.SaveChanges();
 
-            foreach (var item in cartProducts.Products)
-            {
-                foodAppContext.OrderProducts.Add(new OrderProduct
-                {
-                    OrderId = order.Id,
-                    ProductId = item.Id
-                });
-            }
+            //foreach (var item in cartProducts.Products)
+            //{
+            //    foodAppContext.OrderProducts.Add(new OrderProduct
+            //    {
+            //        OrderId = order.Id,
+            //        ProductId = item.Id
+            //    });
+            //}
 
             foodAppContext.SaveChanges();
 

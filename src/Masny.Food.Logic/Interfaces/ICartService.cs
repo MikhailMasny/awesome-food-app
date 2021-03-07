@@ -21,8 +21,8 @@ namespace Masny.Food.Logic.Interfaces
         /// </summary>
         /// <param name="cartOperationType">Cart operation type.</param>
         /// <param name="userId">User identifier.</param>
-        /// <param name="productDto">Product data transfer object.</param>
-        Task AddOrUpdateAsync(CartOperationType cartOperationType, string userId, ProductDto productDto);
+        /// <param name="productId">Product identifier.</param>
+        Task AddOrUpdateAsync(CartOperationType cartOperationType, string userId, int productId);
 
         /// <summary>
         /// Clear operation.
