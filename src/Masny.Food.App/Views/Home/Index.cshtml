@@ -1,32 +1,16 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model IEnumerable<ProductDetailViewModel>
 
-@model CommonViewModel
-@*Cart: @Model.Count*@
+<h1>Food here :)</h1>
 
-<h1>Pizza here</h1>
-
-@foreach (var item in Model.Products)
+@foreach (var productDetail in Model)
 {
-    <div style="width: 200px; display: flex; justify-content: space-between">
-        <div>@item.Name</div>
-        @*<div>@item.Description</div>*@
+    <div style="width: 310px; display: flex; justify-content: space-between">
+        <div style="width: 150px">@productDetail.Name</div>
+        <div>@productDetail.Description</div>
         <div>
-            <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id">
+            <a asp-controller="Product" asp-action="Detail" asp-route-id="@productDetail.Id">
                 Details
             </a>
         </div>
     </div>
-
-    @*<p>@item.Name</p>
-        <a asp-controller="Product" asp-action="Detail" asp-route-id="@item.Id">
-            Details
-        </a>*@
-
-
 }
-
-

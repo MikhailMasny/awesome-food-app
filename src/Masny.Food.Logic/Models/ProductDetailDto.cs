@@ -1,9 +1,9 @@
-﻿namespace Masny.Food.App.ViewModels
+﻿namespace Masny.Food.Logic.Models
 {
     /// <summary>
-    /// Product detail view model.
+    /// Product detail data transfer object.
     /// </summary>
-    public class ProductDetailViewModel
+    public class ProductDetailDto
     {
         /// <summary>
         /// Identifier.

@@ -1,4 +1,6 @@
-﻿using Masny.Food.Data.Contexts;
+﻿using Masny.Food.App.Extensions;
+using Masny.Food.App.ViewModels;
+using Masny.Food.Data.Contexts;
 using Masny.Food.Logic.Enums;
 using Masny.Food.Logic.Interfaces;
 using Masny.Food.Logic.Models;
@@ -18,7 +20,7 @@ namespace Masny.Food.App.Controllers
     {
         private readonly FoodAppContext _foodAppContext;
         private readonly IMemoryCache memoryCache;
-        private readonly ICartService cartService;
+        private readonly ICartService _cartService;
 
         public CartController(FoodAppContext foodAppContext,
             IMemoryCache memoryCache,
@@ -26,25 +28,34 @@ namespace Masny.Food.App.Controllers
         {
             _foodAppContext = foodAppContext;
             this.memoryCache = memoryCache;
-            this.cartService = cartService;
+            _cartService = cartService;
         }
 
         [Authorize]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
-            //cartService.Get(HttpContext.User)
+            var cartDto = await _cartService.GetAsync(User.GetUserIdByClaimsPrincipal());
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var productViewModels = new List<ProductViewModel>();
 
-            var cartProducts = await cartService.GetAsync(userId);
+            if (cartDto.Products.Any())
+            {
+                foreach (var product in cartDto.Products)
+                {
+                    productViewModels.Add(new ProductViewModel
+                    {
+                        Id = product.Id,
+                        Price = product.Price,
+                    });
+                }
+            }
 
-            //if (cartProducts is null)
+            //var cartViewModel = new CartViewModel
             //{
-            //    cartProducts = new Logic.Models.CartDto();
-            //}
+            //    Products = productViewModels,
+            //};
 
-
-            return View(cartProducts);
+            return View(productViewModels);
         }
 
         [Authorize]
@@ -71,7 +82,7 @@ namespace Masny.Food.App.Controllers
 
             };
 
-            await cartService.AddOrUpdateAsync(CartOperationType.Add, userId, pdmDto);
+            await _cartService.AddOrUpdateAsync(CartOperationType.Add, userId, pdmDto);
 
             //var userId = await _accountManager.GetUserIdByNameAsync(User.Identity.Name);
             //await _todoManager.DeleteAsync(id, userId);

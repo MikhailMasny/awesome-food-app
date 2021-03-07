@@ -1,16 +1,27 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<ProductViewModel>
+
+<h1>Cart</h1>
+
 @{
+    if (Model.Any())
+    {
+        foreach (var product in Model)
+        {
+            <p>@product.Id  @product.Price</p>
+        }
+
+        <a asp-controller="Order" asp-action="Index">Get order</a>
+
+        // Order here
+    }
+    else
+    {
+        <p>Cart is empty</p>
+    }
 }
 
-@model Masny.Food.Logic.Models.CartDto
 
-
-
-<h1>Cart index</h1>
-
-@if (Model is not null)
+@*@if (Model is not null)
 {
     @foreach (var item in Model.Products)
     {
@@ -20,9 +31,9 @@
 else
 {
     <p>Корзина пуста</p>
-}
+}*@
 
-<a asp-controller="Order" asp-action="Index">Get order</a>
+@*<a asp-controller="Order" asp-action="Index">Get order</a>*@
 
 @*<form method="post" asp-controller="Order" asp-action="Index">
         <button class="button" type="submit">Get order</button>

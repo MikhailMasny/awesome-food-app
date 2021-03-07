@@ -22,17 +22,11 @@ namespace Masny.Food.Logic.Services
         {
             if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
             {
-                //cartDto = new CartDto
-                //{
-                //    UserId = userId,
-                //    Products = new List<ProductDetail>(),
-                //};
-
-                //_memoryCache.Set(
-                //    userId,
-                //    cartDto,
-                //    new MemoryCacheEntryOptions()
-                //        .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)));
+                cartDto = new CartDto
+                {
+                    UserId = userId,
+                    Products = new List<ProductDto>(),
+                };
             }
 
             return Task.FromResult(cartDto);

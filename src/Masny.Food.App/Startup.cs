@@ -27,9 +27,10 @@ namespace Masny.Food.App
         public void ConfigureServices(IServiceCollection services)
         {
             // Managers & services
-            services.AddScoped<ICartService, CartService>();
-            services.AddScoped<IProfileManager, ProfileManager>();
             services.AddScoped(typeof(IRepositoryManager<>), typeof(RepositoryManager<>));
+            services.AddScoped<IProfileManager, ProfileManager>();
+            services.AddScoped<IProductManager, ProductManager>();
+            services.AddScoped<ICartService, CartService>();
 
             // Database context
             services.AddDbContext<FoodAppContext>(options =>

@@ -123,7 +123,7 @@ namespace Masny.Food.App.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> ProfileAsync()
+        public async Task<IActionResult> Profile()
         {
             var profileDto = await _profileManager.GetProfileByUserIdAsync(User.GetUserIdByClaimsPrincipal());
 

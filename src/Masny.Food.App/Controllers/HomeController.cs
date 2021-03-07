@@ -1,55 +1,39 @@
 ﻿using Masny.Food.App.ViewModels;
-using Masny.Food.Data.Contexts;
 using Masny.Food.Logic.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Masny.Food.App.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly FoodAppContext _foodAppContext;
-        private readonly ICartService _cartService;
+        private readonly IProductManager _productManager;
 
-        public HomeController(FoodAppContext foodAppContext,
-            ICartService cartService)
+        public HomeController(IProductManager productManager)
         {
-            _foodAppContext = foodAppContext ?? throw new ArgumentNullException(nameof(foodAppContext));
-            _cartService = cartService;
+            _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
         }
 
         [HttpGet]
-        public async Task<IActionResult> IndexAsync()
+        public async Task<IActionResult> Index()
         {
-            Console.WriteLine(HttpContext.User.Identity.Name);
+            var productDetailDtos = await _productManager.GetAll();
 
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            //var cartServiceModel = _cartService.Get(HttpContext.User.Identity.Name.ToString());
-
-            return View(new CommonViewModel
+            var productDetailViewModels = new List<ProductDetailViewModel>();
+            foreach (var productDetailDto in productDetailDtos)
             {
-                Products = await _foodAppContext.ProductDetails.AsNoTracking().ToListAsync(),
-                Count = 0 // cartServiceModel.Products.Count
-            });
+                productDetailViewModels.Add(new ProductDetailViewModel
+                {
+                    Id = productDetailDto.Id,
+                    Name = productDetailDto.Name,
+                    Description = productDetailDto.Description,
+                    Comment = productDetailDto.Comment,
+                });
+            }
+
+            return View(productDetailViewModels);
         }
-
-        //[Authorize]
-        //public async Task<IActionResult> AddToCart(int id)
-        //{
-        //    var pdm = _pizzaAppContext.ProductDetails.AsNoTracking().FirstOrDefault(pd => pd.ProductId == id);
-        //    _cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
-
-        //    //var userId = await _accountManager.GetUserIdByNameAsync(User.Identity.Name);
-        //    //await _todoManager.DeleteAsync(id, userId);
-
-        //    return RedirectToAction("Index", "Home");
-        //}
     }
 }
