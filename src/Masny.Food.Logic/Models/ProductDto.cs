@@ -13,11 +13,6 @@ namespace Masny.Food.Logic.Models
         public int Id { get; set; }
 
         /// <summary>
-        /// Product detail identifier.
-        /// </summary>
-        public int ProductDetailId { get; set; }
-
-        /// <summary>
         /// Photo.
         /// </summary>
         public byte[] Photo { get; set; }

@@ -10,9 +10,16 @@ namespace Masny.Food.Logic.Interfaces
     public interface IProductManager
     {
         /// <summary>
+        /// Get all product details.
+        /// </summary>
+        /// <returns>List of product detail data transfer objects.</returns>
+        Task<IEnumerable<ProductDetailDto>> GetAllProductDetails();
+
+        /// <summary>
         /// Get all products.
         /// </summary>
+        /// <param name="productDetailId">Product detail identifier.</param>
         /// <returns>List of product data transfer objects.</returns>
-        Task<IEnumerable<ProductDetailDto>> GetAll();
+        Task<(IEnumerable<ProductDto> productDtos, string productName)> GetAllProductsByProductDetailId(int productDetailId);
     }
 }

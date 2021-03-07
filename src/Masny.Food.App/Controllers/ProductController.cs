@@ -1,32 +1,52 @@
-﻿using Masny.Food.Data.Contexts;
+﻿using Masny.Food.App.ViewModels;
+using Masny.Food.Logic.Interfaces;
+using Masny.Food.Logic.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Masny.Food.App.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly FoodAppContext _foodAppContext;
+        private readonly IProductManager _productManager;
 
-        public ProductController(FoodAppContext foodAppContext)
+        public ProductController(IProductManager productManager)
         {
-            _foodAppContext = foodAppContext;
+            _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
         }
 
-        public async Task<IActionResult> DetailAsync(int id)
+        public async Task<IActionResult> List(int id)
         {
-            
+            (IEnumerable<ProductDto> productDtos, string productName) = await _productManager.GetAllProductsByProductDetailId(id);
 
+            var productViewModels = new List<ProductViewModel>();
+            foreach (var productDto in productDtos)
+            {
+                productViewModels.Add(new ProductViewModel
+                {
+                    Id = productDto.Id,
+                    Photo = productDto.Photo,
+                    Price = productDto.Price,
+                    Energy = productDto.Energy,
+                    Protein = productDto.Protein,
+                    Fat = productDto.Fat,
+                    Carbohydrate = productDto.Carbohydrate,
+                    Weight = productDto.Weight,
+                    Comment = productDto.Comment,
+                    Diameter = productDto.Diameter,
+                    Kind = productDto.Kind,
+                });
+            }
 
-            var pdm = await _foodAppContext.Products.Include(pd => pd.ProductDetail).AsNoTracking().Where(pd => pd.ProductDetailId == id).ToListAsync();
-            //_cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
+            var productListViewModel = new ProductListViewModel
+            {
+                Name = productName,
+                Products = productViewModels,
+            };
 
-            return View(pdm);
+            return View(productListViewModel);
         }
     }
 }

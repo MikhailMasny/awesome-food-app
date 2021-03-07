@@ -1,0 +1,27 @@
+﻿@model ProductListViewModel
+
+<h1>@Model.Name</h1>
+
+@{
+    foreach (var product in Model.Products)
+    {
+        <div style="width: 310px; display: flex; justify-content: space-between">
+            <p>@product.Weight</p>
+            <p>@product.Diameter</p>
+            <p>@product.Kind</p>
+            <p>@product.Price</p>
+
+            @{
+                if (User.Identity.IsAuthenticated)
+                {
+                    <button data-cart-id="@product.Id">to cart</button>
+                }
+            }
+        </div>
+    }
+}
+
+@section scripts
+{
+    <script src="~/js/cart/post.js"></script>
+}

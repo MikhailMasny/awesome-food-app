@@ -19,7 +19,7 @@ namespace Masny.Food.App.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var productDetailDtos = await _productManager.GetAll();
+            var productDetailDtos = await _productManager.GetAllProductDetails();
 
             var productDetailViewModels = new List<ProductDetailViewModel>();
             foreach (var productDetailDto in productDetailDtos)

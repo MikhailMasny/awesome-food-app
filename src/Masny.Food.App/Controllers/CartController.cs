@@ -68,7 +68,7 @@ namespace Masny.Food.App.Controllers
             var pdmDto = new ProductDto
             {
                 Id = pdm.Id,
-                ProductDetailId = pdm.ProductDetailId,
+                //ProductDetailId = pdm.ProductDetailId,
                 Photo = pdm.Photo,
                 Price = pdm.Price,
                 Energy = pdm.Energy,

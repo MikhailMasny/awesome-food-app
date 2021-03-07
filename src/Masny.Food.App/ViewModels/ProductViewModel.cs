@@ -13,9 +13,9 @@ namespace Masny.Food.App.ViewModels
         public int Id { get; set; }
 
         /// <summary>
-        /// Product detail identifier.
+        /// Name.
         /// </summary>
-        public int ProductDetailId { get; set; }
+        public string Name { get; set; }
 
         /// <summary>
         /// Photo.
