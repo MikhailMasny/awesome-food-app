@@ -1,7 +1,5 @@
-﻿using System;
+﻿using Masny.Food.Logic.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Masny.Food.Logic.Interfaces
@@ -11,7 +9,12 @@ namespace Masny.Food.Logic.Interfaces
     /// </summary>
     public interface IOrderManager
     {
-        //Task<>
+        /// <summary>
+        /// Get order history by user identifier.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <returns>List of order data transfer objects.</returns>
+        Task<IEnumerable<OrderDto>> GetOrdersByUserId(string userId);
 
     }
 }

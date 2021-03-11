@@ -1,0 +1,28 @@
+﻿@model IEnumerable<OrderViewModel>
+
+<h1>Order history</h1>
+
+@{
+    if (Model.Any())
+    {
+        foreach (var order in Model)
+        {
+            <div style="width: 310px; display: flex; justify-content: space-between">
+                <p>@order.Number</p>
+                <p>@order.Creation</p>
+                <p>@order.Name</p>
+                <p>@order.Phone</p>
+                <p>@order.InPlace</p>
+                <p>@order.Address</p>
+                <p>@order.PromoCode</p>
+                <p>@order.TotalPrice</p>
+                <p>@order.Comment</p>
+                <p>@order.Status</p>
+            </div>
+        }
+    }
+    else
+    {
+        <p>Order history is empty</p>
+    }
+}

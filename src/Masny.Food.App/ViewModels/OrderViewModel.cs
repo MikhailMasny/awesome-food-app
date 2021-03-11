@@ -1,12 +1,12 @@
 ﻿using Masny.Food.Data.Enums;
 using System;
 
-namespace Masny.Food.Logic.Models
+namespace Masny.Food.App.ViewModels
 {
     /// <summary>
-    /// Order data transfer object.
+    /// Order view model.
     /// </summary>
-    public class OrderDto
+    public class OrderViewModel
     {
         /// <summary>
         /// Number.

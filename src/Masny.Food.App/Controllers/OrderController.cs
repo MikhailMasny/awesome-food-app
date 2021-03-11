@@ -4,6 +4,7 @@ using Masny.Food.Data.Contexts;
 using Masny.Food.Data.Enums;
 using Masny.Food.Data.Models;
 using Masny.Food.Logic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,23 +22,53 @@ namespace Masny.Food.App.Controllers
     {
         private readonly ICartService cartService;
         private readonly FoodAppContext foodAppContext;
+        private readonly IOrderManager _orderManager;
 
-        public OrderController(ICartService cartService, FoodAppContext foodAppContext)
+        public OrderController(
+            ICartService cartService,
+            FoodAppContext foodAppContext,
+            IOrderManager orderManager)
         {
             this.cartService = cartService;
             this.foodAppContext = foodAppContext;
+
+            _orderManager = orderManager ?? throw new ArgumentNullException(nameof(orderManager));
         }
 
-
-        public IActionResult OrderHistory()
+        [Authorize]
+        public async Task<IActionResult> HistoryAsync()
         {
-            var userId = User.GetUserIdByClaimsPrincipal();
+            var orderDtos = await _orderManager.GetOrdersByUserId(User.GetUserIdByClaimsPrincipal());
 
+            var orderViewModels = new List<OrderViewModel>();
+            foreach (var orderDto in orderDtos)
+            {
+                orderViewModels.Add(new OrderViewModel
+                {
+                    Number = orderDto.Number,
+                    Creation = orderDto.Creation,
+                    Name = orderDto.Name,
+                    Phone = orderDto.Phone,
+                    InPlace = orderDto.InPlace,
+                    Address = orderDto.Address,
+                    PromoCode = orderDto.PromoCode,
+                    TotalPrice = orderDto.TotalPrice,
+                    Comment = orderDto.Comment,
+                    Status = orderDto.Status,
+                });
+            }
 
-            var orderHistory = foodAppContext.Orders.AsNoTracking().Where(o => o.UserId == userId).ToList();
-
-            return View(orderHistory);
+            return View(orderViewModels);
         }
+
+
+
+
+
+
+
+
+
 
         [HttpGet]
         public async Task<IActionResult> IndexAsync()
