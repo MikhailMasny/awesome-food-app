@@ -103,5 +103,15 @@ namespace Masny.Food.Logic.Managers
 
             return (productDtos, products.FirstOrDefault().ProductDetail.Name);
         }
+
+        public async Task<decimal> GetTotalPriceByProductIds(IEnumerable<int> ids)
+        {
+            return (await _productManager
+                    .GetAll()
+                    .Where(p => ids.Contains(p.Id))
+                    .ToListAsync())
+                .Select(p => p.Price)
+                .Sum();
+        }
     }
 }

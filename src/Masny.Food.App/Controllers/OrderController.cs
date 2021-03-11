@@ -4,6 +4,7 @@ using Masny.Food.Data.Contexts;
 using Masny.Food.Data.Enums;
 using Masny.Food.Data.Models;
 using Masny.Food.Logic.Interfaces;
+using Masny.Food.Logic.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -20,23 +21,76 @@ namespace Masny.Food.App.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly ICartService cartService;
-        private readonly FoodAppContext foodAppContext;
+        private readonly ICartService _cartService;
         private readonly IOrderManager _orderManager;
+        private readonly IProductManager _productManager;
+        private readonly FoodAppContext foodAppContext;
 
         public OrderController(
             ICartService cartService,
             FoodAppContext foodAppContext,
-            IOrderManager orderManager)
+            IOrderManager orderManager,
+            IProductManager productManager)
         {
-            this.cartService = cartService;
             this.foodAppContext = foodAppContext;
 
+            _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
             _orderManager = orderManager ?? throw new ArgumentNullException(nameof(orderManager));
+            _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
         }
 
         [Authorize]
-        public async Task<IActionResult> HistoryAsync()
+        public async Task<IActionResult> Create(OrderViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userId = User.GetUserIdByClaimsPrincipal();
+
+                // UNDONE: need method get order number
+                var orderNumber = 1;
+                var dateTimeNow = DateTime.Now;
+                var lastOrder = await foodAppContext.Orders
+                    .AsNoTracking()
+                    .OrderBy(o => o.Id)
+                    .LastOrDefaultAsync();
+
+                if (lastOrder is not null && lastOrder.Creation.Date == dateTimeNow.Date)
+                {
+                    orderNumber = ++lastOrder.Number;
+                }
+
+                // UNDONE: need method get totalPrice
+                var cartDto = await _cartService.GetAsync(userId);
+
+                var orderDto = new OrderDto
+                {
+                    Number = orderNumber,
+                    Creation = dateTimeNow,
+                    UserId = userId,
+                    Name = model.Name,
+                    Phone = model.Phone,
+                    InPlace = model.InPlace,
+                    Address = model.Address,
+                    PromoCode = model.PromoCode,
+                    TotalPrice = await _productManager.GetTotalPriceByProductIds(cartDto.ProductIds), // UNDONE: to calc service
+                    Comment = model.Comment,
+                    Status = StatusType.Todo,
+                };
+
+                var orderId = await _orderManager.CreateOrderAsync(orderDto);
+
+                await _orderManager.CreateOrderProductsAsync(orderId, cartDto.ProductIds);
+
+                await _cartService.ClearAsync(userId);
+
+                return RedirectToAction("Index", "Home");
+            }
+
+            return RedirectToAction("Index", "Cart");
+        }
+
+        [Authorize]
+        public async Task<IActionResult> History()
         {
             var orderDtos = await _orderManager.GetOrdersByUserId(User.GetUserIdByClaimsPrincipal());
 
@@ -66,116 +120,7 @@ namespace Masny.Food.App.Controllers
 
 
 
-
-
-
-
-        [HttpGet]
-        public async Task<IActionResult> IndexAsync()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var cartProducts = await cartService.GetAsync(userId);
-
-            //var tp = 
-            //var order = new Order
-            //{
-            //    Name = "Random",
-            //    TotalPrice = 
-            //}
-
-            //pizzaAppContext.Orders.Add()
-
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> IndexAsync(SimpleTestClass simpleTestClass)
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            var cartProducts = await cartService.GetAsync(userId);
-
-            var orderNumber = 1;
-            var dateTimeNow = DateTime.Now;
-            //try
-            //{
-            //    var lastOrder1 = await pizzaAppContext.Orders.AsNoTracking().LastOrDefaultAsync();
-            //}
-            //catch (Exception ex)
-            //{
-
-            //    throw;
-            //}
-
-            var lastOrder = await foodAppContext.Orders
-                .AsNoTracking()
-                .OrderBy(o => o.Id)
-                .LastOrDefaultAsync();
-
-            if (lastOrder is not null && lastOrder.Creation.Date == dateTimeNow.Date)
-            {
-                orderNumber = ++lastOrder.Number;
-            }
-
-            var order = new Order
-            {
-                Number = orderNumber,
-                Creation = dateTimeNow,
-                Comment = simpleTestClass.Comment,
-                UserId = userId,
-                Name = "test",
-                Phone = "take from db",
-                Address = "take from db",
-                //TotalPrice = cartProducts.Products.Sum(p => p.Price)
-            };
-
-            foodAppContext.Orders.Add(order);
-            foodAppContext.SaveChanges();
-
-            //foreach (var item in cartProducts.Products)
-            //{
-            //    foodAppContext.OrderProducts.Add(new OrderProduct
-            //    {
-            //        OrderId = order.Id,
-            //        ProductId = item.Id
-            //    });
-            //}
-
-            foodAppContext.SaveChanges();
-
-            //var tp = 
-            //var order = new Order
-            //{
-            //    Name = "Random",
-            //    TotalPrice = 
-            //}
-
-            //pizzaAppContext.Orders.Add()
-
-            await cartService.ClearAsync(userId);
-
-            return Redirect("/Home/Index");
-        }
-
-        public async Task<IActionResult> DetailAsync(int id)
-        {
-
-
-
-            var pdm = 
-                await foodAppContext.OrderProducts
-                    .Include(op => op.Product)
-                        .ThenInclude(p => p.ProductDetail)
-                    .AsNoTracking()
-                    .Where(pd => pd.OrderId == id)
-                    .ToListAsync();
-            //_cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
-
-            return View(pdm);
-        }
-
+        [Authorize]
         public async Task<IActionResult> List(int? status)
         {
             IQueryable<Order> orders = foodAppContext.Orders.AsNoTracking();
@@ -186,6 +131,11 @@ namespace Masny.Food.App.Controllers
 
             var statusList = new List<StatusModel>
             {
+                new StatusModel
+                {
+                    Id = 0,
+                    Name = "Nazvanie 0"
+                },
                 new StatusModel
                 {
                     Id = 1,
@@ -202,7 +152,7 @@ namespace Masny.Food.App.Controllers
 
             OrderListViewModel viewModel = new OrderListViewModel
             {
-                //Orders = await orders.ToListAsync(),
+                Orders = await orders.ToListAsync(),
                 Statuses = new SelectList(statusList, "Id", "Name"),
                 CurrentStatus = status.HasValue ? status.Value : -1
             };
@@ -231,6 +181,9 @@ namespace Masny.Food.App.Controllers
             //return View(orders);
         }
 
+
+
+        [Authorize]
         [HttpGet]
         public IActionResult Edit(int id)
         {
@@ -245,6 +198,7 @@ namespace Masny.Food.App.Controllers
             });
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Edit(OrderEditViewModel model)
         {

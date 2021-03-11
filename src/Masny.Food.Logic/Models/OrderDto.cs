@@ -19,6 +19,11 @@ namespace Masny.Food.Logic.Models
         public DateTime Creation { get; set; }
 
         /// <summary>
+        /// User identifier.
+        /// </summary>
+        public string UserId { get; set; }
+
+        /// <summary>
         /// Name.
         /// </summary>
         public string Name { get; set; }

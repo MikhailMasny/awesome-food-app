@@ -74,6 +74,8 @@ namespace Masny.Food.Data.Models
         /// </summary>
         public StatusType Status { get; set; }
 
+        // UNDONE: paymentType
+
         public ICollection<OrderProduct> OrderProducts { get; set; }
     }
 }

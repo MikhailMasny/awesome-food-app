@@ -46,7 +46,7 @@ namespace Masny.Food.Data.Configurations
                 .HasMaxLength(SqlConfiguration.SqlMaxLengthLong);
 
             builder.Property(order => order.Status)
-                .HasDefaultValue(StatusType.Unknown)
+                .HasDefaultValue(StatusType.Unknown) // UNDONE: delete it
                 .HasConversion(new EnumToNumberConverter<StatusType, int>());
 
             builder.HasOne(order => order.User)

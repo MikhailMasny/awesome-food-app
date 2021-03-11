@@ -13,10 +13,53 @@ namespace Masny.Food.Logic.Managers
     public class OrderManager : IOrderManager
     {
         private readonly IRepositoryManager<Order> _orderManager;
+        private readonly IRepositoryManager<OrderProduct> _orderProductManager;
 
-        public OrderManager(IRepositoryManager<Order> orderManager)
+        public OrderManager(
+            IRepositoryManager<Order> orderManager,
+            IRepositoryManager<OrderProduct> orderProductManager)
         {
             _orderManager = orderManager ?? throw new ArgumentNullException(nameof(orderManager));
+            _orderProductManager = orderProductManager ?? throw new ArgumentNullException(nameof(orderProductManager));
+        }
+
+        public async Task<int> CreateOrderAsync(OrderDto orderDto)
+        {
+            var order = new Order
+            {
+                Number = orderDto.Number,
+                Creation = orderDto.Creation,
+                UserId = orderDto.UserId,
+                Name = orderDto.Name,
+                Phone = orderDto.Phone,
+                InPlace = orderDto.InPlace,
+                Address = orderDto.Address,
+                PromoCode = orderDto.PromoCode,
+                TotalPrice = orderDto.TotalPrice,
+                Comment = orderDto.Comment,
+                Status = orderDto.Status,
+            };
+
+            await _orderManager.CreateAsync(order);
+            await _orderManager.SaveChangesAsync();
+
+            return order.Id;
+        }
+
+        public async Task CreateOrderProductsAsync(int orderId, IEnumerable<int> productIds)
+        {
+            var orderProducts = new List<OrderProduct>();
+            foreach (var productId in productIds)
+            {
+                orderProducts.Add(new OrderProduct
+                {
+                    OrderId = orderId,
+                    ProductId = productId,
+                });
+            }
+
+            await _orderProductManager.CreateRangeAsync(orderProducts);
+            await _orderProductManager.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<OrderDto>> GetOrdersByUserId(string userId)

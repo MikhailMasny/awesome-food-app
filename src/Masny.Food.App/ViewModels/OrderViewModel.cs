@@ -1,5 +1,6 @@
 ﻿using Masny.Food.Data.Enums;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Masny.Food.App.ViewModels
 {
@@ -21,11 +22,15 @@ namespace Masny.Food.App.ViewModels
         /// <summary>
         /// Name.
         /// </summary>
+        [Required]
+        [Display(Name = nameof(Name))]
         public string Name { get; set; }
 
         /// <summary>
         /// Phone.
-        /// </summary>
+        /// </summary
+        [Required]
+        [Display(Name = nameof(Phone))]
         public string Phone { get; set; }
 
         /// <summary>
@@ -36,6 +41,8 @@ namespace Masny.Food.App.ViewModels
         /// <summary>
         /// Address.
         /// </summary>
+        [Required]
+        [Display(Name = nameof(Address))]
         public string Address { get; set; }
 
         /// <summary>
@@ -51,6 +58,7 @@ namespace Masny.Food.App.ViewModels
         /// <summary>
         /// Comment.
         /// </summary>
+        [Display(Name = nameof(Comment))]
         public string Comment { get; set; }
 
         // TODO: replace to common project

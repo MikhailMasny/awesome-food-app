@@ -15,19 +15,24 @@ namespace Masny.Food.App.Controllers
     {
         private readonly ICartService _cartService;
         private readonly IProductManager _productManager;
+        private readonly IProfileManager _profileManager;
 
         public CartController(
             ICartService cartService,
-            IProductManager productManager)
+            IProductManager productManager,
+            IProfileManager profileManager)
         {
             _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
             _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
+            _profileManager = profileManager ?? throw new ArgumentNullException(nameof(profileManager));
         }
 
         [Authorize]
         public async Task<IActionResult> Index()
         {
-            var cartDto = await _cartService.GetAsync(User.GetUserIdByClaimsPrincipal());
+            var userId = User.GetUserIdByClaimsPrincipal();
+
+            var cartDto = await _cartService.GetAsync(userId);
 
             var productViewModels = new List<ProductViewModel>();
             if (cartDto.ProductIds.Any())
@@ -44,7 +49,28 @@ namespace Masny.Food.App.Controllers
                 }
             }
 
-            return View(productViewModels);
+            var profile = await _profileManager.GetProfileByUserIdAsync(userId);
+            var cart = await _cartService.GetAsync(userId);
+            //var products = await _productManager.GetAllProductsByIds(cart.ProductIds);
+            //var totalPrice = products.Select(p => p.Price).Sum();
+
+            var orderViewModel = new OrderViewModel
+            {
+                Name = profile.Name,
+
+                TotalPrice = await _productManager.GetTotalPriceByProductIds(cart.ProductIds), // UNDONE: to calc service
+
+                //Phone = orderDto.Phone,
+                //Address = orderDto.Address,
+            };
+
+            var cartIndexViewModel = new CartIndexViewModel
+            {
+                Products = productViewModels,
+                OrderViewModel = orderViewModel,
+            };
+
+            return View(cartIndexViewModel);
         }
 
         [Authorize]

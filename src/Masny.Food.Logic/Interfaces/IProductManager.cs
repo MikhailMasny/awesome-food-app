@@ -23,5 +23,8 @@ namespace Masny.Food.Logic.Interfaces
         Task<(IEnumerable<ProductDto> productDtos, string productName)> GetAllProductsByProductDetailId(int productDetailId);
 
         Task<IEnumerable<ProductDto>> GetAllProductsByIds(IEnumerable<int> ids);
+
+        // UNDONE: replace to product service ?
+        Task<decimal> GetTotalPriceByProductIds(IEnumerable<int> ids);
     }
 }

@@ -1,0 +1,39 @@
+﻿@model OrderViewModel
+
+<p>Total price*: @Model.TotalPrice</p>
+
+<form method="post" asp-controller="Order" asp-action="Create">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="Name"></label>
+        <input asp-for="Name" placeholder="Enter your name" type="text" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="Phone"></label>
+        <input asp-for="Phone" placeholder="Enter phone" type="text" />
+        <span asp-validation-for="Phone"></span>
+    </div>
+    <div>
+        <label asp-for="Address"></label>
+        <input asp-for="Address" placeholder="Enter address" type="text" />
+        <span asp-validation-for="Address"></span>
+    </div>
+    <div>
+        <label asp-for="InPlace"></label>
+        <input asp-for="InPlace" />
+    </div>
+    @*<div>
+            <label asp-for="PromoCode"></label>
+            <input asp-for="PromoCode" placeholder="Enter promo code" type="text" />
+            <span asp-validation-for="PromoCode"></span>
+        </div>*@
+    <div>
+        <label asp-for="Comment"></label>
+        <input asp-for="Comment" placeholder="Comment" type="text" />
+        <span asp-validation-for="Comment"></span>
+    </div>
+    <div>
+        <button type="submit">Get order</button>
+    </div>
+</form>
