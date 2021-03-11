@@ -1,18 +1,31 @@
-﻿using Masny.Food.Data.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Masny.Food.App.ViewModels
 {
+    /// <summary>
+    /// Order list view model.
+    /// </summary>
     public class OrderListViewModel
     {
-        public IEnumerable<Order> Orders { get; set; }
+        /// <summary>
+        /// Orders.
+        /// </summary>
+        public IEnumerable<OrderViewModel> Orders { get; set; }
 
+        /// <summary>
+        /// Statuses.
+        /// </summary>
         public SelectList Statuses { get; set; }
 
+        /// <summary>
+        /// Phone.
+        /// </summary>
+        public string Phone { get; set; }
+
+        /// <summary>
+        /// Current status.
+        /// </summary>
         public int CurrentStatus { get; set; }
     }
 }

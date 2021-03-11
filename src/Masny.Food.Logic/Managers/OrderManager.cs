@@ -1,4 +1,5 @@
-﻿using Masny.Food.Data.Models;
+﻿using Masny.Food.Data.Enums;
+using Masny.Food.Data.Models;
 using Masny.Food.Logic.Interfaces;
 using Masny.Food.Logic.Models;
 using Microsoft.EntityFrameworkCore;
@@ -62,7 +63,58 @@ namespace Masny.Food.Logic.Managers
             await _orderProductManager.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<OrderDto>> GetOrdersByUserId(string userId)
+        public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
+        {
+            var orders = await _orderManager
+                .GetAll()
+                .ToListAsync();
+
+            var orderDtos = new List<OrderDto>();
+            foreach (var order in orders)
+            {
+                // TODO: change to yield return
+                orderDtos.Add(new OrderDto
+                {
+                    Id = order.Id,
+                    Number = order.Number,
+                    Creation = order.Creation,
+                    UserId = order.UserId,
+                    Name = order.Name,
+                    Phone = order.Phone,
+                    InPlace = order.InPlace,
+                    Address = order.Address,
+                    PromoCode = order.PromoCode,
+                    TotalPrice = order.TotalPrice,
+                    Comment = order.Comment,
+                    Status = order.Status,
+                });
+            }
+
+            return orderDtos;
+        }
+
+        public async Task<OrderDto> GetOrderByIdAsync(int id)
+        {
+            var order = await _orderManager.GetEntityWithoutTrackingAsync(o => o.Id == id);
+
+            var orderDto = new OrderDto
+            {
+                Number = order.Number,
+                Creation = order.Creation,
+                Name = order.Name,
+                Phone = order.Phone,
+                InPlace = order.InPlace,
+                Address = order.Address,
+                PromoCode = order.PromoCode,
+                TotalPrice = order.TotalPrice,
+                Comment = order.Comment,
+                Status = order.Status,
+            };
+
+            return orderDto;
+        }
+
+        public async Task<IEnumerable<OrderDto>> GetOrdersByUserIdAsync(string userId)
         {
             var orders = await _orderManager
                 .GetAll()
@@ -89,6 +141,15 @@ namespace Masny.Food.Logic.Managers
             }
 
             return orderDtos;
+        }
+
+        public async Task UpdateOrderStatusByIdAsync(int id, StatusType statusType)
+        {
+            var order = await _orderManager.GetEntityAsync(o => o.Id == id);
+
+            order.Status = statusType;
+
+            await _orderManager.SaveChangesAsync();
         }
     }
 }

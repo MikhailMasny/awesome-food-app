@@ -10,6 +10,11 @@ namespace Masny.Food.App.ViewModels
     public class OrderViewModel
     {
         /// <summary>
+        /// Identifier.
+        /// </summary>
+        public int Id { get; set; }
+
+        /// <summary>
         /// Number.
         /// </summary>
         public int Number { get; set; }

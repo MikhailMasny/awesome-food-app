@@ -8,6 +8,8 @@ namespace Masny.Food.Data.Models
     /// </summary>
     public class Profile
     {
+        // UNDONE: address
+
         /// <summary>
         /// Identifier.
         /// </summary>

@@ -1,15 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Masny.Food.App.ViewModels
 {
+    /// <summary>
+    /// Order edit view model.
+    /// </summary>
     public class OrderEditViewModel
     {
+        /// <summary>
+        /// Order identifier.
+        /// </summary>
+        [Required]
         public int Id { get; set; }
 
+        /// <summary>
+        /// Number.
+        /// </summary>
+        public int Number { get; set; }
+
+        /// <summary>
+        /// Status.
+        /// </summary>
+        [Required]
+        [Range(0, 2, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int Status { get; set; }
 
+        /// <summary>
+        /// Statuses.
+        /// </summary>
+        public SelectList Statuses { get; set; }
     }
 }

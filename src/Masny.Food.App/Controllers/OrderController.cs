@@ -1,4 +1,5 @@
 ﻿using Masny.Food.App.Extensions;
+using Masny.Food.App.Models;
 using Masny.Food.App.ViewModels;
 using Masny.Food.Data.Contexts;
 using Masny.Food.Data.Enums;
@@ -92,7 +93,7 @@ namespace Masny.Food.App.Controllers
         [Authorize]
         public async Task<IActionResult> History()
         {
-            var orderDtos = await _orderManager.GetOrdersByUserId(User.GetUserIdByClaimsPrincipal());
+            var orderDtos = await _orderManager.GetOrdersByUserIdAsync(User.GetUserIdByClaimsPrincipal());
 
             var orderViewModels = new List<OrderViewModel>();
             foreach (var orderDto in orderDtos)
@@ -115,86 +116,64 @@ namespace Masny.Food.App.Controllers
             return View(orderViewModels);
         }
 
-
-
-
-
-
         [Authorize]
-        public async Task<IActionResult> List(int? status)
+        public async Task<IActionResult> List(int? status, string phone)
         {
-            IQueryable<Order> orders = foodAppContext.Orders.AsNoTracking();
+            var orderDtos = await _orderManager.GetAllOrdersAsync();
             if (status != null && status != -1)
             {
-                orders = orders.Where(p => p.Status == (StatusType)status);
+                orderDtos = orderDtos.Where(p => p.Status == (StatusType)status);
             }
 
-            var statusList = new List<StatusModel>
+            if (!string.IsNullOrEmpty(phone))
             {
-                new StatusModel
+                orderDtos = orderDtos.Where(p => p.Phone == phone);
+            }
+
+            var orderViewModels = new List<OrderViewModel>();
+            foreach (var orderDto in orderDtos)
+            {
+                orderViewModels.Add(new OrderViewModel
                 {
-                    Id = 0,
-                    Name = "Nazvanie 0"
-                },
-                new StatusModel
-                {
-                    Id = 1,
-                    Name = "Nazvanie 1"
-                },
-                new StatusModel
-                {
-                    Id = 2,
-                    Name = "Nazvanie 2"
-                }
+                    Id = orderDto.Id,
+                    Number = orderDto.Number,
+                    Creation = orderDto.Creation,
+                    Name = orderDto.Name,
+                    Phone = orderDto.Phone,
+                    InPlace = orderDto.InPlace,
+                    Address = orderDto.Address,
+                    PromoCode = orderDto.PromoCode,
+                    TotalPrice = orderDto.TotalPrice,
+                    Comment = orderDto.Comment,
+                    Status = orderDto.Status,
+                });
+            }
+
+            var orderListViewModel = new OrderListViewModel
+            {
+                Orders = orderViewModels.OrderByDescending(o => o.Creation),
+                Statuses = GetStatuses(true),
+                Phone = phone,
+                CurrentStatus = status.HasValue 
+                    ? status.Value 
+                    : (int)StatusType.Unknown
             };
 
-            statusList.Insert(0, new StatusModel { Name = "Все", Id = -1 });
-
-            OrderListViewModel viewModel = new OrderListViewModel
-            {
-                Orders = await orders.ToListAsync(),
-                Statuses = new SelectList(statusList, "Id", "Name"),
-                CurrentStatus = status.HasValue ? status.Value : -1
-            };
-
-            return View(viewModel);
-
-
-
-
-
-
-            //var orders = await pizzaAppContext.Orders.AsNoTracking().ToListAsync();
-
-            ////var pdm =
-            ////    await pizzaAppContext.OrderProducts
-            ////        .Include(op => op.Product)
-            ////            .ThenInclude(p => p.ProductDetail)
-            ////        .AsNoTracking()
-            ////        .Where(pd => pd.OrderId == id)
-            ////        .ToListAsync();
-
-            ////_cartService.AddOrUpdate(1, HttpContext.User.Identity.Name, pdm);
-
-
-
-            //return View(orders);
+            return View(orderListViewModel);
         }
-
-
 
         [Authorize]
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> EditAsync(int id)
         {
-            var order = foodAppContext.Orders.AsNoTracking().FirstOrDefault(o => o.Id == id);
-
-
+            var orderDto = await _orderManager.GetOrderByIdAsync(id);
 
             return View(new OrderEditViewModel
             {
-                Id = order.Id,
-                Status = (int)order.Status,
+                Id = orderDto.Id,
+                Number = orderDto.Number,
+                Status = (int)orderDto.Status,
+                Statuses = GetStatuses(false),
             });
         }
 
@@ -202,64 +181,43 @@ namespace Masny.Food.App.Controllers
         [HttpPost]
         public async Task<IActionResult> Edit(OrderEditViewModel model)
         {
-            //model = model ?? throw new ArgumentNullException(nameof(model));
-
             if (ModelState.IsValid)
             {
-                var order = foodAppContext.Orders.FirstOrDefault(o => o.Id == model.Id);
-
-                order.Status = (StatusType)model.Status;
-
-                foodAppContext.SaveChanges();
-
+                await _orderManager.UpdateOrderStatusByIdAsync(model.Id, (StatusType)model.Status);
 
                 return RedirectToAction("List", "Order");
-
-
-                //var user = new User
-                //{
-                //    Email = model.Email,
-                //    UserName = model.Username,
-                //};
-
-                //var result = await _userManager.CreateAsync(user, model.Password);
-                //if (result.Succeeded)
-                //{
-                //    await _signInManager.SignInAsync(user, false);
-
-                //    //_emailService.Send(model.Email, EmailResource.Subject, EmailResource.Message);
-
-                //    return RedirectToAction("Index", "Home");
-                //}
-
-                //foreach (var error in result.Errors)
-                //{
-                //    ModelState.AddModelError(string.Empty, error.Description);
-                //}
             }
 
             return View(model);
         }
 
-    }
+        private SelectList GetStatuses(bool withDefaultStatusModel)
+        {
+            var statusList = new List<StatusModel>
+            {
+                new StatusModel
+                {
+                    Id = 0,
+                    Name = StatusType.Todo.ToString(),
+                },
+                new StatusModel
+                {
+                    Id = 1,
+                    Name = StatusType.InProgress.ToString(),
+                },
+                new StatusModel
+                {
+                    Id = 2,
+                    Name = StatusType.Done.ToString(),
+                }
+            };
 
-    public class StatusModel
-    {
-        public int Id { get; set; }
+            if (withDefaultStatusModel)
+            {
+                statusList.Insert(0, new StatusModel { Name = "All", Id = -1 });
+            }
 
-        public string Name { get; set; }
-    }
-
-    public class SimpleTestClass
-    {
-        public int OrderType { get; set; }
-
-        public string Address { get; set; }
-
-        //public string Time { get; set; }
-
-        public int PaymentType { get; set; }
-
-        public string Comment { get; set; }
+            return new SelectList(statusList, "Id", "Name");
+        }
     }
 }
