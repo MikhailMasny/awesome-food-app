@@ -8,13 +8,16 @@ namespace Masny.Food.Data.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "user");
-
-            migrationBuilder.EnsureSchema(
                 name: "product");
 
             migrationBuilder.EnsureSchema(
                 name: "order");
+
+            migrationBuilder.EnsureSchema(
+                name: "user");
+
+            migrationBuilder.EnsureSchema(
+                name: "ad");
 
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
@@ -63,7 +66,7 @@ namespace Masny.Food.Data.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -84,6 +87,22 @@ namespace Masny.Food.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ProductDetails", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PromoCodes",
+                schema: "ad",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(63)", maxLength: 63, nullable: false),
+                    Value = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PromoCodes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -193,31 +212,6 @@ namespace Masny.Food.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DeliveryAddresses",
-                schema: "user",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(127)", maxLength: 127, nullable: false),
-                    Apartment = table.Column<int>(type: "int", nullable: true),
-                    Floor = table.Column<int>(type: "int", nullable: true),
-                    Intercom = table.Column<int>(type: "int", nullable: true),
-                    Entrance = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DeliveryAddresses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DeliveryAddresses_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Orders",
                 schema: "order",
                 columns: table => new
@@ -232,9 +226,10 @@ namespace Masny.Food.Data.Migrations
                     InPlace = table.Column<bool>(type: "bit", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(127)", maxLength: 127, nullable: false),
                     PromoCode = table.Column<string>(type: "nvarchar(63)", maxLength: 63, nullable: true),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Payment = table.Column<int>(type: "int", nullable: false),
+                    TotalPrice = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: -1)
+                    Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -258,7 +253,8 @@ namespace Masny.Food.Data.Migrations
                     Name = table.Column<string>(type: "nvarchar(127)", maxLength: 127, nullable: false),
                     Gender = table.Column<int>(type: "int", nullable: false, defaultValue: -1),
                     BirthDate = table.Column<DateTime>(type: "date", nullable: false, defaultValue: new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc)),
-                    Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: true)
+                    Avatar = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    Address = table.Column<string>(type: "nvarchar(127)", maxLength: 127, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -309,15 +305,16 @@ namespace Masny.Food.Data.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductDetailId = table.Column<int>(type: "int", nullable: false),
                     Photo = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(18,4)", nullable: false),
                     Energy = table.Column<double>(type: "float", nullable: false),
                     Protein = table.Column<double>(type: "float", nullable: false),
                     Fat = table.Column<double>(type: "float", nullable: false),
                     Carbohydrate = table.Column<double>(type: "float", nullable: false),
                     Weight = table.Column<double>(type: "float", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Diameter = table.Column<int>(type: "int", nullable: false, defaultValue: -1),
-                    Kind = table.Column<int>(type: "int", nullable: false, defaultValue: 0)
+                    Diameter = table.Column<int>(type: "int", nullable: false),
+                    Kind = table.Column<int>(type: "int", nullable: false),
+                    IsArchived = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -400,12 +397,6 @@ namespace Masny.Food.Data.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DeliveryAddresses_UserId",
-                schema: "user",
-                table: "DeliveryAddresses",
-                column: "UserId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_OrderProducts_OrderId",
                 schema: "order",
                 table: "OrderProducts",
@@ -467,10 +458,6 @@ namespace Masny.Food.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DeliveryAddresses",
-                schema: "user");
-
-            migrationBuilder.DropTable(
                 name: "OrderProducts",
                 schema: "order");
 
@@ -481,6 +468,10 @@ namespace Masny.Food.Data.Migrations
             migrationBuilder.DropTable(
                 name: "Profiles",
                 schema: "user");
+
+            migrationBuilder.DropTable(
+                name: "PromoCodes",
+                schema: "ad");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masny.Food.Data.Migrations
 {
     [DbContext(typeof(FoodAppContext))]
-    [Migration("20210304185011_Init")]
+    [Migration("20210312185311_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,41 +20,6 @@ namespace Masny.Food.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("ProductVersion", "5.0.3")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("Masny.Food.Data.Models.DeliveryAddress", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasMaxLength(127)
-                        .HasColumnType("nvarchar(127)");
-
-                    b.Property<int?>("Apartment")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Entrance")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Floor")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Intercom")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("DeliveryAddresses", "user");
-                });
 
             modelBuilder.Entity("Masny.Food.Data.Models.Ingredient", b =>
                 {
@@ -69,7 +34,7 @@ namespace Masny.Food.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
 
@@ -108,6 +73,9 @@ namespace Masny.Food.Data.Migrations
                     b.Property<int>("Number")
                         .HasColumnType("int");
 
+                    b.Property<int>("Payment")
+                        .HasColumnType("int");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasMaxLength(63)
@@ -118,12 +86,10 @@ namespace Masny.Food.Data.Migrations
                         .HasColumnType("nvarchar(63)");
 
                     b.Property<int>("Status")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(-1);
+                        .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -173,9 +139,7 @@ namespace Masny.Food.Data.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<int>("Diameter")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(-1);
+                        .HasColumnType("int");
 
                     b.Property<double>("Energy")
                         .HasColumnType("float");
@@ -183,16 +147,17 @@ namespace Masny.Food.Data.Migrations
                     b.Property<double>("Fat")
                         .HasColumnType("float");
 
+                    b.Property<bool>("IsArchived")
+                        .HasColumnType("bit");
+
                     b.Property<int>("Kind")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(0);
+                        .HasColumnType("int");
 
                     b.Property<byte[]>("Photo")
                         .HasColumnType("varbinary(max)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,4)");
 
                     b.Property<int>("ProductDetailId")
                         .HasColumnType("int");
@@ -265,6 +230,10 @@ namespace Masny.Food.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(127)
+                        .HasColumnType("nvarchar(127)");
+
                     b.Property<byte[]>("Avatar")
                         .HasColumnType("varbinary(max)");
 
@@ -293,6 +262,30 @@ namespace Masny.Food.Data.Migrations
                         .IsUnique();
 
                     b.ToTable("Profiles", "user");
+                });
+
+            modelBuilder.Entity("Masny.Food.Data.Models.PromoCode", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(63)
+                        .HasColumnType("nvarchar(63)");
+
+                    b.Property<string>("Comment")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<decimal>("Value")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PromoCodes", "ad");
                 });
 
             modelBuilder.Entity("Masny.Food.Data.Models.User", b =>
@@ -491,17 +484,6 @@ namespace Masny.Food.Data.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("Masny.Food.Data.Models.DeliveryAddress", b =>
-                {
-                    b.HasOne("Masny.Food.Data.Models.User", "User")
-                        .WithMany("DeliveryAddresses")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Masny.Food.Data.Models.Order", b =>
                 {
                     b.HasOne("Masny.Food.Data.Models.User", "User")
@@ -648,8 +630,6 @@ namespace Masny.Food.Data.Migrations
 
             modelBuilder.Entity("Masny.Food.Data.Models.User", b =>
                 {
-                    b.Navigation("DeliveryAddresses");
-
                     b.Navigation("Orders");
 
                     b.Navigation("Profile");

@@ -5,9 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-// TODO:
-// sql scripts
-
 namespace Masny.Food.App.Controllers
 {
     public class HomeController : Controller
