@@ -1,6 +1,6 @@
 # Food application
 
-![.NET Core](https://github.com/MikhailMasny/awesome-food-app/workflows/.NET%20Core/badge.svg)
+[![.NET](https://github.com/MikhailMasny/awesome-food-app/actions/workflows/dotnet.yml/badge.svg)](https://github.com/MikhailMasny/awesome-food-app/actions/workflows/dotnet.yml)
 
 A web-application developed on the .NET 5.0. The main idea of a web application is to develop a system for create a basic engine for the operation of an internet cafe. This repository can also serve as a template for creating the application with the account and some basic functionality.
 
