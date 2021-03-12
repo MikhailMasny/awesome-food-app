@@ -3,7 +3,7 @@
 namespace Masny.Food.Data.Models
 {
     /// <summary>
-    /// Product detail.
+    /// Product detail entity.
     /// </summary>
     public class ProductDetail
     {

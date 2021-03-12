@@ -19,5 +19,10 @@
         /// Product.
         /// </summary>
         public const string Product = "product";
+
+        /// <summary>
+        /// Advertising.
+        /// </summary>
+        public const string Ad = "ad";
     }
 }

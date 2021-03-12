@@ -11,6 +11,7 @@ document.addEventListener("click", function (event) {
             "https://localhost:5001/cart/add",
             "POST",
             item,
+            false,
             true,
             "Add"
         );

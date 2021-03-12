@@ -12,10 +12,11 @@ document.addEventListener("click", function (event) {
             "POST",
             item,
             false,
-            "Remove"
+            false,
+            ""
         );
 
-        event.srcElement.parentElement.remove();
+        event.srcElement.parentElement.parentElement.remove();
         
         const count = document.querySelectorAll(".productInCart").length;
 

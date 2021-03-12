@@ -44,5 +44,10 @@
         /// Ingredients.
         /// </summary>
         public const string Ingredients = nameof(Ingredients);
+
+        /// <summary>
+        /// Promo codes.
+        /// </summary>
+        public const string PromoCodes = nameof(PromoCodes);
     }
 }

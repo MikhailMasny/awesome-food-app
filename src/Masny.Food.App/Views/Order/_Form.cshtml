@@ -27,15 +27,16 @@
     </div>
 
     <div>
+        <label asp-for="Payment"></label>
         <select asp-for="Payment" asp-items="Html.GetEnumSelectList<PaymentType>()"></select>
         <span asp-validation-for="Payment" />
     </div>
 
-    @*<div>
-            <label asp-for="PromoCode"></label>
-            <input asp-for="PromoCode" placeholder="Enter promo code" type="text" />
-            <span asp-validation-for="PromoCode"></span>
-        </div>*@
+    <div>
+        <label asp-for="PromoCode"></label>
+        <input asp-for="PromoCode" placeholder="Enter promo code" type="text" />
+        <span asp-validation-for="PromoCode"></span>
+    </div>
 
     <div>
         <label asp-for="Comment"></label>
@@ -44,6 +45,6 @@
     </div>
 
     <div>
-        <button id="confirmOrder" type="submit">Confirm order</button>
+        <button id="confirmOrderButton" type="submit">Confirm order</button>
     </div>
 </form>

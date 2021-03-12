@@ -1,6 +1,5 @@
-﻿export default function request(uri, type, data, showAlert, alertMessage) {
-    fetch(uri,
-    {
+﻿export default function request(uri, type, data, promoCodeAlert, showAlert, alertMessage) {
+    fetch(uri, {
         method: type,
         headers:
         {
@@ -8,11 +7,27 @@
             "Content-Type": "application/json"
         },
         body: JSON.stringify(data)
-    })
-    .then(() => {
+    }).then(({ status }) => {
+        let message = "";
+        switch (status) {
+            case 201:
+            case 200:
+                message = "Promo code successfully applied!";
+                break;
+            case 400:
+            case 404:
+            case 500:
+            default:
+                message = "The entered promotional code was not found..";
+                break;
+        }
+
+        if (promoCodeAlert) {
+            alert(message);
+        }
+
         if (showAlert) {
             alert(alertMessage);
         }
     })
-    .catch(error => console.error("Unable to do action.", error));
 }

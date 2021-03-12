@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Masny.Food.Data.Models
 {
     /// <summary>
-    /// Product.
+    /// Product entity.
     /// </summary>
     public class Product
     {

@@ -17,18 +17,15 @@ namespace Masny.Food.App.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderManager _orderManager;
-        private readonly IProductManager _productManager;
         private readonly ICartService _cartService;
         private readonly ICalcService _calcService;
 
         public OrderController(
-            IProductManager productManager,
             IOrderManager orderManager,
             ICartService cartService,
             ICalcService calcService)
         {
             _orderManager = orderManager ?? throw new ArgumentNullException(nameof(orderManager));
-            _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
             _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
             _calcService = calcService ?? throw new ArgumentNullException(nameof(calcService));
         }
@@ -43,6 +40,13 @@ namespace Masny.Food.App.Controllers
                 var orderNumber = await _calcService.GetNewOrderNumberAsync(dateTimeNow);
                 var cartDto = await _cartService.GetAsync(userId);
 
+                var totalPrice = await _calcService.GetTotalPriceByProductIdsAsync(cartDto.ProductIds);
+
+                if (!string.IsNullOrEmpty(model.PromoCode))
+                {
+                    totalPrice = await _calcService.ApplyPromoCodeAsync(model.PromoCode, totalPrice);
+                }
+
                 var orderDto = new OrderDto
                 {
                     Number = orderNumber,
@@ -54,7 +58,7 @@ namespace Masny.Food.App.Controllers
                     Address = model.Address,
                     PromoCode = model.PromoCode,
                     Payment = model.Payment,
-                    TotalPrice = await _calcService.GetTotalPriceByProductIdsAsync(cartDto.ProductIds),
+                    TotalPrice = totalPrice,
                     Comment = model.Comment,
                     Status = StatusType.Todo,
                 };
@@ -169,6 +173,19 @@ namespace Masny.Food.App.Controllers
             }
 
             return View(model);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CheckPromoCodeAsync([FromBody] PromoCodeViewModel model)
+        {
+            var isExist = await _calcService.IsExistPromoCodeAsync(model.Value.ToUpper());
+            if (isExist)
+            {
+                return Ok();
+            }
+
+            return NotFound();
         }
 
         private SelectList GetStatusTypes(bool withDefaultStatusModel)

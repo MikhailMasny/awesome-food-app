@@ -3,7 +3,7 @@
 namespace Masny.Food.Data.Models
 {
     /// <summary>
-    /// Ingredient.
+    /// Ingredient entity.
     /// </summary>
     public class Ingredient
     {

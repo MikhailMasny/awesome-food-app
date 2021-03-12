@@ -147,8 +147,6 @@ namespace Masny.Food.App.Controllers
 
             if (ModelState.IsValid)
             {
-                // UNDONE: Use automapper
-
                 var profileDto = new ProfileDto
                 {
                     UserId = User.GetUserIdByClaimsPrincipal(),

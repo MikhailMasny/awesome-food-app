@@ -12,14 +12,24 @@ namespace Masny.Food.Logic.Services
     public class CalcService : ICalcService
     {
         private readonly IRepositoryManager<Order> _orderManager;
+        private readonly IRepositoryManager<PromoCode> _promoCodeManager;
         private readonly IRepositoryManager<Product> _productManager;
 
         public CalcService(
             IRepositoryManager<Order> orderManager,
+            IRepositoryManager<PromoCode> promoCodeManager,
             IRepositoryManager<Product> productManager)
         {
             _orderManager = orderManager ?? throw new System.ArgumentNullException(nameof(orderManager));
+            _promoCodeManager = promoCodeManager ?? throw new ArgumentNullException(nameof(promoCodeManager));
             _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
+        }
+
+        public async Task<decimal> ApplyPromoCodeAsync(string code, decimal totalPrice)
+        {
+            const int procentConstant = 100;
+            var promoCode = await _promoCodeManager.GetEntityWithoutTrackingAsync(p => p.Code == code);
+            return totalPrice - totalPrice * promoCode.Value / procentConstant;
         }
 
         public async Task<int> GetNewOrderNumberAsync(DateTime dateTime)
@@ -46,6 +56,12 @@ namespace Masny.Food.Logic.Services
                     .ToListAsync())
                 .Select(p => p.Price)
                 .Sum();
+        }
+
+        public async Task<bool> IsExistPromoCodeAsync(string code)
+        {
+            var promoCode = await _promoCodeManager.GetEntityWithoutTrackingAsync(p => p.Code == code);
+            return promoCode is not null;
         }
     }
 }

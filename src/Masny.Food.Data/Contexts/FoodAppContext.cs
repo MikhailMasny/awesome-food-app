@@ -55,6 +55,11 @@ namespace Masny.Food.Data.Contexts
         /// </summary>
         public DbSet<Ingredient> Ingredients { get; set; }
 
+        /// <summary>
+        /// DbSet for PromoCode.
+        /// </summary>
+        public DbSet<PromoCode> PromoCodes { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
@@ -66,6 +71,7 @@ namespace Masny.Food.Data.Contexts
             builder.ApplyConfiguration(new ProductDetailConfiguration());
             builder.ApplyConfiguration(new ProductIngredientConfiguration());
             builder.ApplyConfiguration(new IngredientConfiguration());
+            builder.ApplyConfiguration(new PromoCodeConfiguration());
 
             base.OnModelCreating(builder);
         }

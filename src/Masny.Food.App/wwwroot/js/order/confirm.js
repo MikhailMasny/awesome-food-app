@@ -1,9 +1,8 @@
-﻿const confirmOrderButton = document.getElementById("confirmOrder");
-const nameInput = document.getElementById("Name");
-const phoneInput = document.getElementById("Phone");
-const addressInput = document.getElementById("Address");
+﻿function checkValues(event) {
+    const nameInput = document.getElementById("Name");
+    const phoneInput = document.getElementById("Phone");
+    const addressInput = document.getElementById("Address");
 
-function checkValues(event) {
     if (nameInput.value === '') {
         event.preventDefault();
         alert("Name is empty");
@@ -23,4 +22,12 @@ function checkValues(event) {
     }
 }
 
-confirmOrderButton.addEventListener("click", checkValues);
+function main() {
+    const confirmOrderButton = document.getElementById("confirmOrderButton");
+
+    if (confirmOrderButton) {
+        confirmOrderButton.addEventListener("click", checkValues);
+    }
+}
+
+document.addEventListener("DOMContentLoaded", main);

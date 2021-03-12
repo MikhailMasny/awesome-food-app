@@ -24,7 +24,7 @@
                 @{
                     foreach (var product in Model.Products)
                     {
-                        <tr>
+                        <tr class="productInCart">
                             <td>
                                 @product.Name
                             </td>
@@ -37,7 +37,7 @@
                             <td>
                                 @product.Kind
                             </td>
-                            <td>
+                            <td class="productPrice">
                                 @product.Price
                             </td>
                             <td>
@@ -48,6 +48,13 @@
                 }
             </tbody>
         </table>
+
+        <br />
+
+        <div>
+            <button id="totalPriceButton">Get total price</button>
+            <button id="promoCodeButton">Apply promo code</button>
+        </div>
 
         <br />
 
@@ -63,4 +70,6 @@
 {
     <script type="module" src="~/js/cart/remove.js" asp-append-version="true"></script>
     <script src="~/js/order/confirm.js" asp-append-version="true"></script>
+    <script src="~/js/order/totalPrice.js" asp-append-version="true"></script>
+    <script type="module" src="~/js/order/promoCode.js" asp-append-version="true"></script>
 }

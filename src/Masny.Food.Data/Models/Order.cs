@@ -5,7 +5,7 @@ using System.Collections.Generic;
 namespace Masny.Food.Data.Models
 {
     /// <summary>
-    /// Order.
+    /// Order entity.
     /// </summary>
     public class Order
     {

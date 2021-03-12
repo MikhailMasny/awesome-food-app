@@ -4,7 +4,7 @@ using System;
 namespace Masny.Food.Data.Models
 {
     /// <summary>
-    /// User profile.
+    /// User profile entity.
     /// </summary>
     public class Profile
     {

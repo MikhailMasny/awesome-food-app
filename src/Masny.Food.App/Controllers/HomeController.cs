@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 // TODO:
-// Promocode and totalprice by js
 // Admin panel
 // Common project
 // sql scripts
