@@ -7,8 +7,6 @@ namespace Masny.Food.App.ViewModels
     /// </summary>
     public class RegisterViewModel
     {
-        // TODO: add resources files
-
         /// <summary>
         /// Email.
         /// </summary>
@@ -37,6 +35,8 @@ namespace Masny.Food.App.ViewModels
         [DataType(DataType.Password)]
         [Display(Name = nameof(Password))]
         public string Password { get; set; }
+
+        // UNDONE: use resources files
 
         /// <summary>
         /// Password confirm.

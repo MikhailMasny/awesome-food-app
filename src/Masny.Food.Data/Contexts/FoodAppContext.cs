@@ -26,11 +26,6 @@ namespace Masny.Food.Data.Contexts
         public DbSet<Profile> Profiles { get; set; }
 
         /// <summary>
-        /// DbSet for DeliveryAddresses.
-        /// </summary>
-        public DbSet<DeliveryAddress> DeliveryAddresses { get; set; }
-
-        /// <summary>
         /// DbSet for Orders.
         /// </summary>
         public DbSet<Order> Orders { get; set; }
@@ -65,7 +60,6 @@ namespace Masny.Food.Data.Contexts
             builder = builder ?? throw new ArgumentNullException(nameof(builder));
 
             builder.ApplyConfiguration(new ProfileConfiguration());
-            builder.ApplyConfiguration(new DeliveryAddressConfiguration());
             builder.ApplyConfiguration(new OrderConfiguration());
             builder.ApplyConfiguration(new OrderProductConfiguration());
             builder.ApplyConfiguration(new ProductConfiguration());

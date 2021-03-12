@@ -37,6 +37,7 @@ namespace Masny.Food.Logic.Managers
                 Address = orderDto.Address,
                 PromoCode = orderDto.PromoCode,
                 TotalPrice = orderDto.TotalPrice,
+                Payment = orderDto.Payment,
                 Comment = orderDto.Comment,
                 Status = orderDto.Status,
             };
@@ -84,6 +85,7 @@ namespace Masny.Food.Logic.Managers
                     InPlace = order.InPlace,
                     Address = order.Address,
                     PromoCode = order.PromoCode,
+                    Payment = order.Payment,
                     TotalPrice = order.TotalPrice,
                     Comment = order.Comment,
                     Status = order.Status,
@@ -106,6 +108,7 @@ namespace Masny.Food.Logic.Managers
                 InPlace = order.InPlace,
                 Address = order.Address,
                 PromoCode = order.PromoCode,
+                Payment = order.Payment,
                 TotalPrice = order.TotalPrice,
                 Comment = order.Comment,
                 Status = order.Status,
@@ -134,6 +137,7 @@ namespace Masny.Food.Logic.Managers
                     InPlace = order.InPlace,
                     Address = order.Address,
                     PromoCode = order.PromoCode,
+                    Payment = order.Payment,
                     TotalPrice = order.TotalPrice,
                     Comment = order.Comment,
                     Status = order.Status,
@@ -143,9 +147,9 @@ namespace Masny.Food.Logic.Managers
             return orderDtos;
         }
 
-        public async Task UpdateOrderStatusByIdAsync(int id, StatusType statusType)
+        public async Task UpdateOrderStatusByIdAsync(int orderId, StatusType statusType)
         {
-            var order = await _orderManager.GetEntityAsync(o => o.Id == id);
+            var order = await _orderManager.GetEntityAsync(o => o.Id == orderId);
 
             order.Status = statusType;
 

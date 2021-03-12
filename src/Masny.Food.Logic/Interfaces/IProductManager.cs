@@ -13,18 +13,26 @@ namespace Masny.Food.Logic.Interfaces
         /// Get all product details.
         /// </summary>
         /// <returns>List of product detail data transfer objects.</returns>
-        Task<IEnumerable<ProductDetailDto>> GetAllProductDetails();
+        Task<IEnumerable<ProductDetailDto>> GetAllProductDetailsAsync();
 
         /// <summary>
         /// Get all products.
         /// </summary>
         /// <param name="productDetailId">Product detail identifier.</param>
+        /// <returns>List of product data transfer objects and product name.</returns>
+        Task<(IEnumerable<ProductDto> productDtos, string productName)> GetAllProductsByProductDetailIdAsync(int productDetailId);
+
+        /// <summary>
+        /// Get all products by identifiers.
+        /// </summary>
+        /// <param name="ids">Identifiers.</param>
         /// <returns>List of product data transfer objects.</returns>
-        Task<(IEnumerable<ProductDto> productDtos, string productName)> GetAllProductsByProductDetailId(int productDetailId);
+        Task<IEnumerable<ProductDto>> GetAllProductsByIdsAsync(IEnumerable<int> ids);
 
-        Task<IEnumerable<ProductDto>> GetAllProductsByIds(IEnumerable<int> ids);
-
-        // UNDONE: replace to product service ?
-        Task<decimal> GetTotalPriceByProductIds(IEnumerable<int> ids);
+        /// <summary>
+        /// Get all products.
+        /// </summary>
+        /// <returns>List of product data transfer objects.</returns>
+        Task<IEnumerable<ProductDto>> GetAllProductsAsync();
     }
 }

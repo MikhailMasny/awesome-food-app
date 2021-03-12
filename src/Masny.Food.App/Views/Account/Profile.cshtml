@@ -1,10 +1,14 @@
 ﻿@model ProfileViewModel
 
+@{
+    ViewData["Title"] = "";
+}
+
 <h1>User profile</h1>
 
 <form method="post" asp-controller="Account" asp-action="Profile" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly"></div>
-    
+
     <div>
         <input asp-for="Name" placeholder="Enter your name" type="text" />
         <span asp-validation-for="Name"></span>
@@ -18,6 +22,11 @@
     <div>
         <select asp-for="Gender" asp-items="Html.GetEnumSelectList<GenderType>()"></select>
         <span asp-validation-for="Gender" />
+    </div>
+
+    <div>
+        <input asp-for="Address" placeholder="Enter address" type="text" />
+        <span asp-validation-for="Address"></span>
     </div>
 
     <div>

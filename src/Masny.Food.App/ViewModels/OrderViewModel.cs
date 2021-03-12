@@ -31,6 +31,8 @@ namespace Masny.Food.App.ViewModels
         [Display(Name = nameof(Name))]
         public string Name { get; set; }
 
+        // UNDONE: use resources files
+
         /// <summary>
         /// Phone.
         /// </summary
@@ -54,6 +56,11 @@ namespace Masny.Food.App.ViewModels
         /// Promo code.
         /// </summary>
         public string PromoCode { get; set; }
+
+        /// <summary>
+        /// Payment.
+        /// </summary>
+        public PaymentType Payment { get; set; }
 
         /// <summary>
         /// Total price.

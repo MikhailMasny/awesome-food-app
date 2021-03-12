@@ -74,6 +74,11 @@ namespace Masny.Food.Data.Models
         public KindType Kind { get; set; }
 
         /// <summary>
+        /// Is archived.
+        /// </summary>
+        public bool IsArchived { get; set; }
+
+        /// <summary>
         /// Navigation property for order product.
         /// </summary>
         public ICollection<OrderProduct> OrderProducts { get; set; }

@@ -45,8 +45,6 @@ namespace Masny.Food.Logic.Services
 
             switch (cartOperationType)
             {
-                case CartOperationType.Unknown:
-                    break;
                 case CartOperationType.Add:
                     {
                         cartDto.ProductIds.Add(productId);
@@ -56,6 +54,8 @@ namespace Masny.Food.Logic.Services
                     {
                         cartDto.ProductIds.Remove(productId);
                     }
+                    break;
+                case CartOperationType.Unknown:
                     break;
                 default:
                     break;

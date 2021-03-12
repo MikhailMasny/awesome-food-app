@@ -32,6 +32,7 @@ namespace Masny.Food.App
             services.AddScoped<IProductManager, ProductManager>();
             services.AddScoped<IOrderManager, OrderManager>();
             services.AddScoped<ICartService, CartService>();
+            services.AddScoped<ICalcService, CalcService>();
 
             // Database context
             services.AddDbContext<FoodAppContext>(options =>

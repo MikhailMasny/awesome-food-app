@@ -54,6 +54,11 @@ namespace Masny.Food.Logic.Models
         public string PromoCode { get; set; }
 
         /// <summary>
+        /// Payment.
+        /// </summary>
+        public PaymentType Payment { get; set; }
+
+        /// <summary>
         /// Total price.
         /// </summary>
         public decimal TotalPrice { get; set; }

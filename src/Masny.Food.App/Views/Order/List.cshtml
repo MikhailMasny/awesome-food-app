@@ -1,5 +1,9 @@
 ﻿@model OrderListViewModel
 
+@{
+    ViewData["Title"] = "";
+}
+
 <h1>All orders</h1>
 
 <form method="get">
@@ -14,21 +18,75 @@
 
 <br />
 
-@foreach (var order in Model.Orders)
-{
-    <div style="width: 800px; display: flex; justify-content: space-between">
-        <div>@order.Number</div>
-        <div>@order.Creation</div>
-        <div>@order.Status</div>
-        <div>@order.Name</div>
-        <div>@order.Phone</div>
-        <div>@order.InPlace</div>
-        <div>@order.Address</div>
-        <div>@order.PromoCode</div>
-        <div>@order.TotalPrice</div>
-        <div>@order.Comment</div>
-        <div>
-            <a asp-controller="Order" asp-action="Edit" asp-route-id="@order.Id">Edit</a>
-        </div>
-    </div>
+@{
+    if (Model.Orders.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Phone</th>
+                    <th>Name</th>
+                    <th>Status</th>
+                    <th>Creation</th>
+                    <th>In place</th>
+                    <th>Address</th>
+                    <th>Promo code</th>
+                    <th>Payment</th>
+                    <th>Total price</th>
+                    <th>Comment</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td>
+                                @order.Number
+                            </td>
+                            <td>
+                                @order.Phone
+                            </td>
+                            <td>
+                                @order.Name
+                            </td>
+                            <td>
+                                @order.Status
+                            </td>
+                            <td>
+                                @order.Creation
+                            </td>
+                            <td>
+                                @order.InPlace
+                            </td>
+                            <td>
+                                @order.Address
+                            </td>
+                            <td>
+                                @order.PromoCode
+                            </td>
+                            <td>
+                                @order.Payment
+                            </td>
+                            <td>
+                                @order.TotalPrice
+                            </td>
+                            <td>
+                                @order.Comment
+                            </td>
+                            <td>
+                                <a asp-controller="Order" asp-action="Edit" asp-route-id="@order.Id">Edit</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No orders found.</p>
+    }
 }

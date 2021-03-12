@@ -56,8 +56,7 @@ namespace Masny.Food.App.Controllers
                     var createdUser = await _userManager.FindByNameAsync(user.UserName);
                     await _profileManager.CreateProfileAsync(createdUser.Id, model.Name);
 
-                    // TODO: add email service
-                    //_emailService.Send(model.Email, EmailResource.Subject, EmailResource.Message);
+                    // UNDONE: add email service
 
                     return RedirectToAction("Index", "Home");
                 }
@@ -107,7 +106,8 @@ namespace Masny.Food.App.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                // TODO: resources
+                // UNDONE: use resources files
+
                 ModelState.AddModelError(string.Empty, "Incorrect data");
             }
 
@@ -132,6 +132,7 @@ namespace Masny.Food.App.Controllers
                 Name = profileDto.Name,
                 BirthDate = profileDto.BirthDate,
                 Gender = profileDto.Gender,
+                Address = profileDto.Address,
                 Avatar = profileDto.Avatar,
             };
 
@@ -146,12 +147,15 @@ namespace Masny.Food.App.Controllers
 
             if (ModelState.IsValid)
             {
+                // UNDONE: Use automapper
+
                 var profileDto = new ProfileDto
                 {
                     UserId = User.GetUserIdByClaimsPrincipal(),
                     Name = model.Name,
                     BirthDate = model.BirthDate,
                     Gender = model.Gender,
+                    Address = model.Address,
                 };
 
                 if (model.AvatarFile is not null)
@@ -173,4 +177,3 @@ namespace Masny.Food.App.Controllers
         }
     }
 }
-

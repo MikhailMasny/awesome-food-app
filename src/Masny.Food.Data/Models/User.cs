@@ -14,11 +14,6 @@ namespace Masny.Food.Data.Models
         public ICollection<Order> Orders { get; set; }
 
         /// <summary>
-        /// Navigation property for delivery address.
-        /// </summary>
-        public ICollection<DeliveryAddress> DeliveryAddresses { get; set; }
-
-        /// <summary>
         /// Navigation property for profile.
         /// </summary>
         public Profile Profile { get; set; }

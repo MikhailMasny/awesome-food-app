@@ -1,6 +1,7 @@
 ﻿using Masny.Food.Data.Enums;
 using Microsoft.AspNetCore.Http;
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Masny.Food.App.ViewModels
 {
@@ -12,6 +13,8 @@ namespace Masny.Food.App.ViewModels
         /// <summary>
         /// Name.
         /// </summary>
+        [Required]
+        [Display(Name = nameof(Name))]
         public string Name { get; set; }
 
         // TODO: to common project
@@ -30,6 +33,11 @@ namespace Masny.Food.App.ViewModels
         /// Avatar.
         /// </summary>
         public byte[] Avatar { get; set; }
+
+        /// <summary>
+        /// Address.
+        /// </summary>
+        public string Address { get; set; }
 
         /// <summary>
         /// Avatar from file.

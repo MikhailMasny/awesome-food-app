@@ -1,6 +1,7 @@
 ﻿using Masny.Food.App.ViewModels;
 using Masny.Food.Logic.Interfaces;
 using Masny.Food.Logic.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -17,27 +18,31 @@ namespace Masny.Food.App.Controllers
             _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
         }
 
+        [Authorize]
         public async Task<IActionResult> List(int id)
         {
-            (IEnumerable<ProductDto> productDtos, string productName) = await _productManager.GetAllProductsByProductDetailId(id);
+            (IEnumerable<ProductDto> productDtos, string productName) = await _productManager.GetAllProductsByProductDetailIdAsync(id);
 
             var productViewModels = new List<ProductViewModel>();
             foreach (var productDto in productDtos)
             {
-                productViewModels.Add(new ProductViewModel
+                if (!productDto.IsArchived)
                 {
-                    Id = productDto.Id,
-                    Photo = productDto.Photo,
-                    Price = productDto.Price,
-                    Energy = productDto.Energy,
-                    Protein = productDto.Protein,
-                    Fat = productDto.Fat,
-                    Carbohydrate = productDto.Carbohydrate,
-                    Weight = productDto.Weight,
-                    Comment = productDto.Comment,
-                    Diameter = productDto.Diameter,
-                    Kind = productDto.Kind,
-                });
+                    productViewModels.Add(new ProductViewModel
+                    {
+                        Id = productDto.Id,
+                        Photo = productDto.Photo,
+                        Price = productDto.Price,
+                        Energy = productDto.Energy,
+                        Protein = productDto.Protein,
+                        Fat = productDto.Fat,
+                        Carbohydrate = productDto.Carbohydrate,
+                        Weight = productDto.Weight,
+                        Comment = productDto.Comment,
+                        Diameter = productDto.Diameter,
+                        Kind = productDto.Kind,
+                    });
+                }
             }
 
             var productListViewModel = new ProductListViewModel

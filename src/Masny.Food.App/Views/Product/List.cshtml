@@ -1,27 +1,55 @@
 ﻿@model ProductListViewModel
 
+@{
+    ViewData["Title"] = "";
+}
+
 <h1>@Model.Name</h1>
 
 @{
-    foreach (var product in Model.Products)
-    {
-        <div style="width: 310px; display: flex; justify-content: space-between">
-            <p>@product.Weight</p>
-            <p>@product.Diameter</p>
-            <p>@product.Kind</p>
-            <p>@product.Price</p>
-
+    <table>
+        <thead>
+            <tr>
+                <th>Weight</th>
+                <th>Diameter</th>
+                <th>Kind</th>
+                <th>Price</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
             @{
-                if (User.Identity.IsAuthenticated)
+                foreach (var product in Model.Products)
                 {
-                    <button data-cart-id="@product.Id">to cart</button>
+                    <tr>
+                        <td>
+                            @product.Weight
+                        </td>
+                        <td>
+                            @product.Diameter
+                        </td>
+                        <td>
+                            @product.Kind
+                        </td>
+                        <td>
+                            @product.Price
+                        </td>
+                        <td>
+                            @{
+                                if (User.Identity.IsAuthenticated)
+                                {
+                                    <button data-cart-id="@product.Id">to cart</button>
+                                }
+                            }
+                        </td>
+                    </tr>
                 }
             }
-        </div>
-    }
+        </tbody>
+    </table>
 }
 
 @section scripts
 {
-    <script src="~/js/cart/post.js"></script>
+    <script type="module" src="~/js/cart/add.js" asp-append-version="true"></script>
 }

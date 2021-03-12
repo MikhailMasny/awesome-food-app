@@ -1,43 +1,36 @@
 ﻿using Masny.Food.App.Extensions;
 using Masny.Food.App.Models;
 using Masny.Food.App.ViewModels;
-using Masny.Food.Data.Contexts;
 using Masny.Food.Data.Enums;
-using Masny.Food.Data.Models;
 using Masny.Food.Logic.Interfaces;
 using Masny.Food.Logic.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
-
-// TODO: ordercontroller, deliveryaddresses, js to delete from cart
 
 namespace Masny.Food.App.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly ICartService _cartService;
         private readonly IOrderManager _orderManager;
         private readonly IProductManager _productManager;
-        private readonly FoodAppContext foodAppContext;
+        private readonly ICartService _cartService;
+        private readonly ICalcService _calcService;
 
         public OrderController(
-            ICartService cartService,
-            FoodAppContext foodAppContext,
+            IProductManager productManager,
             IOrderManager orderManager,
-            IProductManager productManager)
+            ICartService cartService,
+            ICalcService calcService)
         {
-            this.foodAppContext = foodAppContext;
-
-            _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
             _orderManager = orderManager ?? throw new ArgumentNullException(nameof(orderManager));
             _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
+            _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
+            _calcService = calcService ?? throw new ArgumentNullException(nameof(calcService));
         }
 
         [Authorize]
@@ -46,21 +39,8 @@ namespace Masny.Food.App.Controllers
             if (ModelState.IsValid)
             {
                 var userId = User.GetUserIdByClaimsPrincipal();
-
-                // UNDONE: need method get order number
-                var orderNumber = 1;
                 var dateTimeNow = DateTime.Now;
-                var lastOrder = await foodAppContext.Orders
-                    .AsNoTracking()
-                    .OrderBy(o => o.Id)
-                    .LastOrDefaultAsync();
-
-                if (lastOrder is not null && lastOrder.Creation.Date == dateTimeNow.Date)
-                {
-                    orderNumber = ++lastOrder.Number;
-                }
-
-                // UNDONE: need method get totalPrice
+                var orderNumber = await _calcService.GetNewOrderNumberAsync(dateTimeNow);
                 var cartDto = await _cartService.GetAsync(userId);
 
                 var orderDto = new OrderDto
@@ -73,7 +53,8 @@ namespace Masny.Food.App.Controllers
                     InPlace = model.InPlace,
                     Address = model.Address,
                     PromoCode = model.PromoCode,
-                    TotalPrice = await _productManager.GetTotalPriceByProductIds(cartDto.ProductIds), // UNDONE: to calc service
+                    Payment = model.Payment,
+                    TotalPrice = await _calcService.GetTotalPriceByProductIdsAsync(cartDto.ProductIds),
                     Comment = model.Comment,
                     Status = StatusType.Todo,
                 };
@@ -113,7 +94,7 @@ namespace Masny.Food.App.Controllers
                 });
             }
 
-            return View(orderViewModels);
+            return View(orderViewModels.OrderByDescending(o => o.Creation));
         }
 
         [Authorize]
@@ -143,6 +124,7 @@ namespace Masny.Food.App.Controllers
                     InPlace = orderDto.InPlace,
                     Address = orderDto.Address,
                     PromoCode = orderDto.PromoCode,
+                    Payment = orderDto.Payment,
                     TotalPrice = orderDto.TotalPrice,
                     Comment = orderDto.Comment,
                     Status = orderDto.Status,
@@ -152,11 +134,9 @@ namespace Masny.Food.App.Controllers
             var orderListViewModel = new OrderListViewModel
             {
                 Orders = orderViewModels.OrderByDescending(o => o.Creation),
-                Statuses = GetStatuses(true),
+                Statuses = GetStatusTypes(true),
                 Phone = phone,
-                CurrentStatus = status.HasValue 
-                    ? status.Value 
-                    : (int)StatusType.Unknown
+                CurrentStatus = status ?? (int)StatusType.Unknown
             };
 
             return View(orderListViewModel);
@@ -173,7 +153,7 @@ namespace Masny.Food.App.Controllers
                 Id = orderDto.Id,
                 Number = orderDto.Number,
                 Status = (int)orderDto.Status,
-                Statuses = GetStatuses(false),
+                Statuses = GetStatusTypes(false),
             });
         }
 
@@ -191,30 +171,35 @@ namespace Masny.Food.App.Controllers
             return View(model);
         }
 
-        private SelectList GetStatuses(bool withDefaultStatusModel)
+        private SelectList GetStatusTypes(bool withDefaultStatusModel)
         {
-            var statusList = new List<StatusModel>
+            var statusList = new List<SelectListModel>
             {
-                new StatusModel
+                new SelectListModel
                 {
                     Id = 0,
                     Name = StatusType.Todo.ToString(),
                 },
-                new StatusModel
+                new SelectListModel
                 {
                     Id = 1,
                     Name = StatusType.InProgress.ToString(),
                 },
-                new StatusModel
+                new SelectListModel
                 {
                     Id = 2,
                     Name = StatusType.Done.ToString(),
+                },
+                new SelectListModel
+                {
+                    Id = 3,
+                    Name = StatusType.Canceled.ToString(),
                 }
             };
 
             if (withDefaultStatusModel)
             {
-                statusList.Insert(0, new StatusModel { Name = "All", Id = -1 });
+                statusList.Insert(0, new SelectListModel { Name = "All", Id = -1 });
             }
 
             return new SelectList(statusList, "Id", "Name");

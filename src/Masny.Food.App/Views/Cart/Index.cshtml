@@ -1,59 +1,66 @@
 ﻿@model CartIndexViewModel
 
+@{
+    ViewData["Title"] = "";
+}
+
 <h1>Cart</h1>
 
 @{
     if (Model.Products.Any())
     {
-        foreach (var product in Model.Products)
-        {
-            <p>@product.Id  @product.Price</p>
-        }
+        <table id="cartItems">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Weight</th>
+                    <th>Diameter</th>
+                    <th>Kind</th>
+                    <th>Price</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var product in Model.Products)
+                    {
+                        <tr>
+                            <td>
+                                @product.Name
+                            </td>
+                            <td>
+                                @product.Weight
+                            </td>
+                            <td>
+                                @product.Diameter
+                            </td>
+                            <td>
+                                @product.Kind
+                            </td>
+                            <td>
+                                @product.Price
+                            </td>
+                            <td>
+                                <button data-cart-id="@product.Id">Remove from cart</button>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
 
-        @*<form method="post" asp-controller="Order" asp-action="Create">
-            <div asp-validation-summary="ModelOnly"></div>
-            <div>
-                <label asp-for="OrderViewModel.Name"></label>
-                <input asp-for="OrderViewModel.Name" placeholder="Name" type="text" />
-                <span asp-validation-for="OrderViewModel.Name"></span>
-            </div>
-            <div>
-                <button type="submit">Get order</button>
-            </div>
-        </form>*@
+        <br />
 
         <partial name="~/Views/Order/_Form.cshtml" model="Model.OrderViewModel" />
-
-        @*<a asp-controller="Order" asp-action="Index">Get order</a>*@
-
-        // Order here
     }
     else
     {
-        <p>Cart is empty</p>
+        <p>Cart is empty.</p>
     }
 }
 
-
-@*@if (Model is not null)
-    {
-        @foreach (var item in Model.Products)
-        {
-            <p>@item.Id  @item.Price</p>
-        }
-    }
-    else
-    {
-        <p>Корзина пуста</p>
-    }*@
-
-@*<a asp-controller="Order" asp-action="Index">Get order</a>*@
-
-@*<form method="post" asp-controller="Order" asp-action="Index">
-        <button class="button" type="submit">Get order</button>
-    </form>*@
-
 @section scripts
 {
-    @*<script src="~/js/cart/post.js"></script>*@
+    <script type="module" src="~/js/cart/remove.js" asp-append-version="true"></script>
+    <script src="~/js/order/confirm.js" asp-append-version="true"></script>
 }

@@ -34,12 +34,15 @@ namespace Masny.Food.Logic.Managers
 
             // UNDONE: check if user is not exist
 
+            // UNDONE: Use automapper
+
             return new ProfileDto
             {
                 UserId = profile.UserId,
                 Name = profile.Name,
                 Gender = profile.Gender,
                 BirthDate = profile.BirthDate,
+                Address = profile.Address,
                 Avatar = profile.Avatar,
             };
         }
@@ -53,6 +56,7 @@ namespace Masny.Food.Logic.Managers
             profile.Name = profileDto.Name;
             profile.Gender = profileDto.Gender;
             profile.BirthDate = profileDto.BirthDate;
+            profile.Address = profileDto.Address;
 
             if (profileDto.Avatar is not null)
             {

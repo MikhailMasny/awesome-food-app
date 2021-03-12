@@ -1,16 +1,44 @@
 ﻿@model IEnumerable<ProductDetailViewModel>
 
+@{
+    ViewData["Title"] = "";
+}
+
 <h1>Food here :)</h1>
 
-@foreach (var productDetail in Model)
-{
-    <div style="width: 310px; display: flex; justify-content: space-between">
-        <div style="width: 150px">@productDetail.Name</div>
-        <div>@productDetail.Description</div>
-        <div>
-            <a asp-controller="Product" asp-action="List" asp-route-id="@productDetail.Id">
-                Details
-            </a>
-        </div>
-    </div>
+@{
+    if (Model.Any())
+    {
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var productDetail in Model)
+                    {
+                        <tr>
+                            <td>
+                                @productDetail.Name
+                            </td>
+                            <td>
+                                @productDetail.Description
+                            </td>
+                            <td>
+                                <a asp-controller="Product" asp-action="List" asp-route-id="@productDetail.Id">Details</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+    else
+    {
+        <p>No products found.</p>
+    }
 }

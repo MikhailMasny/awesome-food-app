@@ -36,6 +36,9 @@ namespace Masny.Food.Data.Configurations
                 .HasDefaultValue(DateTime.UnixEpoch)
                 .HasColumnType(SqlConfiguration.SqlDateFormat);
 
+            builder.Property(profile => profile.Address)
+                .HasMaxLength(SqlConfiguration.SqlMaxLengthMedium);
+
             builder.HasOne(profile => profile.User)
                 .WithOne(user => user.Profile)
                 .HasForeignKey<Profile>(profile => profile.UserId)

@@ -20,11 +20,13 @@ namespace Masny.Food.App.ViewModels
         /// </summary>
         public int Number { get; set; }
 
+        // UNDONE: use resources files
+
         /// <summary>
         /// Status.
         /// </summary>
         [Required]
-        [Range(0, 2, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
+        [Range(0, 3, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int Status { get; set; }
 
         /// <summary>

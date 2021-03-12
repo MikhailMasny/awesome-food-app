@@ -10,6 +10,11 @@ namespace Masny.Food.Logic.Interfaces
     /// </summary>
     public interface IOrderManager
     {
+        /// <summary>
+        /// Get order by identifier.
+        /// </summary>
+        /// <param name="id">Identifier.</param>
+        /// <returns>Order data transfer object.</returns>
         Task<OrderDto> GetOrderByIdAsync(int id);
 
         /// <summary>
@@ -32,8 +37,18 @@ namespace Masny.Food.Logic.Interfaces
         /// <returns>Order identifier.</returns>
         Task<int> CreateOrderAsync(OrderDto orderDto);
 
+        /// <summary>
+        /// Create order products.
+        /// </summary>
+        /// <param name="orderId">Order identifier.</param>
+        /// <param name="productIds">Product identifiers.</param>
         Task CreateOrderProductsAsync(int orderId, IEnumerable<int> productIds);
 
-        Task UpdateOrderStatusByIdAsync(int id, StatusType statusType);
+        /// <summary>
+        /// Update order status by identifier.
+        /// </summary>
+        /// <param name="orderId">Order identifier.</param>
+        /// <param name="statusType">Status type.</param>
+        Task UpdateOrderStatusByIdAsync(int orderId, StatusType statusType);
     }
 }

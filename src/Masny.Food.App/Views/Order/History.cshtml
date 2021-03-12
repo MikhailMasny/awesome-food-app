@@ -1,28 +1,72 @@
 ﻿@model IEnumerable<OrderViewModel>
 
+@{
+    ViewData["Title"] = "";
+}
+
 <h1>Order history</h1>
 
 @{
     if (Model.Any())
     {
-        foreach (var order in Model)
-        {
-            <div style="width: 800px; display: flex; justify-content: space-between">
-                <p>@order.Number</p>
-                <p>@order.Creation</p>
-                <p>@order.Name</p>
-                <p>@order.Phone</p>
-                <p>@order.InPlace</p>
-                <p>@order.Address</p>
-                <p>@order.PromoCode</p>
-                <p>@order.TotalPrice</p>
-                <p>@order.Comment</p>
-                <p>@order.Status</p>
-            </div>
-        }
+        <table>
+            <thead>
+                <tr>
+                    <th>Number</th>
+                    <th>Creation</th>
+                    <th>Name</th>
+                    <th>Phone</th>
+                    <th>In place</th>
+                    <th>Address</th>
+                    <th>Promo code</th>
+                    <th>Total price</th>
+                    <th>Comment</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var order in Model)
+                    {
+                        <tr>
+                            <td>
+                                @order.Number
+                            </td>
+                            <td>
+                                @order.Creation
+                            </td>
+                            <td>
+                                @order.Name
+                            </td>
+                            <td>
+                                @order.Phone
+                            </td>
+                            <td>
+                                @order.InPlace
+                            </td>
+                            <td>
+                                @order.Address
+                            </td>
+                            <td>
+                                @order.PromoCode
+                            </td>
+                            <td>
+                                @order.TotalPrice
+                            </td>
+                            <td>
+                                @order.Comment
+                            </td>
+                            <td>
+                                @order.Status
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
     }
     else
     {
-        <p>Order history is empty</p>
+        <p>No order history found.</p>
     }
 }

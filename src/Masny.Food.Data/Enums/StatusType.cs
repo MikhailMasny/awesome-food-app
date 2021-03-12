@@ -24,5 +24,10 @@
         /// Done.
         /// </summary>
         Done = 2,
+
+        /// <summary>
+        /// Canceled.
+        /// </summary>
+        Canceled = 3,
     }
 }

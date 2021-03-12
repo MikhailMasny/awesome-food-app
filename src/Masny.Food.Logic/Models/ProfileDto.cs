@@ -31,6 +31,11 @@ namespace Masny.Food.Logic.Models
         public DateTime BirthDate { get; set; }
 
         /// <summary>
+        /// Address.
+        /// </summary>
+        public string Address { get; set; }
+
+        /// <summary>
         /// Avatar.
         /// </summary>
         public byte[] Avatar { get; set; }

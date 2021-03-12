@@ -13,18 +13,18 @@ namespace Masny.Food.App.Controllers
 {
     public class CartController : Controller
     {
-        private readonly ICartService _cartService;
         private readonly IProductManager _productManager;
         private readonly IProfileManager _profileManager;
+        private readonly ICartService _cartService;
 
         public CartController(
-            ICartService cartService,
             IProductManager productManager,
-            IProfileManager profileManager)
+            IProfileManager profileManager,
+            ICartService cartService)
         {
-            _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
             _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
             _profileManager = profileManager ?? throw new ArgumentNullException(nameof(profileManager));
+            _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
         }
 
         [Authorize]
@@ -33,35 +33,33 @@ namespace Masny.Food.App.Controllers
             var userId = User.GetUserIdByClaimsPrincipal();
 
             var cartDto = await _cartService.GetAsync(userId);
+            var productDtos = await _productManager.GetAllProductsAsync();
 
             var productViewModels = new List<ProductViewModel>();
             if (cartDto.ProductIds.Any())
             {
-                var productDtos = await _productManager.GetAllProductsByIds(cartDto.ProductIds);
-
-                foreach (var product in productDtos)
+                foreach (var id in cartDto.ProductIds)
                 {
+                    var productDto = productDtos.First(p => p.Id == id);
+
                     productViewModels.Add(new ProductViewModel
                     {
-                        Id = product.Id,
-                        Price = product.Price,
+                        Id = productDto.Id,
+                        Name = productDto.Name,
+                        Weight = productDto.Weight,
+                        Diameter = productDto.Diameter,
+                        Kind = productDto.Kind,
+                        Price = productDto.Price,
                     });
                 }
             }
 
-            var profile = await _profileManager.GetProfileByUserIdAsync(userId);
-            var cart = await _cartService.GetAsync(userId);
-            //var products = await _productManager.GetAllProductsByIds(cart.ProductIds);
-            //var totalPrice = products.Select(p => p.Price).Sum();
+            var profileDto = await _profileManager.GetProfileByUserIdAsync(userId);
 
             var orderViewModel = new OrderViewModel
             {
-                Name = profile.Name,
-
-                TotalPrice = await _productManager.GetTotalPriceByProductIds(cart.ProductIds), // UNDONE: to calc service
-
-                //Phone = orderDto.Phone,
-                //Address = orderDto.Address,
+                Name = profileDto.Name,
+                Address = profileDto.Address,
             };
 
             var cartIndexViewModel = new CartIndexViewModel
@@ -79,6 +77,18 @@ namespace Masny.Food.App.Controllers
         {
             await _cartService.AddOrUpdateAsync(
                 CartOperationType.Add,
+                User.GetUserIdByClaimsPrincipal(),
+                model.ProductId);
+
+            return Ok();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Remove([FromBody] CartAddViewModel model)
+        {
+            await _cartService.AddOrUpdateAsync(
+                CartOperationType.Remove,
                 User.GetUserIdByClaimsPrincipal(),
                 model.ProductId);
 

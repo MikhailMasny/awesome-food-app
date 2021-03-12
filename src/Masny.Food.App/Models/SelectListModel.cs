@@ -1,9 +1,9 @@
 ﻿namespace Masny.Food.App.Models
 {
     /// <summary>
-    /// Status model.
+    /// Select list model.
     /// </summary>
-    public class StatusModel
+    public class SelectListModel
     {
         /// <summary>
         /// Identifier.

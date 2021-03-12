@@ -13,6 +13,11 @@ namespace Masny.Food.Logic.Models
         public int Id { get; set; }
 
         /// <summary>
+        /// Name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
         /// Photo.
         /// </summary>
         public byte[] Photo { get; set; }
@@ -61,5 +66,10 @@ namespace Masny.Food.Logic.Models
         /// Kind.
         /// </summary>
         public KindType Kind { get; set; }
+
+        /// <summary>
+        /// Is archived.
+        /// </summary>
+        public bool IsArchived { get; set; }
     }
 }

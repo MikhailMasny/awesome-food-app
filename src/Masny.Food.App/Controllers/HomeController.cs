@@ -5,6 +5,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+// TODO:
+// Promocode and totalprice by js
+// Admin panel
+// Common project
+// sql scripts
+
 namespace Masny.Food.App.Controllers
 {
     public class HomeController : Controller
@@ -16,10 +22,9 @@ namespace Masny.Food.App.Controllers
             _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
         }
 
-        [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var productDetailDtos = await _productManager.GetAllProductDetails();
+            var productDetailDtos = await _productManager.GetAllProductDetailsAsync();
 
             var productDetailViewModels = new List<ProductDetailViewModel>();
             foreach (var productDetailDto in productDetailDtos)

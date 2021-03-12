@@ -60,6 +60,11 @@ namespace Masny.Food.Data.Models
         public string PromoCode { get; set; }
 
         /// <summary>
+        /// Payment type.
+        /// </summary>
+        public PaymentType Payment { get; set; }
+
+        /// <summary>
         /// Total price.
         /// </summary>
         public decimal TotalPrice { get; set; }
@@ -70,11 +75,9 @@ namespace Masny.Food.Data.Models
         public string Comment { get; set; }
 
         /// <summary>
-        /// Status.
+        /// Status type.
         /// </summary>
         public StatusType Status { get; set; }
-
-        // UNDONE: paymentType
 
         public ICollection<OrderProduct> OrderProducts { get; set; }
     }

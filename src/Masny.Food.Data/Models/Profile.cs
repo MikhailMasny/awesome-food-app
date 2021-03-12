@@ -8,8 +8,6 @@ namespace Masny.Food.Data.Models
     /// </summary>
     public class Profile
     {
-        // UNDONE: address
-
         /// <summary>
         /// Identifier.
         /// </summary>
@@ -44,5 +42,10 @@ namespace Masny.Food.Data.Models
         /// Avatar.
         /// </summary>
         public byte[] Avatar { get; set; }
+
+        /// <summary>
+        /// Address.
+        /// </summary>
+        public string Address { get; set; }
     }
 }

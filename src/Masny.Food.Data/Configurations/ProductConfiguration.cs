@@ -25,11 +25,9 @@ namespace Masny.Food.Data.Configurations
                 .HasMaxLength(SqlConfiguration.SqlMaxLengthLong);
 
             builder.Property(product => product.Diameter)
-                .HasDefaultValue(DiameterType.Unknown)
                 .HasConversion(new EnumToNumberConverter<DiameterType, int>());
 
             builder.Property(product => product.Kind)
-                .HasDefaultValue(KindType.Unknown)
                 .HasConversion(new EnumToNumberConverter<KindType, int>());
 
             builder.HasOne(product => product.ProductDetail)
