@@ -1,7 +1,7 @@
 ﻿using Masny.Food.App.Extensions;
 using Masny.Food.App.Models;
 using Masny.Food.App.ViewModels;
-using Masny.Food.Data.Enums;
+using Masny.Food.Common.Enums;
 using Masny.Food.Logic.Interfaces;
 using Masny.Food.Logic.Models;
 using Microsoft.AspNetCore.Authorization;

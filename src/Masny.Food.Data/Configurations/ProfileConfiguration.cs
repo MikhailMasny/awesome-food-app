@@ -1,5 +1,5 @@
-﻿using Masny.Food.Data.Constants;
-using Masny.Food.Data.Enums;
+﻿using Masny.Food.Common.Enums;
+using Masny.Food.Data.Constants;
 using Masny.Food.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;

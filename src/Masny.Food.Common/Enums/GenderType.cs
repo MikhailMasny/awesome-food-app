@@ -1,23 +1,23 @@
-﻿namespace Masny.Food.Data.Enums
+﻿namespace Masny.Food.Common.Enums
 {
     /// <summary>
-    /// Kind type.
+    /// Gender type.
     /// </summary>
-    public enum KindType
+    public enum GenderType
     {
         /// <summary>
         /// Unknown.
         /// </summary>
-        Unknown = 0,
+        Unknown = -1,
 
         /// <summary>
-        /// Classic.
+        /// Female.
         /// </summary>
-        Classic = 1,
+        Female = 0,
 
         /// <summary>
-        /// Thin.
+        /// Male.
         /// </summary>
-        Thin = 2,
+        Male = 1,
     }
 }

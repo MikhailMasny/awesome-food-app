@@ -13,4 +13,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Masny.Food.Common\Masny.Food.Common.csproj" />
+  </ItemGroup>
+
 </Project>

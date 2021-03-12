@@ -1,4 +1,4 @@
-﻿using Masny.Food.Data.Enums;
+﻿using Masny.Food.Common.Enums;
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -72,8 +72,6 @@ namespace Masny.Food.App.ViewModels
         /// </summary>
         [Display(Name = nameof(Comment))]
         public string Comment { get; set; }
-
-        // TODO: replace to common project
 
         /// <summary>
         /// Status.

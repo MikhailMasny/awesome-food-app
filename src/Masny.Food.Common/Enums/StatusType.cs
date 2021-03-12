@@ -1,4 +1,4 @@
-﻿namespace Masny.Food.Data.Enums
+﻿namespace Masny.Food.Common.Enums
 {
     /// <summary>
     /// Status type.

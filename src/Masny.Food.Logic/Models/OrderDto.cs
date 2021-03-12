@@ -1,4 +1,4 @@
-﻿using Masny.Food.Data.Enums;
+﻿using Masny.Food.Common.Enums;
 using System;
 
 namespace Masny.Food.Logic.Models
@@ -67,8 +67,6 @@ namespace Masny.Food.Logic.Models
         /// Comment.
         /// </summary>
         public string Comment { get; set; }
-
-        // TODO: replace to common project
 
         /// <summary>
         /// Status.

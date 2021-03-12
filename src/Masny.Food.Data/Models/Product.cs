@@ -1,4 +1,4 @@
-﻿using Masny.Food.Data.Enums;
+﻿using Masny.Food.Common.Enums;
 using System.Collections.Generic;
 
 namespace Masny.Food.Data.Models

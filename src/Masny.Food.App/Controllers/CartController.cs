@@ -1,6 +1,6 @@
 ﻿using Masny.Food.App.Extensions;
 using Masny.Food.App.ViewModels;
-using Masny.Food.Logic.Enums;
+using Masny.Food.Common.Enums;
 using Masny.Food.Logic.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

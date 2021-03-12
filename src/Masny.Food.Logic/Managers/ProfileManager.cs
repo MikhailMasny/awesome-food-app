@@ -34,8 +34,6 @@ namespace Masny.Food.Logic.Managers
 
             // UNDONE: check if user is not exist
 
-            // UNDONE: Use automapper
-
             return new ProfileDto
             {
                 UserId = profile.UserId,

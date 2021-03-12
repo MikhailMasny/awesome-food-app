@@ -1,9 +1,13 @@
-﻿namespace Masny.Food.Logic.Enums
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Masny.Food.Common.Enums
 {
     /// <summary>
-    /// Cart operation type.
+    /// Kind type.
     /// </summary>
-    public enum CartOperationType
+    public enum KindType
     {
         /// <summary>
         /// Unknown.
@@ -11,13 +15,13 @@
         Unknown = 0,
 
         /// <summary>
-        /// Add.
+        /// Classic.
         /// </summary>
-        Add = 1,
+        Classic = 1,
 
         /// <summary>
-        /// Remove.
+        /// Thin.
         /// </summary>
-        Remove = 2,
+        Thin = 2,
     }
 }

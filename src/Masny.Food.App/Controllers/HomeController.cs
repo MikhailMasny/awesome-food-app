@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 // TODO:
 // Admin panel
-// Common project
 // sql scripts
 
 namespace Masny.Food.App.Controllers

@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Masny.Food.Common\Masny.Food.Common.csproj" />
     <ProjectReference Include="..\Masny.Food.Logic\Masny.Food.Logic.csproj" />
   </ItemGroup>
 

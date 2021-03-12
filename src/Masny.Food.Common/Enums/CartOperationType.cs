@@ -1,23 +1,23 @@
-﻿namespace Masny.Food.Data.Enums
+﻿namespace Masny.Food.Common.Enums
 {
     /// <summary>
-    /// Gender type.
+    /// Cart operation type.
     /// </summary>
-    public enum GenderType
+    public enum CartOperationType
     {
         /// <summary>
         /// Unknown.
         /// </summary>
-        Unknown = -1,
+        Unknown = 0,
 
         /// <summary>
-        /// Female.
+        /// Add.
         /// </summary>
-        Female = 0,
+        Add = 1,
 
         /// <summary>
-        /// Male.
+        /// Remove.
         /// </summary>
-        Male = 1,
+        Remove = 2,
     }
 }

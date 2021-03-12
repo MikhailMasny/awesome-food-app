@@ -1,4 +1,4 @@
-﻿using Masny.Food.Logic.Enums;
+﻿using Masny.Food.Common.Enums;
 using Masny.Food.Logic.Interfaces;
 using Masny.Food.Logic.Models;
 using Microsoft.Extensions.Caching.Memory;

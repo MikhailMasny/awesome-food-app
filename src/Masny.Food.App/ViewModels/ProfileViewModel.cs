@@ -1,4 +1,4 @@
-﻿using Masny.Food.Data.Enums;
+﻿using Masny.Food.Common.Enums;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.ComponentModel.DataAnnotations;
@@ -16,8 +16,6 @@ namespace Masny.Food.App.ViewModels
         [Required]
         [Display(Name = nameof(Name))]
         public string Name { get; set; }
-
-        // TODO: to common project
 
         /// <summary>
         /// Gender type.

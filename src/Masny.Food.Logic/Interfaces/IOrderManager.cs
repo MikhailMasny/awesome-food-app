@@ -1,4 +1,4 @@
-﻿using Masny.Food.Data.Enums;
+﻿using Masny.Food.Common.Enums;
 using Masny.Food.Logic.Models;
 using System.Collections.Generic;
 using System.Threading.Tasks;
