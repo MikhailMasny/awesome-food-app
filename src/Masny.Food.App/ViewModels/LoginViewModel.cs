@@ -22,8 +22,6 @@ namespace Masny.Food.App.ViewModels
         [Display(Name = nameof(Password))]
         public string Password { get; set; }
 
-        // UNDONE: use resources files
-
         /// <summary>
         /// Remember me.
         /// </summary>

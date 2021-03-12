@@ -31,23 +31,24 @@ namespace Masny.Food.Logic.Managers
                     .Include(p => p.Products)
                     .ToListAsync();
 
-            var productDetailDtos = new List<ProductDetailDto>();
-            foreach (var productDetail in productDetails)
+            IEnumerable<ProductDetailDto> GetProductDetails()
             {
-                if (productDetail.Products.Any(p => !p.IsArchived))
+                foreach (var productDetail in productDetails)
                 {
-                    // TODO: change to yield return
-                    productDetailDtos.Add(new ProductDetailDto
+                    if (productDetail.Products.Any(p => !p.IsArchived))
                     {
-                        Id = productDetail.Id,
-                        Name = productDetail.Name,
-                        Description = productDetail.Description,
-                        Comment = productDetail.Comment,
-                    });
+                        yield return new ProductDetailDto
+                        {
+                            Id = productDetail.Id,
+                            Name = productDetail.Name,
+                            Description = productDetail.Description,
+                            Comment = productDetail.Comment,
+                        };
+                    }
                 }
             }
 
-            return productDetailDtos;
+            return GetProductDetails();
         }
 
         public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
@@ -57,29 +58,30 @@ namespace Masny.Food.Logic.Managers
                 .Include(p => p.ProductDetail)
                 .ToListAsync();
 
-            var productDtos = new List<ProductDto>();
-            foreach (var product in products)
+            IEnumerable<ProductDto> GetProducts()
             {
-                // TODO: change to yield return
-                productDtos.Add(new ProductDto
+                foreach (var product in products)
                 {
-                    Id = product.Id,
-                    Name = product.ProductDetail.Name,
-                    Photo = product.Photo,
-                    Price = product.Price,
-                    Energy = product.Energy,
-                    Protein = product.Protein,
-                    Fat = product.Fat,
-                    Carbohydrate = product.Carbohydrate,
-                    Weight = product.Weight,
-                    Comment = product.Comment,
-                    Diameter = product.Diameter,
-                    Kind = product.Kind,
-                    IsArchived = product.IsArchived,
-                });
+                    yield return new ProductDto
+                    {
+                        Id = product.Id,
+                        Name = product.ProductDetail.Name,
+                        Photo = product.Photo,
+                        Price = product.Price,
+                        Energy = product.Energy,
+                        Protein = product.Protein,
+                        Fat = product.Fat,
+                        Carbohydrate = product.Carbohydrate,
+                        Weight = product.Weight,
+                        Comment = product.Comment,
+                        Diameter = product.Diameter,
+                        Kind = product.Kind,
+                        IsArchived = product.IsArchived,
+                    };
+                }
             }
 
-            return productDtos;
+            return GetProducts();
         }
 
         public async Task<IEnumerable<ProductDto>> GetAllProductsByIdsAsync(IEnumerable<int> ids)
@@ -89,28 +91,29 @@ namespace Masny.Food.Logic.Managers
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync();
 
-            var productDtos = new List<ProductDto>();
-            foreach (var product in products)
+            IEnumerable<ProductDto> GetProducts()
             {
-                // TODO: change to yield return
-                productDtos.Add(new ProductDto
+                foreach (var product in products)
                 {
-                    Id = product.Id,
-                    Photo = product.Photo,
-                    Price = product.Price,
-                    Energy = product.Energy,
-                    Protein = product.Protein,
-                    Fat = product.Fat,
-                    Carbohydrate = product.Carbohydrate,
-                    Weight = product.Weight,
-                    Comment = product.Comment,
-                    Diameter = product.Diameter,
-                    Kind = product.Kind,
-                    IsArchived = product.IsArchived,
-                });
+                    yield return new ProductDto
+                    {
+                        Id = product.Id,
+                        Photo = product.Photo,
+                        Price = product.Price,
+                        Energy = product.Energy,
+                        Protein = product.Protein,
+                        Fat = product.Fat,
+                        Carbohydrate = product.Carbohydrate,
+                        Weight = product.Weight,
+                        Comment = product.Comment,
+                        Diameter = product.Diameter,
+                        Kind = product.Kind,
+                        IsArchived = product.IsArchived,
+                    };
+                }
             }
 
-            return productDtos;
+            return GetProducts();
         }
 
         public async Task<(IEnumerable<ProductDto> productDtos, string productName)> GetAllProductsByProductDetailIdAsync(int productDetailId)
@@ -121,28 +124,29 @@ namespace Masny.Food.Logic.Managers
                 .Where(p => p.ProductDetailId == productDetailId)
                 .ToListAsync();
 
-            var productDtos = new List<ProductDto>();
-            foreach (var product in products)
+            IEnumerable<ProductDto> GetProducts()
             {
-                // TODO: change to yield return
-                productDtos.Add(new ProductDto
+                foreach (var product in products)
                 {
-                    Id = product.Id,
-                    Photo = product.Photo,
-                    Price = product.Price,
-                    Energy = product.Energy,
-                    Protein = product.Protein,
-                    Fat = product.Fat,
-                    Carbohydrate = product.Carbohydrate,
-                    Weight = product.Weight,
-                    Comment = product.Comment,
-                    Diameter = product.Diameter,
-                    Kind = product.Kind,
-                    IsArchived = product.IsArchived,
-                });
+                    yield return new ProductDto
+                    {
+                        Id = product.Id,
+                        Photo = product.Photo,
+                        Price = product.Price,
+                        Energy = product.Energy,
+                        Protein = product.Protein,
+                        Fat = product.Fat,
+                        Carbohydrate = product.Carbohydrate,
+                        Weight = product.Weight,
+                        Comment = product.Comment,
+                        Diameter = product.Diameter,
+                        Kind = product.Kind,
+                        IsArchived = product.IsArchived,
+                    };
+                }
             }
 
-            return (productDtos, products.FirstOrDefault().ProductDetail.Name);
+            return (GetProducts(), products.FirstOrDefault().ProductDetail.Name);
         }
     }
 }

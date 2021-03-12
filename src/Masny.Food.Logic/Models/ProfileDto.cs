@@ -18,8 +18,6 @@ namespace Masny.Food.Logic.Models
         /// </summary>
         public string Name { get; set; }
 
-        // TODO: to common project
-
         /// <summary>
         /// Gender type.
         /// </summary>

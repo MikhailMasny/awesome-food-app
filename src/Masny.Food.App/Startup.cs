@@ -46,17 +46,8 @@ namespace Masny.Food.App
             services.AddMemoryCache();
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
-                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-                )
+                    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddRazorRuntimeCompilation();
-
-            //services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-            //    .AddCookie(options => //CookieAuthenticationOptions
-            //    {
-            //        options.Cookie.Name = "PizzaApp.Cookie";
-            //        options.Cookie.Expiration
-            //        //options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-            //    });
 
             services.ConfigureApplicationCookie(config =>
             {
@@ -65,7 +56,6 @@ namespace Masny.Food.App
             });
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())

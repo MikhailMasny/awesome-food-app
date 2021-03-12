@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Masny.Food.Common.Enums
+﻿namespace Masny.Food.Common.Enums
 {
     /// <summary>
     /// Kind type.

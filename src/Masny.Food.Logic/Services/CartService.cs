@@ -50,13 +50,16 @@ namespace Masny.Food.Logic.Services
                         cartDto.ProductIds.Add(productId);
                     }
                     break;
+
                 case CartOperationType.Remove:
                     {
                         cartDto.ProductIds.Remove(productId);
                     }
                     break;
+
                 case CartOperationType.Unknown:
                     break;
+
                 default:
                     break;
             }

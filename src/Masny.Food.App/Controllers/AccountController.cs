@@ -1,6 +1,7 @@
 ﻿using Masny.Food.App.Extensions;
 using Masny.Food.App.ViewModels;
 using Masny.Food.Common.Constants;
+using Masny.Food.Common.Resources;
 using Masny.Food.Data.Models;
 using Masny.Food.Logic.Interfaces;
 using Masny.Food.Logic.Models;
@@ -58,8 +59,6 @@ namespace Masny.Food.App.Controllers
                     var createdUser = await _userManager.FindByNameAsync(user.UserName);
                     await _profileManager.CreateProfileAsync(createdUser.Id, model.Name);
 
-                    // UNDONE: add email service
-
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -108,9 +107,7 @@ namespace Masny.Food.App.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                // UNDONE: use resources files
-
-                ModelState.AddModelError(string.Empty, "Incorrect data");
+                ModelState.AddModelError(string.Empty, CommonResource.AccountLoginError);
             }
 
             return View(model);

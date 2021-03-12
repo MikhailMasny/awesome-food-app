@@ -31,8 +31,6 @@ namespace Masny.Food.App.ViewModels
         [Display(Name = nameof(Name))]
         public string Name { get; set; }
 
-        // UNDONE: use resources files
-
         /// <summary>
         /// Phone.
         /// </summary

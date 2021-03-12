@@ -20,8 +20,6 @@ namespace Masny.Food.App.ViewModels
         /// </summary>
         public int Number { get; set; }
 
-        // UNDONE: use resources files
-
         /// <summary>
         /// Status.
         /// </summary>

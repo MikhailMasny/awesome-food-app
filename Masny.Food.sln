@@ -11,6 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Masny.Food.Logic", "src\Mas
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{69F2095F-5C4A-4658-9B9B-9A4FCD38EF80}"
 	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		LICENSE = LICENSE
+		README.md = README.md
 		scripts\SqlSeed.sql = scripts\SqlSeed.sql
 	EndProjectSection
 EndProject

@@ -32,8 +32,6 @@ namespace Masny.Food.Logic.Managers
         {
             var profile = await _profileManager.GetEntityWithoutTrackingAsync(p => p.UserId == userId);
 
-            // UNDONE: check if user is not exist
-
             return new ProfileDto
             {
                 UserId = profile.UserId,
@@ -48,8 +46,6 @@ namespace Masny.Food.Logic.Managers
         public async Task UpdateProfileAsync(ProfileDto profileDto)
         {
             var profile = await _profileManager.GetEntityAsync(p => p.UserId == profileDto.UserId);
-
-            // UNDONE: check if user is not exist
 
             profile.Name = profileDto.Name;
             profile.Gender = profileDto.Gender;

@@ -41,11 +41,14 @@ namespace Masny.Food.App.Controllers
                 var cartDto = await _cartService.GetAsync(userId);
 
                 var totalPrice = await _calcService.GetTotalPriceByProductIdsAsync(cartDto.ProductIds);
-                var promoCodeIsExist = await _calcService.IsExistPromoCodeAsync(model.PromoCode.ToUpper());
 
-                if (promoCodeIsExist)
+                if(!string.IsNullOrEmpty(model.PromoCode))
                 {
-                    totalPrice = await _calcService.ApplyPromoCodeAsync(model.PromoCode, totalPrice);
+                    var promoCodeIsExist = await _calcService.IsExistPromoCodeAsync(model.PromoCode.ToUpper());
+                    if (promoCodeIsExist)
+                    {
+                        totalPrice = await _calcService.ApplyPromoCodeAsync(model.PromoCode, totalPrice);
+                    }
                 }
 
                 var orderDto = new OrderDto

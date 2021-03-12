@@ -50,17 +50,19 @@ namespace Masny.Food.Logic.Managers
 
         public async Task CreateOrderProductsAsync(int orderId, IEnumerable<int> productIds)
         {
-            var orderProducts = new List<OrderProduct>();
-            foreach (var productId in productIds)
+            IEnumerable<OrderProduct> GetOrderProducts()
             {
-                orderProducts.Add(new OrderProduct
+                foreach (var productId in productIds)
                 {
-                    OrderId = orderId,
-                    ProductId = productId,
-                });
+                    yield return new OrderProduct
+                    {
+                        OrderId = orderId,
+                        ProductId = productId,
+                    };
+                }
             }
 
-            await _orderProductManager.CreateRangeAsync(orderProducts);
+            await _orderProductManager.CreateRangeAsync(GetOrderProducts());
             await _orderProductManager.SaveChangesAsync();
         }
 
@@ -70,36 +72,37 @@ namespace Masny.Food.Logic.Managers
                 .GetAll()
                 .ToListAsync();
 
-            var orderDtos = new List<OrderDto>();
-            foreach (var order in orders)
+            IEnumerable<OrderDto> GetOrders()
             {
-                // TODO: change to yield return
-                orderDtos.Add(new OrderDto
+                foreach (var order in orders)
                 {
-                    Id = order.Id,
-                    Number = order.Number,
-                    Creation = order.Creation,
-                    UserId = order.UserId,
-                    Name = order.Name,
-                    Phone = order.Phone,
-                    InPlace = order.InPlace,
-                    Address = order.Address,
-                    PromoCode = order.PromoCode,
-                    Payment = order.Payment,
-                    TotalPrice = order.TotalPrice,
-                    Comment = order.Comment,
-                    Status = order.Status,
-                });
+                    yield return new OrderDto
+                    {
+                        Id = order.Id,
+                        Number = order.Number,
+                        Creation = order.Creation,
+                        UserId = order.UserId,
+                        Name = order.Name,
+                        Phone = order.Phone,
+                        InPlace = order.InPlace,
+                        Address = order.Address,
+                        PromoCode = order.PromoCode,
+                        Payment = order.Payment,
+                        TotalPrice = order.TotalPrice,
+                        Comment = order.Comment,
+                        Status = order.Status,
+                    };
+                }
             }
 
-            return orderDtos;
+            return GetOrders();
         }
 
         public async Task<OrderDto> GetOrderByIdAsync(int id)
         {
             var order = await _orderManager.GetEntityWithoutTrackingAsync(o => o.Id == id);
 
-            var orderDto = new OrderDto
+            return new OrderDto
             {
                 Number = order.Number,
                 Creation = order.Creation,
@@ -113,8 +116,6 @@ namespace Masny.Food.Logic.Managers
                 Comment = order.Comment,
                 Status = order.Status,
             };
-
-            return orderDto;
         }
 
         public async Task<IEnumerable<OrderDto>> GetOrdersByUserIdAsync(string userId)
@@ -124,27 +125,28 @@ namespace Masny.Food.Logic.Managers
                 .Where(o => o.UserId == userId)
                 .ToListAsync();
 
-            var orderDtos = new List<OrderDto>();
-            foreach (var order in orders)
+            IEnumerable<OrderDto> GetOrders()
             {
-                // TODO: change to yield return
-                orderDtos.Add(new OrderDto
+                foreach (var order in orders)
                 {
-                    Number = order.Number,
-                    Creation = order.Creation,
-                    Name = order.Name,
-                    Phone = order.Phone,
-                    InPlace = order.InPlace,
-                    Address = order.Address,
-                    PromoCode = order.PromoCode,
-                    Payment = order.Payment,
-                    TotalPrice = order.TotalPrice,
-                    Comment = order.Comment,
-                    Status = order.Status,
-                });
+                    yield return new OrderDto
+                    {
+                        Number = order.Number,
+                        Creation = order.Creation,
+                        Name = order.Name,
+                        Phone = order.Phone,
+                        InPlace = order.InPlace,
+                        Address = order.Address,
+                        PromoCode = order.PromoCode,
+                        Payment = order.Payment,
+                        TotalPrice = order.TotalPrice,
+                        Comment = order.Comment,
+                        Status = order.Status,
+                    };
+                }
             }
 
-            return orderDtos;
+            return GetOrders();
         }
 
         public async Task UpdateOrderStatusByIdAsync(int orderId, StatusType statusType)

@@ -11,7 +11,7 @@
         Unknown = -1,
 
         /// <summary>
-        /// Todo.
+        /// To do.
         /// </summary>
         Todo = 0,
 

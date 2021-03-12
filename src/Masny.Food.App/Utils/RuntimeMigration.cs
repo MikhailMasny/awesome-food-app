@@ -1,4 +1,5 @@
-﻿using Masny.Food.Data.Contexts;
+﻿using Masny.Food.Common.Resources;
+using Masny.Food.Data.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,8 +8,6 @@ using System;
 
 namespace Masny.Food.App.Utils
 {
-    // UNDONE: use resources files
-
     /// <summary>
     /// Apply migration in real time.
     /// </summary>
@@ -30,12 +29,12 @@ namespace Masny.Food.App.Utils
                     var appContextService = serviceProvider.GetRequiredService<FoodAppContext>();
                     appContextService.Database.Migrate();
 
-                    Log.Information("The database is successfully migrated."); // DatabaseMigrateSuccessful
+                    Log.Information(CommonResource.DatabaseMigrateSuccessful);
                 }
             }
             catch (Exception ex)
             {
-                Log.Error(ex, "An error occurred migrating the DB."); // DatabaseMigrateError
+                Log.Error(ex, CommonResource.DatabaseMigrateError);
             }
         }
     }

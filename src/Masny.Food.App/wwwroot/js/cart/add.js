@@ -2,7 +2,6 @@
 
 document.addEventListener("click", function (event) {
     if (event.target.dataset.cartId != undefined) {
-
         const item = {
             productId: event.target.dataset.cartId,
         };

@@ -8,7 +8,7 @@
 
 <form method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model.ReturnUrl" asp-antiforgery="true">
     <div asp-validation-summary="ModelOnly"></div>
-    
+
     <div>
         <label asp-for="Username"></label>
         <input asp-for="Username" placeholder="Username" type="text" />
