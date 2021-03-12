@@ -30,6 +30,9 @@ namespace Masny.Food.Data.Configurations
             builder.Property(product => product.Kind)
                 .HasConversion(new EnumToNumberConverter<KindType, int>());
 
+            builder.Property(product => product.Price)
+                .HasColumnType(SqlConfiguration.SqlDecimalFormat);
+
             builder.HasOne(product => product.ProductDetail)
                 .WithMany(productDetail => productDetail.Products)
                 .HasForeignKey(product => product.ProductDetailId)

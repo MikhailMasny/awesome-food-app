@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 // TODO:
-// Admin panel
 // sql scripts
 
 namespace Masny.Food.App.Controllers

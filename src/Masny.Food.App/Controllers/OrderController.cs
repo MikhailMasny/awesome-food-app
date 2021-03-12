@@ -41,8 +41,9 @@ namespace Masny.Food.App.Controllers
                 var cartDto = await _cartService.GetAsync(userId);
 
                 var totalPrice = await _calcService.GetTotalPriceByProductIdsAsync(cartDto.ProductIds);
+                var promoCodeIsExist = await _calcService.IsExistPromoCodeAsync(model.PromoCode.ToUpper());
 
-                if (!string.IsNullOrEmpty(model.PromoCode))
+                if (promoCodeIsExist)
                 {
                     totalPrice = await _calcService.ApplyPromoCodeAsync(model.PromoCode, totalPrice);
                 }
@@ -101,7 +102,7 @@ namespace Masny.Food.App.Controllers
             return View(orderViewModels.OrderByDescending(o => o.Creation));
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> List(int? status, string phone)
         {
             var orderDtos = await _orderManager.GetAllOrdersAsync();

@@ -18,9 +18,14 @@
                 <a asp-controller="Order" asp-action="History">Order history</a>
                 <a asp-controller="Account" asp-action="Logout">Logout</a>
             </div>
-            <div>
-                <a asp-controller="Order" asp-action="List">Order list</a>
-            </div>
+
+            @if (User.IsInRole(AppRole.Admin))
+            {
+                <div>
+                    <a asp-controller="Order" asp-action="List">Order list</a>
+                </div>
+
+            }
         }
         else
         {

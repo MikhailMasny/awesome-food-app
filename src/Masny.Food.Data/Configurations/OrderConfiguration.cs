@@ -51,6 +51,9 @@ namespace Masny.Food.Data.Configurations
             builder.Property(order => order.Status)
                 .HasConversion(new EnumToNumberConverter<StatusType, int>());
 
+            builder.Property(order => order.TotalPrice)
+                .HasColumnType(SqlConfiguration.SqlDecimalFormat);
+
             builder.HasOne(order => order.User)
                 .WithMany(user => user.Orders)
                 .HasForeignKey(order => order.UserId)

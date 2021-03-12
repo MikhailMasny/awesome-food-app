@@ -11,6 +11,11 @@
         public const string SqlDateFormat = "date";
 
         /// <summary>
+        /// Custom decimal format.
+        /// </summary>
+        public const string SqlDecimalFormat = "decimal(18,4)";
+
+        /// <summary>
         /// Min lenght for string field.
         /// </summary>
         public const int SqlMaxLengthShort = 63;

@@ -1,3 +1,4 @@
+using Masny.Food.App.Utils;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
@@ -8,6 +9,8 @@ namespace Masny.Food.App
 {
     public class Program
     {
+        // UNDONE: use resources files
+
         public static void Main(string[] args)
         {
             Log.Logger = new LoggerConfiguration()
@@ -20,7 +23,10 @@ namespace Masny.Food.App
             try
             {
                 Log.Information("Starting web host");
-                CreateHostBuilder(args).Build().Run();
+
+                IHost host = CreateHostBuilder(args).Build();
+                InitialInitialization.Run(host);
+                host.Run();
             }
             catch (Exception ex)
             {

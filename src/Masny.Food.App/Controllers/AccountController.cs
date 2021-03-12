@@ -1,5 +1,6 @@
 ﻿using Masny.Food.App.Extensions;
 using Masny.Food.App.ViewModels;
+using Masny.Food.Common.Constants;
 using Masny.Food.Data.Models;
 using Masny.Food.Logic.Interfaces;
 using Masny.Food.Logic.Models;
@@ -51,6 +52,7 @@ namespace Masny.Food.App.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    await _userManager.AddToRoleAsync(user, AppRole.User);
                     await _signInManager.SignInAsync(user, false);
 
                     var createdUser = await _userManager.FindByNameAsync(user.UserName);

@@ -22,6 +22,9 @@ namespace Masny.Food.Data.Configurations
             builder.Property(productDetail => productDetail.Name)
                 .IsRequired()
                 .HasMaxLength(SqlConfiguration.SqlMaxLengthLong);
+
+            builder.Property(productDetail => productDetail.Price)
+                .HasColumnType(SqlConfiguration.SqlDecimalFormat);
         }
     }
 }

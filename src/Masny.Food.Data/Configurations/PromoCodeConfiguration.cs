@@ -23,6 +23,9 @@ namespace Masny.Food.Data.Configurations
                 .IsRequired()
                 .HasMaxLength(SqlConfiguration.SqlMaxLengthShort);
 
+            builder.Property(promoCode => promoCode.Value)
+                .HasColumnType(SqlConfiguration.SqlDecimalFormat);
+
             builder.Property(promoCode => promoCode.Comment)
                 .HasMaxLength(SqlConfiguration.SqlMaxLengthLong);
         }
