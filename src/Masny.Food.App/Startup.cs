@@ -26,11 +26,13 @@ namespace Masny.Food.App
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Managers & services
+            // Managers
             services.AddScoped(typeof(IRepositoryManager<>), typeof(RepositoryManager<>));
             services.AddScoped<IProfileManager, ProfileManager>();
             services.AddScoped<IProductManager, ProductManager>();
             services.AddScoped<IOrderManager, OrderManager>();
+
+            // Services
             services.AddScoped<ICartService, CartService>();
             services.AddScoped<ICalcService, CalcService>();
 
@@ -43,6 +45,7 @@ namespace Masny.Food.App
                 .AddEntityFrameworkStores<FoodAppContext>();
 
             // Microsoft services
+            services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddMemoryCache();
             services.AddControllersWithViews()
                 .AddNewtonsoftJson(options =>
@@ -61,7 +64,12 @@ namespace Masny.Food.App
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseMigrationsEndPoint();
             }
+
+            app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
+            app.UseExceptionHandler("/Error");
+            app.UseHsts();
 
             app.UseSerilogRequestLogging();
 
