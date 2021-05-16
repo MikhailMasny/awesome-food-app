@@ -57,7 +57,7 @@ namespace Masny.Food.App
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
             });
 
             services.ConfigureApplicationCookie(config =>
@@ -74,9 +74,12 @@ namespace Masny.Food.App
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
             }
+            else
+            {
+                app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
+                app.UseExceptionHandler("/Error");
+            }
 
-            app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
-            app.UseExceptionHandler("/Error");
 
             app.UseSerilogRequestLogging();
 

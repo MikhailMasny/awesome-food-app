@@ -109,6 +109,7 @@ namespace Masny.Food.Logic.Managers
             {
                 yield return new OrderDto
                 {
+                    Id = order.Id,
                     Number = order.Number,
                     Creation = order.Creation,
                     Name = order.Name,

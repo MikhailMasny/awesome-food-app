@@ -56,10 +56,16 @@
     }
 }
 
+@section css
+{
+    <link rel="stylesheet" href="~/css/validation.css" />
+}
+
 @section scripts
 {
+    <partial name="_ValidationScriptsPartial" />
+
     <script type="module" src="~/js/cart/remove.js" asp-append-version="true"></script>
-    <script src="~/js/order/confirm.js" asp-append-version="true"></script>
     <script src="~/js/order/totalPrice.js" asp-append-version="true"></script>
     <script type="module" src="~/js/order/promoCode.js" asp-append-version="true"></script>
 }
