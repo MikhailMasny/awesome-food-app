@@ -29,6 +29,8 @@ namespace Masny.Food.Logic.Managers
 
         public async Task<int> CreateOrderAsync(OrderDto orderDto)
         {
+            orderDto = orderDto ?? throw new ArgumentNullException(nameof(orderDto));
+
             var order = new Order
             {
                 Number = orderDto.Number,
@@ -88,15 +90,27 @@ namespace Masny.Food.Logic.Managers
         public async Task<IEnumerable<OrderDto>> GetAllAsync() =>
             GetOrders(await OrderQuery.ToListAsync());
 
-        public async Task<IEnumerable<OrderDto>> GetAllByUserIdAsync(string userId) =>
-            GetOrders(await OrderQuery
+        public async Task<IEnumerable<OrderDto>> GetAllByUserIdAsync(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentException($"'{nameof(userId)}' cannot be null or empty.", nameof(userId));
+            }
+
+            return GetOrders(await OrderQuery
                 .Where(order => order.UserId == userId)
                 .ToListAsync());
+        }
 
         public async Task UpdateOrderStatusByIdAsync(int orderId, StatusType statusType)
         {
             var order = await _orderRepository
                 .GetEntityAsync(o => o.Id == orderId);
+
+            if (order is null)
+            {
+                throw new KeyNotFoundException(nameof(order));
+            }
 
             order.Status = statusType;
 
@@ -131,6 +145,7 @@ namespace Masny.Food.Logic.Managers
                 ? new OrderDto()
                 : new OrderDto
                 {
+                    Id = order.Id,
                     Number = order.Number,
                     Creation = order.Creation,
                     Name = order.Name,

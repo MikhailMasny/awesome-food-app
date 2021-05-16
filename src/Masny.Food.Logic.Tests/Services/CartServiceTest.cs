@@ -15,7 +15,7 @@ namespace Masny.Food.Logic.Tests.Services
         // SUT
         private readonly ICartService _cartService;
 
-        // Dependency
+        // Dependencies
         private readonly IMemoryCache _memoryCache;
 
         public CartServiceTest()
@@ -37,7 +37,7 @@ namespace Masny.Food.Logic.Tests.Services
         }
 
         [Fact]
-        public void GetAsync_MemoryCacheIsNotEmpty_RetrievedCartDto()
+        public void GetAsync_MemoryCacheNotEmpty_RetrievedCartDto()
         {
             // Arrange
             var userId = $"{nameof(CartServiceTest)}_userId";
@@ -70,7 +70,7 @@ namespace Masny.Food.Logic.Tests.Services
         }
 
         [Fact]
-        public void AddOrRemoveAsync_MemoryCacheIsEmpty_ProductIdAdded()
+        public void AddOrRemoveAsync_MemoryCacheEmpty_ProductIdAdded()
         {
             // Arrange
             var userId = $"{nameof(CartServiceTest)}_userId";
@@ -92,7 +92,7 @@ namespace Masny.Food.Logic.Tests.Services
         }
 
         [Fact]
-        public void AddOrRemoveAsync_MemoryCacheIsNotEmpty_ProductIdRemoved()
+        public void AddOrRemoveAsync_MemoryCacheNotEmpty_ProductIdRemoved()
         {
             // Arrange
             var userId = $"{nameof(CartServiceTest)}_userId";
@@ -131,7 +131,7 @@ namespace Masny.Food.Logic.Tests.Services
         }
 
         [Fact]
-        public void AddOrRemoveAsync_MemoryCacheIsEmpty_ProductIdNotFound()
+        public void AddOrRemoveAsync_MemoryCacheEmpty_ProductIdNotFound()
         {
             // Arrange
             var userId = $"{nameof(CartServiceTest)}_userId";
@@ -153,7 +153,7 @@ namespace Masny.Food.Logic.Tests.Services
         }
 
         [Fact]
-        public void AddOrRemoveAsync_MemoryCacheIsNotEmpty_UnknownCartOperationType()
+        public void AddOrRemoveAsync_MemoryCacheNotEmpty_UnknownCartOperationType()
         {
             // Arrange
             var userId = $"{nameof(CartServiceTest)}_userId";
@@ -192,7 +192,7 @@ namespace Masny.Food.Logic.Tests.Services
         }
 
         [Fact]
-        public void GetAsync_MemoryCacheIsEmpty_RetrievedNewCartDto()
+        public void GetAsync_MemoryCacheEmpty_RetrievedNewCartDto()
         {
             // Arrange
             var userId = $"{nameof(CartServiceTest)}_userId";
@@ -209,7 +209,7 @@ namespace Masny.Food.Logic.Tests.Services
         }
 
         [Fact]
-        public void ClearAsync_MemoryCacheIsNotEmpty_CacheCleaned()
+        public void ClearAsync_MemoryCacheNotEmpty_CacheCleaned()
         {
             // Arrange
             var userId = $"{nameof(CartServiceTest)}_userId";

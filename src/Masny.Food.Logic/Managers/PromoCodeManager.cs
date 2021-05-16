@@ -9,16 +9,18 @@ namespace Masny.Food.Logic.Managers
     /// <inheritdoc cref="IPromoCodeManager"/>
     public class PromoCodeManager : IPromoCodeManager
     {
-        private readonly IRepositoryManager<PromoCode> _promoCodeManager;
+        private readonly IRepositoryManager<PromoCode> _promoCodeRepository;
 
         public PromoCodeManager(IRepositoryManager<PromoCode> promoCodeManager)
         {
-            _promoCodeManager = promoCodeManager ?? throw new ArgumentNullException(nameof(promoCodeManager));
+            _promoCodeRepository = promoCodeManager ?? throw new ArgumentNullException(nameof(promoCodeManager));
         }
 
         public async Task<PromoCodeDto> GetPromoCodeByCodeAsync(string code)
         {
-            var promoCode = await _promoCodeManager
+            code = code ?? throw new ArgumentException($"'{nameof(code)}' cannot be null or empty.", nameof(code));
+
+            var promoCode = await _promoCodeRepository
                 .GetEntityWithoutTrackingAsync(promo => promo.Code == code.ToUpper());
 
             return promoCode is null
