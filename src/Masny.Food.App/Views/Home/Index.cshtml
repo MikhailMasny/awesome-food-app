@@ -22,12 +22,8 @@
                     foreach (var productDetail in Model)
                     {
                         <tr>
-                            <td>
-                                @productDetail.Name
-                            </td>
-                            <td>
-                                @productDetail.Description
-                            </td>
+                            <td>@productDetail.Name</td>
+                            <td>@productDetail.Description</td>
                             <td>
                                 <a asp-controller="Product" asp-action="List" asp-route-id="@productDetail.Id">Details</a>
                             </td>

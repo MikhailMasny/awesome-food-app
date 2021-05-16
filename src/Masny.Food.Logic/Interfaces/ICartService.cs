@@ -17,12 +17,15 @@ namespace Masny.Food.Logic.Interfaces
         Task<CartDto> GetAsync(string userId);
 
         /// <summary>
-        /// Add or update operation.
+        /// Add or remove operation.
         /// </summary>
         /// <param name="cartOperationType">Cart operation type.</param>
         /// <param name="userId">User identifier.</param>
         /// <param name="productId">Product identifier.</param>
-        Task AddOrUpdateAsync(CartOperationType cartOperationType, string userId, int productId);
+        Task AddOrRemoveAsync(
+            CartOperationType cartOperationType,
+            string userId,
+            int productId);
 
         /// <summary>
         /// Clear operation.

@@ -126,10 +126,31 @@
   <data name="DatabaseMigrateSuccessful" xml:space="preserve">
     <value>The database is successfully migrated.</value>
   </data>
+  <data name="Error400Description" xml:space="preserve">
+    <value>400 Bad Request</value>
+  </data>
+  <data name="Error400Message" xml:space="preserve">
+    <value>The server cannot or will not process the request due to an apparent client error.</value>
+  </data>
+  <data name="Error404Description" xml:space="preserve">
+    <value>404 Page not found</value>
+  </data>
+  <data name="Error404Message" xml:space="preserve">
+    <value>The requested resource could not be found but may be available in the future.</value>
+  </data>
+  <data name="Error500Description" xml:space="preserve">
+    <value>500 Internal Server Error</value>
+  </data>
+  <data name="Error500Message" xml:space="preserve">
+    <value>Oops! Something went wrong.</value>
+  </data>
   <data name="HostFatalError" xml:space="preserve">
     <value>Host terminated unexpectedly!</value>
   </data>
   <data name="HostStart" xml:space="preserve">
     <value>Starting web host..</value>
+  </data>
+  <data name="ProductNotFound" xml:space="preserve">
+    <value>Product not found.</value>
   </data>
 </root>

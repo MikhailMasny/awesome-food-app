@@ -6,7 +6,8 @@
 
 <h1>@Model.Name</h1>
 
-@{
+@if (Model.Products.Any())
+{
     <table>
         <thead>
             <tr>
@@ -18,32 +19,20 @@
             </tr>
         </thead>
         <tbody>
-            @{
-                foreach (var product in Model.Products)
-                {
-                    <tr>
-                        <td>
-                            @product.Weight
-                        </td>
-                        <td>
-                            @product.Diameter
-                        </td>
-                        <td>
-                            @product.Kind
-                        </td>
-                        <td>
-                            @product.Price
-                        </td>
-                        <td>
-                            @{
-                                if (User.Identity.IsAuthenticated)
-                                {
-                                    <button data-cart-id="@product.Id">to cart</button>
-                                }
-                            }
-                        </td>
-                    </tr>
-                }
+            @foreach (var product in Model.Products)
+            {
+                <tr>
+                    <td>@product.Weight</td>
+                    <td>@product.Diameter</td>
+                    <td>@product.Kind</td>
+                    <td>@product.Price</td>
+                    <td>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button data-cart-id="@product.Id">to cart</button>
+                        }
+                    </td>
+                </tr>
             }
         </tbody>
     </table>

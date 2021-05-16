@@ -1,4 +1,5 @@
 ﻿using Masny.Food.App.ViewModels;
+using Masny.Food.Common.Resources;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Masny.Food.App.Controllers
@@ -8,29 +9,27 @@ namespace Masny.Food.App.Controllers
         [HttpGet("/Error")]
         public IActionResult Index(int? statusCode = null)
         {
-
             if (statusCode.HasValue)
             {
                 HttpContext.Response.StatusCode = statusCode.Value;
             }
 
-            // TODO: to resources
             return statusCode switch
             {
                 400 => View(new ErrorViewModel
                 {
-                    Description = "400 Bad Request",
-                    Message = "The server cannot or will not process the request due to an apparent client error."
+                    Description = CommonResource.Error400Description,
+                    Message = CommonResource.Error400Message
                 }),
                 404 => View(new ErrorViewModel
                 {
-                    Description = "404 Page not found",
-                    Message = "The requested resource could not be found but may be available in the future."
+                    Description = CommonResource.Error404Description,
+                    Message = CommonResource.Error404Message
                 }),
                 _ => View(new ErrorViewModel
                 {
-                    Description = "500 Internal Server Error",
-                    Message = "Oops! Something went wrong."
+                    Description = CommonResource.Error500Description,
+                    Message = CommonResource.Error500Message
                 }),
             };
         }

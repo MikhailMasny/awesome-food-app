@@ -11,27 +11,7 @@ namespace Masny.Food.Logic.Interfaces
     public interface IOrderManager
     {
         /// <summary>
-        /// Get order by identifier.
-        /// </summary>
-        /// <param name="id">Identifier.</param>
-        /// <returns>Order data transfer object.</returns>
-        Task<OrderDto> GetOrderByIdAsync(int id);
-
-        /// <summary>
-        /// Get orders.
-        /// </summary>
-        /// <returns>List of order data transfer objects.</returns>
-        Task<IEnumerable<OrderDto>> GetAllOrdersAsync();
-
-        /// <summary>
-        /// Get orders by user identifier.
-        /// </summary>
-        /// <param name="userId">User identifier.</param>
-        /// <returns>List of order data transfer objects.</returns>
-        Task<IEnumerable<OrderDto>> GetOrdersByUserIdAsync(string userId);
-
-        /// <summary>
-        /// Create new order.
+        /// Create order.
         /// </summary>
         /// <param name="orderDto">Order data transfer object.</param>
         /// <returns>Order identifier.</returns>
@@ -42,13 +22,43 @@ namespace Masny.Food.Logic.Interfaces
         /// </summary>
         /// <param name="orderId">Order identifier.</param>
         /// <param name="productIds">Product identifiers.</param>
-        Task CreateOrderProductsAsync(int orderId, IEnumerable<int> productIds);
+        Task CreateOrderProductsAsync(
+            int orderId,
+            IEnumerable<int> productIds);
+
+        /// <summary>
+        /// Get order by identifier.
+        /// </summary>
+        /// <param name="id">Identifier.</param>
+        /// <returns>Order data transfer object.</returns>
+        Task<OrderDto> GetByIdAsync(int id);
+
+        /// <summary>
+        /// Get last order.
+        /// </summary>
+        /// <returns>Order data transfer object.</returns>
+        Task<OrderDto> GetLastAsync();
+
+        /// <summary>
+        /// Get orders.
+        /// </summary>
+        /// <returns>Order data transfer objects.</returns>
+        Task<IEnumerable<OrderDto>> GetAllAsync();
+
+        /// <summary>
+        /// Get orders by user identifier.
+        /// </summary>
+        /// <param name="userId">User identifier.</param>
+        /// <returns>Order data transfer objects.</returns>
+        Task<IEnumerable<OrderDto>> GetAllByUserIdAsync(string userId);
 
         /// <summary>
         /// Update order status by identifier.
         /// </summary>
         /// <param name="orderId">Order identifier.</param>
         /// <param name="statusType">Status type.</param>
-        Task UpdateOrderStatusByIdAsync(int orderId, StatusType statusType);
+        Task UpdateOrderStatusByIdAsync(
+            int orderId,
+            StatusType statusType);
     }
 }

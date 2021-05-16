@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Masny.Food.App.ViewModels
 {
@@ -12,16 +11,6 @@ namespace Masny.Food.App.ViewModels
         /// Orders.
         /// </summary>
         public IEnumerable<OrderViewModel> Orders { get; set; }
-
-        /// <summary>
-        /// Statuses.
-        /// </summary>
-        public SelectList Statuses { get; set; }
-
-        /// <summary>
-        /// Phone.
-        /// </summary>
-        public string Phone { get; set; }
 
         /// <summary>
         /// Current status.

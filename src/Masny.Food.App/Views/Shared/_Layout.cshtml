@@ -15,7 +15,10 @@
                 <span>@User.Identity.Name</span>
                 <a asp-controller="Account" asp-action="Profile">Profile</a>
                 <a asp-controller="Cart" asp-action="Index">Cart</a>
-                <a asp-controller="Order" asp-action="History">Order history</a>
+                @if (!User.IsInRole(AppRole.Admin))
+                {
+                    <a asp-controller="Order" asp-action="History">Order history</a>
+                }
                 <a asp-controller="Account" asp-action="Logout">Logout</a>
             </div>
 

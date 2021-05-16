@@ -88,6 +88,60 @@ namespace Masny.Food.Common.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 400 Bad Request.
+        /// </summary>
+        public static string Error400Description {
+            get {
+                return ResourceManager.GetString("Error400Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The server cannot or will not process the request due to an apparent client error..
+        /// </summary>
+        public static string Error400Message {
+            get {
+                return ResourceManager.GetString("Error400Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 404 Page not found.
+        /// </summary>
+        public static string Error404Description {
+            get {
+                return ResourceManager.GetString("Error404Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The requested resource could not be found but may be available in the future..
+        /// </summary>
+        public static string Error404Message {
+            get {
+                return ResourceManager.GetString("Error404Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to 500 Internal Server Error.
+        /// </summary>
+        public static string Error500Description {
+            get {
+                return ResourceManager.GetString("Error500Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Oops! Something went wrong..
+        /// </summary>
+        public static string Error500Message {
+            get {
+                return ResourceManager.GetString("Error500Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Host terminated unexpectedly!.
         /// </summary>
         public static string HostFatalError {
@@ -102,6 +156,15 @@ namespace Masny.Food.Common.Resources {
         public static string HostStart {
             get {
                 return ResourceManager.GetString("HostStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Product not found..
+        /// </summary>
+        public static string ProductNotFound {
+            get {
+                return ResourceManager.GetString("ProductNotFound", resourceCulture);
             }
         }
     }

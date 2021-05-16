@@ -4,17 +4,24 @@
     ViewData["Title"] = "";
 }
 
-<h1>Order №@Model.Number</h1>
+@if (Model.Number != 0)
+{
+    <h1>Order №@Model.Number</h1>
 
-<form method="post" asp-controller="Order" asp-action="Edit">
-    <div asp-validation-summary="ModelOnly"></div>
+    <form method="post" asp-controller="Order" asp-action="Edit">
+        <div asp-validation-summary="ModelOnly"></div>
 
-    <div>
-        <select name="status" asp-items="Model.Statuses" asp-for="Status"></select>
-        <span asp-validation-for="Status"></span>
-    </div>
+        <div>
+            <select name="status" asp-items="ViewBag.Statuses" asp-for="Status"></select>
+            <span asp-validation-for="Status"></span>
+        </div>
 
-    <div>
-        <button type="submit">Change</button>
-    </div>
-</form>
+        <div>
+            <button type="submit">Change</button>
+        </div>
+    </form>
+}
+else
+{
+    <h1>Order not found.</h1>
+}

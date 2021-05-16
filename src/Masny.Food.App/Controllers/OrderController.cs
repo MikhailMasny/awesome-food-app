@@ -17,15 +17,21 @@ namespace Masny.Food.App.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderManager _orderManager;
+        private readonly IProductManager _productManager;
+        private readonly IPromoCodeManager _promoCodeManager;
         private readonly ICartService _cartService;
         private readonly ICalcService _calcService;
 
         public OrderController(
             IOrderManager orderManager,
+            IProductManager productManager,
+            IPromoCodeManager promoCodeManager,
             ICartService cartService,
             ICalcService calcService)
         {
             _orderManager = orderManager ?? throw new ArgumentNullException(nameof(orderManager));
+            _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
+            _promoCodeManager = promoCodeManager ?? throw new ArgumentNullException(nameof(promoCodeManager));
             _cartService = cartService ?? throw new ArgumentNullException(nameof(cartService));
             _calcService = calcService ?? throw new ArgumentNullException(nameof(calcService));
         }
@@ -33,29 +39,36 @@ namespace Masny.Food.App.Controllers
         [Authorize]
         public async Task<IActionResult> Create(OrderViewModel model)
         {
+            var productIds = (await _cartService
+                    .GetAsync(User.GetUserIdByClaimsPrincipal()))
+                    .ProductIds;
+
+            if (!productIds.Any())
+            {
+                return BadRequest();
+            }
+
             if (ModelState.IsValid)
             {
-                var userId = User.GetUserIdByClaimsPrincipal();
                 var dateTimeNow = DateTime.Now;
-                var orderNumber = await _calcService.GetNewOrderNumberAsync(dateTimeNow);
-                var cartDto = await _cartService.GetAsync(userId);
 
-                var totalPrice = await _calcService.GetTotalPriceByProductIdsAsync(cartDto.ProductIds);
+                var newOrderNumber = await _calcService
+                    .GetNewOrderNumberAsync(
+                        await _orderManager.GetLastAsync(), 
+                        dateTimeNow);
 
-                if(!string.IsNullOrEmpty(model.PromoCode))
-                {
-                    var promoCodeIsExist = await _calcService.IsExistPromoCodeAsync(model.PromoCode.ToUpper());
-                    if (promoCodeIsExist)
-                    {
-                        totalPrice = await _calcService.ApplyPromoCodeAsync(model.PromoCode, totalPrice);
-                    }
-                }
+                var totalPrice = await _calcService
+                    .GetTotalPriceAsync(
+                        await _productManager
+                            .GetAllProductsByIdsAsync(productIds),
+                        await _promoCodeManager
+                            .GetPromoCodeByCodeAsync(model.PromoCode));
 
                 var orderDto = new OrderDto
                 {
-                    Number = orderNumber,
+                    Number = newOrderNumber,
                     Creation = dateTimeNow,
-                    UserId = userId,
+                    UserId = User.GetUserIdByClaimsPrincipal(),
                     Name = model.Name,
                     Phone = model.Phone,
                     InPlace = model.InPlace,
@@ -67,11 +80,11 @@ namespace Masny.Food.App.Controllers
                     Status = StatusType.Todo,
                 };
 
-                var orderId = await _orderManager.CreateOrderAsync(orderDto);
+                await _orderManager.CreateOrderProductsAsync(
+                    await _orderManager.CreateOrderAsync(orderDto),
+                    productIds);
 
-                await _orderManager.CreateOrderProductsAsync(orderId, cartDto.ProductIds);
-
-                await _cartService.ClearAsync(userId);
+                await _cartService.ClearAsync(User.GetUserIdByClaimsPrincipal());
 
                 return RedirectToAction("Index", "Home");
             }
@@ -82,86 +95,109 @@ namespace Masny.Food.App.Controllers
         [Authorize]
         public async Task<IActionResult> History()
         {
-            var orderDtos = await _orderManager.GetOrdersByUserIdAsync(User.GetUserIdByClaimsPrincipal());
+            var orderDtos = await _orderManager
+                .GetAllByUserIdAsync(User.GetUserIdByClaimsPrincipal());
 
-            var orderViewModels = new List<OrderViewModel>();
-            foreach (var orderDto in orderDtos)
+            if (!orderDtos.Any())
             {
-                orderViewModels.Add(new OrderViewModel
-                {
-                    Number = orderDto.Number,
-                    Creation = orderDto.Creation,
-                    Name = orderDto.Name,
-                    Phone = orderDto.Phone,
-                    InPlace = orderDto.InPlace,
-                    Address = orderDto.Address,
-                    PromoCode = orderDto.PromoCode,
-                    TotalPrice = orderDto.TotalPrice,
-                    Comment = orderDto.Comment,
-                    Status = orderDto.Status,
-                });
+                return View(new List<OrderViewModel>());
             }
 
-            return View(orderViewModels.OrderByDescending(o => o.Creation));
+            IEnumerable<OrderViewModel> GetOrderViewModels()
+            {
+                foreach (var orderDto in orderDtos)
+                {
+                    yield return new OrderViewModel
+                    {
+                        Number = orderDto.Number,
+                        Creation = orderDto.Creation,
+                        Name = orderDto.Name,
+                        Phone = orderDto.Phone,
+                        InPlace = orderDto.InPlace,
+                        Address = orderDto.Address,
+                        PromoCode = orderDto.PromoCode,
+                        TotalPrice = orderDto.TotalPrice,
+                        Comment = orderDto.Comment,
+                        Status = orderDto.Status,
+                    };
+                }
+            }
+
+            return View(GetOrderViewModels()
+                .OrderByDescending(orderViewModel => orderViewModel.Creation));
         }
 
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> List(int? status, string phone)
         {
-            var orderDtos = await _orderManager.GetAllOrdersAsync();
-            if (status != null && status != -1)
+            ViewBag.Statuses = GetStatusTypes();
+            ViewBag.Phone = phone;
+            ViewBag.Status = status ?? (int)StatusType.Unknown;
+
+            var orderDtos = await _orderManager.GetAllAsync();
+            if (!orderDtos.Any())
             {
-                orderDtos = orderDtos.Where(p => p.Status == (StatusType)status);
+                return View(new OrderListViewModel
+                {
+                    Orders = new List<OrderViewModel>(),
+                });
+            }
+
+            if (status.HasValue && status != -1)
+            {
+                orderDtos = orderDtos
+                    .Where(orderDto => orderDto.Status == (StatusType)status.Value);
             }
 
             if (!string.IsNullOrEmpty(phone))
             {
-                orderDtos = orderDtos.Where(p => p.Phone == phone);
+                orderDtos = orderDtos
+                    .Where(orderDto => orderDto.Phone.Contains(phone));
             }
 
-            var orderViewModels = new List<OrderViewModel>();
-            foreach (var orderDto in orderDtos)
+            IEnumerable<OrderViewModel> GetOrderViewModels()
             {
-                orderViewModels.Add(new OrderViewModel
+                foreach (var orderDto in orderDtos)
                 {
-                    Id = orderDto.Id,
-                    Number = orderDto.Number,
-                    Creation = orderDto.Creation,
-                    Name = orderDto.Name,
-                    Phone = orderDto.Phone,
-                    InPlace = orderDto.InPlace,
-                    Address = orderDto.Address,
-                    PromoCode = orderDto.PromoCode,
-                    Payment = orderDto.Payment,
-                    TotalPrice = orderDto.TotalPrice,
-                    Comment = orderDto.Comment,
-                    Status = orderDto.Status,
-                });
+                    yield return new OrderViewModel
+                    {
+                        Id = orderDto.Id,
+                        Number = orderDto.Number,
+                        Creation = orderDto.Creation,
+                        Name = orderDto.Name,
+                        Phone = orderDto.Phone,
+                        InPlace = orderDto.InPlace,
+                        Address = orderDto.Address,
+                        PromoCode = orderDto.PromoCode,
+                        Payment = orderDto.Payment,
+                        TotalPrice = orderDto.TotalPrice,
+                        Comment = orderDto.Comment,
+                        Status = orderDto.Status,
+                    };
+                }
             }
 
-            var orderListViewModel = new OrderListViewModel
+            return View(new OrderListViewModel
             {
-                Orders = orderViewModels.OrderByDescending(o => o.Creation),
-                Statuses = GetStatusTypes(true),
-                Phone = phone,
-                CurrentStatus = status ?? (int)StatusType.Unknown
-            };
-
-            return View(orderListViewModel);
+                CurrentStatus = status ?? (int)StatusType.Unknown,
+                Orders = GetOrderViewModels()
+                    .OrderByDescending(orderViewModel => orderViewModel.Creation),
+            });
         }
 
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> EditAsync(int id)
+        public async Task<IActionResult> Edit(int id)
         {
-            var orderDto = await _orderManager.GetOrderByIdAsync(id);
+            ViewBag.Statuses = GetStatusTypes(false);
+
+            var orderDto = await _orderManager.GetByIdAsync(id);
 
             return View(new OrderEditViewModel
             {
                 Id = orderDto.Id,
                 Number = orderDto.Number,
                 Status = (int)orderDto.Status,
-                Statuses = GetStatusTypes(false),
             });
         }
 
@@ -181,18 +217,15 @@ namespace Masny.Food.App.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> CheckPromoCodeAsync([FromBody] PromoCodeViewModel model)
+        public async Task<IActionResult> CheckPromoCode([FromBody] PromoCodeViewModel model)
         {
-            var isExist = await _calcService.IsExistPromoCodeAsync(model.Value.ToUpper());
-            if (isExist)
-            {
-                return Ok();
-            }
-
-            return NotFound();
+            var promoCode = await _promoCodeManager.GetPromoCodeByCodeAsync(model.Value);
+            return await _calcService.IsValidPromoCodeAsync(promoCode.Value)
+                ? Ok()
+                : NotFound();
         }
 
-        private SelectList GetStatusTypes(bool withDefaultStatusModel)
+        private static SelectList GetStatusTypes(bool withDefaultStatusModel = true)
         {
             var statusList = new List<SelectListModel>
             {
@@ -220,7 +253,11 @@ namespace Masny.Food.App.Controllers
 
             if (withDefaultStatusModel)
             {
-                statusList.Insert(0, new SelectListModel { Name = "All", Id = -1 });
+                statusList.Insert(0, new SelectListModel
+                {
+                    Name = "All",
+                    Id = -1
+                });
             }
 
             return new SelectList(statusList, "Id", "Name");

@@ -20,64 +20,72 @@ namespace Masny.Food.Logic.Services
 
         public Task<CartDto> GetAsync(string userId)
         {
-            if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
+            return Task.Run(() =>
             {
-                cartDto = new CartDto
+                if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
                 {
-                    UserId = userId,
-                    ProductIds = new List<int>(),
-                };
-            }
+                    cartDto = new CartDto
+                    {
+                        UserId = userId,
+                        ProductIds = new List<int>(),
+                    };
+                }
 
-            return Task.FromResult(cartDto);
+                return cartDto;
+            });
         }
 
-        public Task AddOrUpdateAsync(CartOperationType cartOperationType, string userId, int productId)
+        public Task AddOrRemoveAsync(
+            CartOperationType cartOperationType,
+            string userId,
+            int productId)
         {
-            if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
+            return Task.Run(() =>
             {
-                cartDto = new CartDto
+                if (!_memoryCache.TryGetValue(userId, out CartDto cartDto))
                 {
-                    UserId = userId,
-                    ProductIds = new List<int>(),
-                };
-            }
-
-            switch (cartOperationType)
-            {
-                case CartOperationType.Add:
+                    cartDto = new CartDto
                     {
-                        cartDto.ProductIds.Add(productId);
-                    }
-                    break;
+                        UserId = userId,
+                        ProductIds = new List<int>(),
+                    };
+                }
 
-                case CartOperationType.Remove:
-                    {
-                        cartDto.ProductIds.Remove(productId);
-                    }
-                    break;
+                switch (cartOperationType)
+                {
+                    case CartOperationType.Add:
+                        {
+                            cartDto.ProductIds.Add(productId);
+                        }
+                        break;
 
-                case CartOperationType.Unknown:
-                    break;
+                    case CartOperationType.Remove:
+                        {
+                            cartDto.ProductIds.Remove(productId);
+                        }
+                        break;
 
-                default:
-                    break;
-            }
+                    case CartOperationType.Unknown:
+                        break;
 
-            _memoryCache.Set(
-                    userId,
-                    cartDto,
-                    new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)));
+                    default:
+                        break;
+                }
 
-            return Task.CompletedTask;
+                _memoryCache.Set(
+                        userId,
+                        cartDto,
+                        new MemoryCacheEntryOptions()
+                            .SetAbsoluteExpiration(TimeSpan.FromMinutes(60)));
+            });
         }
 
         public Task ClearAsync(string userId)
         {
-            _memoryCache.Remove(userId);
-
-            return Task.CompletedTask;
+            return Task.Run(() =>
+            {
+                _memoryCache.Remove(userId);
+            });
         }
     }
 }

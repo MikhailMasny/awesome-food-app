@@ -1,6 +1,5 @@
-﻿using Masny.Food.Data.Models;
-using Masny.Food.Logic.Interfaces;
-using Microsoft.EntityFrameworkCore;
+﻿using Masny.Food.Logic.Interfaces;
+using Masny.Food.Logic.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,57 +10,39 @@ namespace Masny.Food.Logic.Services
     /// <inheritdoc cref="ICartService"/>
     public class CalcService : ICalcService
     {
-        private readonly IRepositoryManager<Order> _orderManager;
-        private readonly IRepositoryManager<PromoCode> _promoCodeManager;
-        private readonly IRepositoryManager<Product> _productManager;
-
-        public CalcService(
-            IRepositoryManager<Order> orderManager,
-            IRepositoryManager<PromoCode> promoCodeManager,
-            IRepositoryManager<Product> productManager)
+        public Task<int> GetNewOrderNumberAsync(
+            OrderDto lastOrderDto,
+            DateTime dateTime)
         {
-            _orderManager = orderManager ?? throw new System.ArgumentNullException(nameof(orderManager));
-            _promoCodeManager = promoCodeManager ?? throw new ArgumentNullException(nameof(promoCodeManager));
-            _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
-        }
-
-        public async Task<decimal> ApplyPromoCodeAsync(string code, decimal totalPrice)
-        {
-            const int procentConstant = 100;
-            var promoCode = await _promoCodeManager.GetEntityWithoutTrackingAsync(p => p.Code == code);
-            return totalPrice - totalPrice * promoCode.Value / procentConstant;
-        }
-
-        public async Task<int> GetNewOrderNumberAsync(DateTime dateTime)
-        {
-            var orderNumber = 1;
-            var lastOrder = await _orderManager
-                .GetAll()
-                .OrderBy(o => o.Id)
-                .LastOrDefaultAsync();
-
-            if (lastOrder is not null && lastOrder.Creation.Date == dateTime.Date)
+            return Task.Run(() =>
             {
-                orderNumber = ++lastOrder.Number;
-            }
-
-            return orderNumber;
+                const int orderNumber = 1;
+                return lastOrderDto is not null && lastOrderDto.Creation.Date == dateTime.Date
+                    ? ++lastOrderDto.Number
+                    : orderNumber;
+            });
         }
 
-        public async Task<decimal> GetTotalPriceByProductIdsAsync(IEnumerable<int> ids)
-        {
-            return (await _productManager
-                    .GetAll()
-                    .Where(p => ids.Contains(p.Id))
-                    .ToListAsync())
-                .Select(p => p.Price)
-                .Sum();
-        }
+        public Task<bool> IsValidPromoCodeAsync(decimal promoCodeValue) =>
+            Task.Run(() =>
+            {
+                return promoCodeValue > 0;
+            });
 
-        public async Task<bool> IsExistPromoCodeAsync(string code)
+        public Task<decimal> GetTotalPriceAsync(
+            IEnumerable<ProductDto> selectedProductDtos,
+            PromoCodeDto promoCodeDto)
         {
-            var promoCode = await _promoCodeManager.GetEntityWithoutTrackingAsync(p => p.Code == code);
-            return promoCode is not null;
+            return Task.Run(async () =>
+            {
+                var totalPrice = selectedProductDtos
+                    .Select(p => p.Price)
+                    .Sum();
+
+                return await IsValidPromoCodeAsync(promoCodeDto.Value)
+                    ? totalPrice - totalPrice * promoCodeDto.Value / 100
+                    : totalPrice;
+            });
         }
     }
 }

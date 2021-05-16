@@ -25,21 +25,11 @@
                     foreach (var product in Model.Products)
                     {
                         <tr class="productInCart">
-                            <td>
-                                @product.Name
-                            </td>
-                            <td>
-                                @product.Weight
-                            </td>
-                            <td>
-                                @product.Diameter
-                            </td>
-                            <td>
-                                @product.Kind
-                            </td>
-                            <td class="productPrice">
-                                @product.Price
-                            </td>
+                            <td>@product.Name</td>
+                            <td>@product.Weight</td>
+                            <td>@product.Diameter</td>
+                            <td>@product.Kind</td>
+                            <td class="productPrice">@product.Price</td>
                             <td>
                                 <button data-cart-id="@product.Id">Remove from cart</button>
                             </td>

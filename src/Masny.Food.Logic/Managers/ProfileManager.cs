@@ -9,11 +9,11 @@ namespace Masny.Food.Logic.Managers
     /// <inheritdoc cref="IProfileManager"/>
     public class ProfileManager : IProfileManager
     {
-        private readonly IRepositoryManager<Profile> _profileManager;
+        private readonly IRepositoryManager<Profile> _profileRepository;
 
-        public ProfileManager(IRepositoryManager<Profile> profileManager)
+        public ProfileManager(IRepositoryManager<Profile> profileRepository)
         {
-            _profileManager = profileManager ?? throw new ArgumentNullException(nameof(profileManager));
+            _profileRepository = profileRepository ?? throw new ArgumentNullException(nameof(profileRepository));
         }
 
         public async Task CreateProfileAsync(string userId, string name)
@@ -24,13 +24,13 @@ namespace Masny.Food.Logic.Managers
                 Name = name,
             };
 
-            await _profileManager.CreateAsync(profile);
-            await _profileManager.SaveChangesAsync();
+            await _profileRepository.CreateAsync(profile);
+            await _profileRepository.SaveChangesAsync();
         }
 
         public async Task<ProfileDto> GetProfileByUserIdAsync(string userId)
         {
-            var profile = await _profileManager.GetEntityWithoutTrackingAsync(p => p.UserId == userId);
+            var profile = await _profileRepository.GetEntityWithoutTrackingAsync(p => p.UserId == userId);
 
             return new ProfileDto
             {
@@ -45,7 +45,7 @@ namespace Masny.Food.Logic.Managers
 
         public async Task UpdateProfileAsync(ProfileDto profileDto)
         {
-            var profile = await _profileManager.GetEntityAsync(p => p.UserId == profileDto.UserId);
+            var profile = await _profileRepository.GetEntityAsync(p => p.UserId == profileDto.UserId);
 
             profile.Name = profileDto.Name;
             profile.Gender = profileDto.Gender;
@@ -57,7 +57,7 @@ namespace Masny.Food.Logic.Managers
                 profile.Avatar = profileDto.Avatar;
             }
 
-            await _profileManager.SaveChangesAsync();
+            await _profileRepository.SaveChangesAsync();
         }
     }
 }

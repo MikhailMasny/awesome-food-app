@@ -12,141 +12,92 @@ namespace Masny.Food.Logic.Managers
     /// <inheritdoc cref="IProductManager"/>
     public class ProductManager : IProductManager
     {
-        private readonly IRepositoryManager<Product> _productManager;
-        private readonly IRepositoryManager<ProductDetail> _productDetailManager;
+        private readonly IRepositoryManager<Product> _productRepository;
+        private readonly IRepositoryManager<ProductDetail> _productDetailRepository;
+
+        private IQueryable<Product> ProductQuery =>
+            _productRepository.GetAll();
 
         public ProductManager(
-            IRepositoryManager<Product> productManager,
-            IRepositoryManager<ProductDetail> productDetailManager)
+                    IRepositoryManager<Product> productRepository,
+            IRepositoryManager<ProductDetail> productDetailRepository)
         {
-            _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
-            _productDetailManager = productDetailManager ?? throw new ArgumentNullException(nameof(productDetailManager));
+            _productRepository = productRepository ?? throw new ArgumentNullException(nameof(productRepository));
+            _productDetailRepository = productDetailRepository ?? throw new ArgumentNullException(nameof(productDetailRepository));
         }
 
         public async Task<IEnumerable<ProductDetailDto>> GetAllProductDetailsAsync()
         {
-            var productDetails =
-                await _productDetailManager
-                    .GetAll()
-                    .Include(p => p.Products)
-                    .ToListAsync();
+            var productDetails = await _productDetailRepository
+                .GetAll()
+                .Where(productDetail => productDetail.Products.Any(p => !p.IsArchived))
+                .ToListAsync();
 
             IEnumerable<ProductDetailDto> GetProductDetails()
             {
                 foreach (var productDetail in productDetails)
                 {
-                    if (productDetail.Products.Any(p => !p.IsArchived))
+                    yield return new ProductDetailDto
                     {
-                        yield return new ProductDetailDto
-                        {
-                            Id = productDetail.Id,
-                            Name = productDetail.Name,
-                            Description = productDetail.Description,
-                            Comment = productDetail.Comment,
-                        };
-                    }
+                        Id = productDetail.Id,
+                        Name = productDetail.Name,
+                        Description = productDetail.Description,
+                        Comment = productDetail.Comment,
+                    };
                 }
             }
 
             return GetProductDetails();
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
-        {
-            var products = await _productManager
-                .GetAll()
-                .Include(p => p.ProductDetail)
-                .ToListAsync();
-
-            IEnumerable<ProductDto> GetProducts()
-            {
-                foreach (var product in products)
-                {
-                    yield return new ProductDto
-                    {
-                        Id = product.Id,
-                        Name = product.ProductDetail.Name,
-                        Photo = product.Photo,
-                        Price = product.Price,
-                        Energy = product.Energy,
-                        Protein = product.Protein,
-                        Fat = product.Fat,
-                        Carbohydrate = product.Carbohydrate,
-                        Weight = product.Weight,
-                        Comment = product.Comment,
-                        Diameter = product.Diameter,
-                        Kind = product.Kind,
-                        IsArchived = product.IsArchived,
-                    };
-                }
-            }
-
-            return GetProducts();
-        }
-
-        public async Task<IEnumerable<ProductDto>> GetAllProductsByIdsAsync(IEnumerable<int> ids)
-        {
-            var products = await _productManager
-                .GetAll()
+        public async Task<IEnumerable<ProductDto>> GetAllProductsByIdsAsync(IEnumerable<int> ids) =>
+            GetProducts(await ProductQuery
                 .Where(p => ids.Contains(p.Id))
-                .ToListAsync();
+                .ToListAsync());
 
-            IEnumerable<ProductDto> GetProducts()
-            {
-                foreach (var product in products)
-                {
-                    yield return new ProductDto
-                    {
-                        Id = product.Id,
-                        Photo = product.Photo,
-                        Price = product.Price,
-                        Energy = product.Energy,
-                        Protein = product.Protein,
-                        Fat = product.Fat,
-                        Carbohydrate = product.Carbohydrate,
-                        Weight = product.Weight,
-                        Comment = product.Comment,
-                        Diameter = product.Diameter,
-                        Kind = product.Kind,
-                        IsArchived = product.IsArchived,
-                    };
-                }
-            }
-
-            return GetProducts();
-        }
-
-        public async Task<(IEnumerable<ProductDto> productDtos, string productName)> GetAllProductsByProductDetailIdAsync(int productDetailId)
+        public async Task<ProductsAndNameDto> GetAllProductsByProductDetailIdAsync(int productDetailId)
         {
-            var products = await _productManager
-                .GetAll()
+            var products = await ProductQuery
                 .Include(p => p.ProductDetail)
                 .Where(p => p.ProductDetailId == productDetailId)
                 .ToListAsync();
 
-            IEnumerable<ProductDto> GetProducts()
+            if (!products.Any())
             {
-                foreach (var product in products)
+                return new ProductsAndNameDto
                 {
-                    yield return new ProductDto
-                    {
-                        Id = product.Id,
-                        Photo = product.Photo,
-                        Price = product.Price,
-                        Energy = product.Energy,
-                        Protein = product.Protein,
-                        Fat = product.Fat,
-                        Carbohydrate = product.Carbohydrate,
-                        Weight = product.Weight,
-                        Comment = product.Comment,
-                        Diameter = product.Diameter,
-                        Kind = product.Kind,
-                        IsArchived = product.IsArchived,
-                    };
-                }
+                    Name = string.Empty,
+                    Products = new List<ProductDto>(),
+                };
             }
 
-            return (GetProducts(), products.FirstOrDefault().ProductDetail.Name);
+            return new ProductsAndNameDto
+            {
+                Name = products.FirstOrDefault().ProductDetail.Name,
+                Products = GetProducts(products),
+            };
+        }
+
+        private IEnumerable<ProductDto> GetProducts(IEnumerable<Product> products)
+        {
+            foreach (var product in products)
+            {
+                yield return new ProductDto
+                {
+                    Id = product.Id,
+                    Photo = product.Photo,
+                    Price = product.Price,
+                    Energy = product.Energy,
+                    Protein = product.Protein,
+                    Fat = product.Fat,
+                    Carbohydrate = product.Carbohydrate,
+                    Weight = product.Weight,
+                    Comment = product.Comment,
+                    Diameter = product.Diameter,
+                    Kind = product.Kind,
+                    IsArchived = product.IsArchived,
+                };
+            }
         }
     }
 }

@@ -31,6 +31,7 @@ namespace Masny.Food.App
             services.AddScoped<IProfileManager, ProfileManager>();
             services.AddScoped<IProductManager, ProductManager>();
             services.AddScoped<IOrderManager, OrderManager>();
+            services.AddScoped<IPromoCodeManager, PromoCodeManager>();
 
             // Services
             services.AddScoped<ICartService, CartService>();
@@ -69,10 +70,10 @@ namespace Masny.Food.App
 
             app.UseStatusCodePagesWithReExecute("/Error", "?statusCode={0}");
             app.UseExceptionHandler("/Error");
-            app.UseHsts();
 
             app.UseSerilogRequestLogging();
 
+            app.UseHsts();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

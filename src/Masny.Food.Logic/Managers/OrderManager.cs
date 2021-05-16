@@ -13,15 +13,18 @@ namespace Masny.Food.Logic.Managers
     /// <inheritdoc cref="IOrderManager"/>
     public class OrderManager : IOrderManager
     {
-        private readonly IRepositoryManager<Order> _orderManager;
-        private readonly IRepositoryManager<OrderProduct> _orderProductManager;
+        private readonly IRepositoryManager<Order> _orderRepository;
+        private readonly IRepositoryManager<OrderProduct> _orderProductRepository;
+
+        private IQueryable<Order> OrderQuery =>
+                    _orderRepository.GetAll();
 
         public OrderManager(
-            IRepositoryManager<Order> orderManager,
-            IRepositoryManager<OrderProduct> orderProductManager)
+            IRepositoryManager<Order> orderRepository,
+            IRepositoryManager<OrderProduct> orderProductRepository)
         {
-            _orderManager = orderManager ?? throw new ArgumentNullException(nameof(orderManager));
-            _orderProductManager = orderProductManager ?? throw new ArgumentNullException(nameof(orderProductManager));
+            _orderRepository = orderRepository ?? throw new ArgumentNullException(nameof(orderRepository));
+            _orderProductRepository = orderProductRepository ?? throw new ArgumentNullException(nameof(orderProductRepository));
         }
 
         public async Task<int> CreateOrderAsync(OrderDto orderDto)
@@ -42,8 +45,8 @@ namespace Masny.Food.Logic.Managers
                 Status = orderDto.Status,
             };
 
-            await _orderManager.CreateAsync(order);
-            await _orderManager.SaveChangesAsync();
+            await _orderRepository.CreateAsync(order);
+            await _orderRepository.SaveChangesAsync();
 
             return order.Id;
         }
@@ -62,100 +65,83 @@ namespace Masny.Food.Logic.Managers
                 }
             }
 
-            await _orderProductManager.CreateRangeAsync(GetOrderProducts());
-            await _orderProductManager.SaveChangesAsync();
+            await _orderProductRepository.CreateRangeAsync(GetOrderProducts());
+            await _orderProductRepository.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<OrderDto>> GetAllOrdersAsync()
+        public async Task<OrderDto> GetByIdAsync(int id)
         {
-            var orders = await _orderManager
-                .GetAll()
-                .ToListAsync();
+            var order = await _orderRepository.GetEntityWithoutTrackingAsync(o => o.Id == id);
 
-            IEnumerable<OrderDto> GetOrders()
-            {
-                foreach (var order in orders)
-                {
-                    yield return new OrderDto
-                    {
-                        Id = order.Id,
-                        Number = order.Number,
-                        Creation = order.Creation,
-                        UserId = order.UserId,
-                        Name = order.Name,
-                        Phone = order.Phone,
-                        InPlace = order.InPlace,
-                        Address = order.Address,
-                        PromoCode = order.PromoCode,
-                        Payment = order.Payment,
-                        TotalPrice = order.TotalPrice,
-                        Comment = order.Comment,
-                        Status = order.Status,
-                    };
-                }
-            }
-
-            return GetOrders();
+            return GetOrder(order);
         }
 
-        public async Task<OrderDto> GetOrderByIdAsync(int id)
+        public async Task<OrderDto> GetLastAsync()
         {
-            var order = await _orderManager.GetEntityWithoutTrackingAsync(o => o.Id == id);
+            var lastOrder = await OrderQuery
+                .OrderBy(orderDto => orderDto.Id)
+                .LastOrDefaultAsync();
 
-            return new OrderDto
-            {
-                Number = order.Number,
-                Creation = order.Creation,
-                Name = order.Name,
-                Phone = order.Phone,
-                InPlace = order.InPlace,
-                Address = order.Address,
-                PromoCode = order.PromoCode,
-                Payment = order.Payment,
-                TotalPrice = order.TotalPrice,
-                Comment = order.Comment,
-                Status = order.Status,
-            };
+            return GetOrder(lastOrder);
         }
 
-        public async Task<IEnumerable<OrderDto>> GetOrdersByUserIdAsync(string userId)
-        {
-            var orders = await _orderManager
-                .GetAll()
-                .Where(o => o.UserId == userId)
-                .ToListAsync();
+        public async Task<IEnumerable<OrderDto>> GetAllAsync() =>
+            GetOrders(await OrderQuery.ToListAsync());
 
-            IEnumerable<OrderDto> GetOrders()
-            {
-                foreach (var order in orders)
-                {
-                    yield return new OrderDto
-                    {
-                        Number = order.Number,
-                        Creation = order.Creation,
-                        Name = order.Name,
-                        Phone = order.Phone,
-                        InPlace = order.InPlace,
-                        Address = order.Address,
-                        PromoCode = order.PromoCode,
-                        Payment = order.Payment,
-                        TotalPrice = order.TotalPrice,
-                        Comment = order.Comment,
-                        Status = order.Status,
-                    };
-                }
-            }
-
-            return GetOrders();
-        }
+        public async Task<IEnumerable<OrderDto>> GetAllByUserIdAsync(string userId) =>
+            GetOrders(await OrderQuery
+                .Where(order => order.UserId == userId)
+                .ToListAsync());
 
         public async Task UpdateOrderStatusByIdAsync(int orderId, StatusType statusType)
         {
-            var order = await _orderManager.GetEntityAsync(o => o.Id == orderId);
+            var order = await _orderRepository
+                .GetEntityAsync(o => o.Id == orderId);
 
             order.Status = statusType;
 
-            await _orderManager.SaveChangesAsync();
+            await _orderRepository.SaveChangesAsync();
+        }
+
+        private static IEnumerable<OrderDto> GetOrders(IEnumerable<Order> orders)
+        {
+            foreach (var order in orders)
+            {
+                yield return new OrderDto
+                {
+                    Number = order.Number,
+                    Creation = order.Creation,
+                    Name = order.Name,
+                    Phone = order.Phone,
+                    InPlace = order.InPlace,
+                    Address = order.Address,
+                    PromoCode = order.PromoCode,
+                    Payment = order.Payment,
+                    TotalPrice = order.TotalPrice,
+                    Comment = order.Comment,
+                    Status = order.Status,
+                };
+            }
+        }
+
+        private OrderDto GetOrder(Order order)
+        {
+            return order is null
+                ? new OrderDto()
+                : new OrderDto
+                {
+                    Number = order.Number,
+                    Creation = order.Creation,
+                    Name = order.Name,
+                    Phone = order.Phone,
+                    InPlace = order.InPlace,
+                    Address = order.Address,
+                    PromoCode = order.PromoCode,
+                    Payment = order.Payment,
+                    TotalPrice = order.TotalPrice,
+                    Comment = order.Comment,
+                    Status = order.Status,
+                };
         }
     }
 }

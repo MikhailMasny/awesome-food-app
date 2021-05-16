@@ -1,10 +1,10 @@
 ﻿using Masny.Food.App.ViewModels;
+using Masny.Food.Common.Resources;
 using Masny.Food.Logic.Interfaces;
-using Masny.Food.Logic.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Masny.Food.App.Controllers
@@ -18,40 +18,48 @@ namespace Masny.Food.App.Controllers
             _productManager = productManager ?? throw new ArgumentNullException(nameof(productManager));
         }
 
-        [Authorize]
         public async Task<IActionResult> List(int id)
         {
-            (IEnumerable<ProductDto> productDtos, string productName) = await _productManager.GetAllProductsByProductDetailIdAsync(id);
+            var result = await _productManager.GetAllProductsByProductDetailIdAsync(id);
 
-            var productViewModels = new List<ProductViewModel>();
-            foreach (var productDto in productDtos)
+            if (!result.Products.Any())
             {
-                if (!productDto.IsArchived)
+                return View(new ProductListViewModel
                 {
-                    productViewModels.Add(new ProductViewModel
+                    Name = CommonResource.ProductNotFound,
+                    Products = new List<ProductViewModel>(),
+                });
+            }
+
+            IEnumerable<ProductViewModel> ProductViewModels()
+            {
+                foreach (var productDto in result.Products)
+                {
+                    if (!productDto.IsArchived)
                     {
-                        Id = productDto.Id,
-                        Photo = productDto.Photo,
-                        Price = productDto.Price,
-                        Energy = productDto.Energy,
-                        Protein = productDto.Protein,
-                        Fat = productDto.Fat,
-                        Carbohydrate = productDto.Carbohydrate,
-                        Weight = productDto.Weight,
-                        Comment = productDto.Comment,
-                        Diameter = productDto.Diameter,
-                        Kind = productDto.Kind,
-                    });
+                        yield return new ProductViewModel
+                        {
+                            Id = productDto.Id,
+                            Photo = productDto.Photo,
+                            Price = productDto.Price,
+                            Energy = productDto.Energy,
+                            Protein = productDto.Protein,
+                            Fat = productDto.Fat,
+                            Carbohydrate = productDto.Carbohydrate,
+                            Weight = productDto.Weight,
+                            Comment = productDto.Comment,
+                            Diameter = productDto.Diameter,
+                            Kind = productDto.Kind,
+                        };
+                    }
                 }
             }
 
-            var productListViewModel = new ProductListViewModel
+            return View(new ProductListViewModel
             {
-                Name = productName,
-                Products = productViewModels,
-            };
-
-            return View(productListViewModel);
+                Name = result.Name,
+                Products = ProductViewModels(),
+            });
         }
     }
 }

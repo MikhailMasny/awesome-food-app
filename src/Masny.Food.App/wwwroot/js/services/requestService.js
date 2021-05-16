@@ -18,7 +18,7 @@
             case 404:
             case 500:
             default:
-                message = "The entered promotional code was not found..";
+                message = "The entered promo code was not found..";
                 break;
         }
 

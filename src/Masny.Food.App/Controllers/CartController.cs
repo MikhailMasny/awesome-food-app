@@ -31,51 +31,52 @@ namespace Masny.Food.App.Controllers
         public async Task<IActionResult> Index()
         {
             var userId = User.GetUserIdByClaimsPrincipal();
-
             var cartDto = await _cartService.GetAsync(userId);
-            var productDtos = await _productManager.GetAllProductsAsync();
 
-            var productViewModels = new List<ProductViewModel>();
-            if (cartDto.ProductIds.Any())
+            if (!cartDto.ProductIds.Any())
             {
-                foreach (var id in cartDto.ProductIds)
+                return View(new CartIndexViewModel
                 {
-                    var productDto = productDtos.First(p => p.Id == id);
-
-                    productViewModels.Add(new ProductViewModel
-                    {
-                        Id = productDto.Id,
-                        Name = productDto.Name,
-                        Weight = productDto.Weight,
-                        Diameter = productDto.Diameter,
-                        Kind = productDto.Kind,
-                        Price = productDto.Price,
-                    });
-                }
+                    Products = new List<ProductViewModel>(),
+                });
             }
 
             var profileDto = await _profileManager.GetProfileByUserIdAsync(userId);
+            var selectedProductDtos = await _productManager
+                .GetAllProductsByIdsAsync(cartDto.ProductIds);
 
-            var orderViewModel = new OrderViewModel
+            IEnumerable<ProductViewModel> GetProductViewModels()
             {
-                Name = profileDto.Name,
-                Address = profileDto.Address,
-            };
+                foreach (var selectedProductDto in selectedProductDtos)
+                {
+                    yield return new ProductViewModel
+                    {
+                        Id = selectedProductDto.Id,
+                        Name = selectedProductDto.Name,
+                        Weight = selectedProductDto.Weight,
+                        Diameter = selectedProductDto.Diameter,
+                        Kind = selectedProductDto.Kind,
+                        Price = selectedProductDto.Price,
+                    };
+                }
+            }
 
-            var cartIndexViewModel = new CartIndexViewModel
+            return View(new CartIndexViewModel
             {
-                Products = productViewModels,
-                OrderViewModel = orderViewModel,
-            };
-
-            return View(cartIndexViewModel);
+                Products = GetProductViewModels(),
+                OrderViewModel = new OrderViewModel
+                {
+                    Name = profileDto.Name,
+                    Address = profileDto.Address,
+                },
+            });
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] CartAddViewModel model)
+        public async Task<IActionResult> Add([FromBody] CartAddOrRemoveViewModel model)
         {
-            await _cartService.AddOrUpdateAsync(
+            await _cartService.AddOrRemoveAsync(
                 CartOperationType.Add,
                 User.GetUserIdByClaimsPrincipal(),
                 model.ProductId);
@@ -85,9 +86,9 @@ namespace Masny.Food.App.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<IActionResult> Remove([FromBody] CartAddViewModel model)
+        public async Task<IActionResult> Remove([FromBody] CartAddOrRemoveViewModel model)
         {
-            await _cartService.AddOrUpdateAsync(
+            await _cartService.AddOrRemoveAsync(
                 CartOperationType.Remove,
                 User.GetUserIdByClaimsPrincipal(),
                 model.ProductId);

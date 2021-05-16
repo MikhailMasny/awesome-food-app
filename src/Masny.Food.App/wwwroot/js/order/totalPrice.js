@@ -3,7 +3,7 @@
     document.querySelectorAll(".productPrice")
         .forEach((price) => priceArray.push(parseFloat(price.innerText)));
 
-    return priceArray.reduce((a, b) => a + b, 0);
+    return priceArray.reduce((productOne, productTwo) => productOne + productTwo, 0);
 }
 
 function showTotalPrice() {

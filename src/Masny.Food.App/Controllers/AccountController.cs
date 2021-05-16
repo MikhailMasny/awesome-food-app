@@ -31,10 +31,7 @@ namespace Masny.Food.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
-        {
-            return View();
-        }
+        public IActionResult Register() => View();
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -50,19 +47,17 @@ namespace Masny.Food.App.Controllers
                     UserName = model.Username,
                 };
 
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var identityResult = await _userManager.CreateAsync(user, model.Password);
+                if (identityResult.Succeeded)
                 {
                     await _userManager.AddToRoleAsync(user, AppRole.User);
                     await _signInManager.SignInAsync(user, false);
-
-                    var createdUser = await _userManager.FindByNameAsync(user.UserName);
-                    await _profileManager.CreateProfileAsync(createdUser.Id, model.Name);
+                    await _profileManager.CreateProfileAsync(user.Id, model.Name);
 
                     return RedirectToAction("Index", "Home");
                 }
 
-                foreach (var error in result.Errors)
+                foreach (var error in identityResult.Errors)
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
@@ -72,15 +67,11 @@ namespace Masny.Food.App.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login(string returnUrl = null)
-        {
-            var signInViewModel = new LoginViewModel
+        public IActionResult Login(string returnUrl = null) =>
+            View(new LoginViewModel
             {
                 ReturnUrl = returnUrl
-            };
-
-            return View(signInViewModel);
-        }
+            });
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -90,14 +81,14 @@ namespace Masny.Food.App.Controllers
 
             if (ModelState.IsValid)
             {
-                var result =
-                    await _signInManager.PasswordSignInAsync(
+                var signInResult = await _signInManager
+                    .PasswordSignInAsync(
                         model.Username,
                         model.Password,
                         model.RememberMe,
                         false);
 
-                if (result.Succeeded)
+                if (signInResult.Succeeded)
                 {
                     if (!string.IsNullOrEmpty(model.ReturnUrl) && Url.IsLocalUrl(model.ReturnUrl))
                     {
@@ -124,7 +115,8 @@ namespace Masny.Food.App.Controllers
         [HttpGet]
         public async Task<IActionResult> Profile()
         {
-            var profileDto = await _profileManager.GetProfileByUserIdAsync(User.GetUserIdByClaimsPrincipal());
+            var profileDto = await _profileManager
+                .GetProfileByUserIdAsync(User.GetUserIdByClaimsPrincipal());
 
             var profileViewModel = new ProfileViewModel
             {

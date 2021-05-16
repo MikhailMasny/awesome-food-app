@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Masny.Food.App.ViewModels
@@ -26,10 +25,5 @@ namespace Masny.Food.App.ViewModels
         [Required]
         [Range(0, 3, ErrorMessage = "Value for {0} must be between {1} and {2}.")]
         public int Status { get; set; }
-
-        /// <summary>
-        /// Statuses.
-        /// </summary>
-        public SelectList Statuses { get; set; }
     }
 }

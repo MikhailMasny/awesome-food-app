@@ -9,9 +9,9 @@
 <form method="get">
     <div>
         <label>Phone: </label>
-        <input name="phone" value="@Model.Phone" asp-for="Phone" />
+        <input name="phone" value="@ViewBag.Phone" />
         <label>Status: </label>
-        <select name="status" asp-items="Model.Statuses" asp-for="CurrentStatus"></select>
+        <select name="status" asp-items="ViewBag.Statuses" asp-for="CurrentStatus"></select>
         <input type="submit" value="Filter" />
     </div>
 </form>
@@ -43,39 +43,17 @@
                     foreach (var order in Model.Orders)
                     {
                         <tr>
-                            <td>
-                                @order.Number
-                            </td>
-                            <td>
-                                @order.Phone
-                            </td>
-                            <td>
-                                @order.Name
-                            </td>
-                            <td>
-                                @order.Status
-                            </td>
-                            <td>
-                                @order.Creation
-                            </td>
-                            <td>
-                                @order.InPlace
-                            </td>
-                            <td>
-                                @order.Address
-                            </td>
-                            <td>
-                                @order.PromoCode
-                            </td>
-                            <td>
-                                @order.Payment
-                            </td>
-                            <td>
-                                @order.TotalPrice
-                            </td>
-                            <td>
-                                @order.Comment
-                            </td>
+                            <td>@order.Number</td>
+                            <td>@order.Phone</td>
+                            <td>@order.Name</td>
+                            <td>@order.Status</td>
+                            <td>@order.Creation</td>
+                            <td>@order.InPlace</td>
+                            <td>@order.Address</td>
+                            <td>@order.PromoCode</td>
+                            <td>@order.Payment</td>
+                            <td>@order.TotalPrice</td>
+                            <td>@order.Comment</td>
                             <td>
                                 <a asp-controller="Order" asp-action="Edit" asp-route-id="@order.Id">Edit</a>
                             </td>

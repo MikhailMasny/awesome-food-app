@@ -20,19 +20,21 @@ namespace Masny.Food.App.Controllers
         {
             var productDetailDtos = await _productManager.GetAllProductDetailsAsync();
 
-            var productDetailViewModels = new List<ProductDetailViewModel>();
-            foreach (var productDetailDto in productDetailDtos)
+            IEnumerable<ProductDetailViewModel> GetProductDetailViewModels()
             {
-                productDetailViewModels.Add(new ProductDetailViewModel
+                foreach (var productDetailDto in productDetailDtos)
                 {
-                    Id = productDetailDto.Id,
-                    Name = productDetailDto.Name,
-                    Description = productDetailDto.Description,
-                    Comment = productDetailDto.Comment,
-                });
+                    yield return new ProductDetailViewModel
+                    {
+                        Id = productDetailDto.Id,
+                        Name = productDetailDto.Name,
+                        Description = productDetailDto.Description,
+                        Comment = productDetailDto.Comment,
+                    };
+                }
             }
 
-            return View(productDetailViewModels);
+            return View(GetProductDetailViewModels());
         }
     }
 }
