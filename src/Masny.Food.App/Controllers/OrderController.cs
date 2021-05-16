@@ -61,8 +61,9 @@ namespace Masny.Food.App.Controllers
                     .GetTotalPriceAsync(
                         await _productManager
                             .GetAllProductsByIdsAsync(productIds),
-                        await _promoCodeManager
-                            .GetPromoCodeByCodeAsync(model.PromoCode));
+                        (await _promoCodeManager
+                            .GetPromoCodeByCodeAsync(model.PromoCode))
+                            .Value);
 
                 var orderDto = new OrderDto
                 {

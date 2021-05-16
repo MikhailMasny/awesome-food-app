@@ -31,7 +31,7 @@ namespace Masny.Food.Logic.Services
 
         public Task<decimal> GetTotalPriceAsync(
             IEnumerable<ProductDto> selectedProductDtos,
-            PromoCodeDto promoCodeDto)
+            decimal promoCodeValue)
         {
             return Task.Run(async () =>
             {
@@ -39,8 +39,8 @@ namespace Masny.Food.Logic.Services
                     .Select(p => p.Price)
                     .Sum();
 
-                return await IsValidPromoCodeAsync(promoCodeDto.Value)
-                    ? totalPrice - totalPrice * promoCodeDto.Value / 100
+                return await IsValidPromoCodeAsync(promoCodeValue)
+                    ? totalPrice - totalPrice * promoCodeValue / 100
                     : totalPrice;
             });
         }

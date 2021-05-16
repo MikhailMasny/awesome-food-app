@@ -31,10 +31,10 @@ namespace Masny.Food.Logic.Interfaces
         /// Get total price with promo code.
         /// </summary>
         /// <param name="selectedProductDtos">Selected product data transfer objects.</param>
-        /// <param name="promoCodeDto">Promo code data transfer object.</param>
+        /// <param name="promoCodeValue">Promo code value.</param>
         /// <returns>Total price.</returns>
         Task<decimal> GetTotalPriceAsync(
             IEnumerable<ProductDto> selectedProductDtos,
-            PromoCodeDto promoCodeDto);
+            decimal promoCodeValue);
     }
 }
