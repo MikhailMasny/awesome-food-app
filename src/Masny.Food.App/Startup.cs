@@ -5,6 +5,7 @@ using Masny.Food.Logic.Managers;
 using Masny.Food.Logic.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -53,6 +54,12 @@ namespace Masny.Food.App
                     options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                 .AddRazorRuntimeCompilation();
 
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
             services.ConfigureApplicationCookie(config =>
             {
                 config.Cookie.Name = "PizzaApp.Cookie";
@@ -76,6 +83,7 @@ namespace Masny.Food.App
             app.UseHsts();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCookiePolicy();
 
             app.UseRouting();
 
