@@ -80,7 +80,6 @@ namespace Masny.Food.App
                 app.UseExceptionHandler("/Error");
             }
 
-
             app.UseSerilogRequestLogging();
 
             app.UseHsts();

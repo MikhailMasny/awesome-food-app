@@ -54,7 +54,7 @@ namespace Masny.Food.App.Controllers
 
                 var newOrderNumber = await _calcService
                     .GetNewOrderNumberAsync(
-                        await _orderManager.GetLastAsync(), 
+                        await _orderManager.GetLastAsync(),
                         dateTimeNow);
 
                 var totalPrice = await _calcService
