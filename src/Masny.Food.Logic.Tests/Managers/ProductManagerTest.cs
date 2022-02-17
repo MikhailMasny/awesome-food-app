@@ -159,8 +159,31 @@ namespace Masny.Food.Logic.Tests.Managers
         public void GetAllProductsByIdsAsync_ProductsExist_ProductDtosRetrieved()
         {
             // Arrange
-            var product1 = new Product();
-            var product2 = new Product();
+            var productDetail1 = new ProductDetail
+            {
+                Id = 1,
+                Name = "ProductDetailName1",
+                Description = "ProductDetailDescription1",
+            };
+
+            var productDetail2 = new ProductDetail
+            {
+                Id = 2,
+                Name = "ProductDetailName2",
+                Description = "ProductDetailDescription2",
+            };
+
+            var product1 = new Product
+            {
+                Id = 1,
+                ProductDetail = productDetail1,
+            };
+
+            var product2 = new Product
+            {
+                Id = 2,
+                ProductDetail = productDetail2,
+            };
 
             _foodAppContext.Products.AddRange(product1, product2);
             _foodAppContext.SaveChanges();
