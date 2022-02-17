@@ -57,13 +57,17 @@ namespace Masny.Food.App.Controllers
                         await _orderManager.GetLastAsync(),
                         dateTimeNow);
 
+                var promoCodeValue = decimal.Zero;
+                if (model.PromoCode is not null)
+                {
+                    var promoCode = await _promoCodeManager.GetPromoCodeByCodeAsync(model.PromoCode);
+                    promoCodeValue = promoCode.Value;
+                }
+
                 var totalPrice = await _calcService
                     .GetTotalPriceAsync(
-                        await _productManager
-                            .GetAllProductsByIdsAsync(productIds),
-                        (await _promoCodeManager
-                            .GetPromoCodeByCodeAsync(model.PromoCode))
-                            .Value);
+                        await _productManager.GetAllProductsByIdsAsync(productIds),
+                        promoCodeValue);
 
                 var orderDto = new OrderDto
                 {
@@ -186,7 +190,7 @@ namespace Masny.Food.App.Controllers
             });
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
@@ -202,7 +206,7 @@ namespace Masny.Food.App.Controllers
             });
         }
 
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(OrderEditViewModel model)
         {
@@ -224,6 +228,29 @@ namespace Masny.Food.App.Controllers
             return await _calcService.IsValidPromoCodeAsync(promoCode.Value)
                 ? Ok()
                 : NotFound();
+        }
+
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> GetTotalPrice([FromBody] PromoCodeViewModel model)
+        {
+            IEnumerable<ProductDto> products = new List<ProductDto>();
+            var cart = await _cartService.GetAsync(User.GetUserIdByClaimsPrincipal());
+            if (cart.ProductIds.Any())
+            {
+                products = await _productManager.GetAllProductsByIdsAsync(cart.ProductIds);
+            }
+
+            var promoCodeValue = decimal.Zero;
+            if (model is not null)
+            {
+                var promoCode = await _promoCodeManager.GetPromoCodeByCodeAsync(model.Value);
+                promoCodeValue = promoCode.Value;
+            }
+
+            var totalPriceWithPromoCode = await _calcService.GetTotalPriceAsync(products, promoCodeValue);
+
+            return Json(new { totalPriceWithPromoCode, promoCodeValue });
         }
 
         private static SelectList GetStatusTypes(bool withDefaultStatusModel = true)

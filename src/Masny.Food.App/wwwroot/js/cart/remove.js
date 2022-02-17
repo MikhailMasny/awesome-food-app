@@ -1,19 +1,23 @@
-﻿import requestService from "../services/requestService.js";
-
-document.addEventListener("click", function (event) {
+﻿document.addEventListener("click", function (event) {
     if (event.target.dataset.cartId != undefined) {
-        const item = {
-            productId: event.target.dataset.cartId,
-        };
+        const url = "https://localhost:5001/cart/remove";
 
-        requestService(
-            "https://localhost:5001/cart/remove",
-            "POST",
-            item,
-            false,
-            false,
-            ""
-        );
+        const data = {
+            productId: event.target.dataset.cartId,
+        }
+
+        const fetchData = {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: new Headers({
+                'Content-Type': 'application/json; charset=UTF-8'
+            })
+        }
+
+        fetch(url, fetchData)
+            .then(function () {
+                alert("Remove");
+            });
 
         event.srcElement.parentElement.parentElement.remove();
 

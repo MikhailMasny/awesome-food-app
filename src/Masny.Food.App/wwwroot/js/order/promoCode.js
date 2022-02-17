@@ -1,21 +1,32 @@
-﻿import requestService from "../services/requestService.js";
-
-function checkPromoCode() {
+﻿function checkPromoCode() {
     const promoCodeInput = document.getElementById("PromoCode");
 
-    const item = {
-        value: promoCodeInput.value,
-    };
+    const url = "https://localhost:5001/order/checkpromocode";
 
-    requestService(
-        "https://localhost:5001/order/checkpromocode",
-        "POST",
-        {
-            value: promoCodeInput.value,
-        },
-        true,
-        false,
-        "");
+    const data = {
+        value: promoCodeInput.value,
+    }
+
+    const fetchData = {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: new Headers({
+            'Content-Type': 'application/json; charset=UTF-8'
+        })
+    }
+
+    fetch(url, fetchData)
+        .then(function (response) {
+            if (response.ok) {
+                alert("Promo code successfully applied!");
+            }
+            else {
+                alert("The entered promo code was not found..");
+            }
+        })
+        .catch(function (error) {
+            console.log('error', error);
+        });
 }
 
 function main() {

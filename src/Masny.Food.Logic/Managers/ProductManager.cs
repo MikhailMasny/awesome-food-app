@@ -52,6 +52,7 @@ namespace Masny.Food.Logic.Managers
 
         public async Task<IEnumerable<ProductDto>> GetAllProductsByIdsAsync(IEnumerable<int> ids) =>
             GetProducts(await ProductQuery
+                .Include(p => p.ProductDetail)
                 .Where(p => ids.Contains(p.Id))
                 .ToListAsync());
 
@@ -85,6 +86,7 @@ namespace Masny.Food.Logic.Managers
                 yield return new ProductDto
                 {
                     Id = product.Id,
+                    Name = product.ProductDetail.Name,
                     Photo = product.Photo,
                     Price = product.Price,
                     Energy = product.Energy,

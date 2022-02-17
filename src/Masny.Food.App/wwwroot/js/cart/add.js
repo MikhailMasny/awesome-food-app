@@ -1,18 +1,22 @@
-﻿import requestService from "../services/requestService.js";
-
-document.addEventListener("click", function (event) {
+﻿document.addEventListener("click", function (event) {
     if (event.target.dataset.cartId != undefined) {
-        const item = {
-            productId: event.target.dataset.cartId,
-        };
+        const url = "https://localhost:5001/cart/add";
 
-        requestService(
-            "https://localhost:5001/cart/add",
-            "POST",
-            item,
-            false,
-            true,
-            "Add"
-        );
+        const data = {
+            productId: event.target.dataset.cartId,
+        }
+
+        const fetchData = {
+            method: 'POST',
+            body: JSON.stringify(data),
+            headers: new Headers({
+                'Content-Type': 'application/json; charset=UTF-8'
+            })
+        }
+
+        fetch(url, fetchData)
+            .then(function () {
+                alert("Add");
+            });
     }
 });

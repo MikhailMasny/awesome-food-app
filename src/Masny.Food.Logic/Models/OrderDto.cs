@@ -9,7 +9,7 @@ namespace Masny.Food.Logic.Models
     public class OrderDto
     {
         /// <summary>
-        /// Identifier
+        /// Identifier.
         /// </summary>
         public int Id { get; set; }
 
